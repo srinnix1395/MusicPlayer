@@ -12,6 +12,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.sev_user.musicplayer.R;
 import com.example.sev_user.musicplayer.callback.OnClickViewHolder;
 import com.example.sev_user.musicplayer.model.Song;
+import com.example.sev_user.musicplayer.utils.ImageUtils;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -21,7 +22,6 @@ import butterknife.OnClick;
  * Created by sev_user on 7/15/2016.
  */
 public class SongViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-    private View view;
 
     @Bind(R.id.imvCover)
     ImageView imvCover;
@@ -44,32 +44,27 @@ public class SongViewHolder extends RecyclerView.ViewHolder implements View.OnCl
 
     public SongViewHolder(View itemView) {
         super(itemView);
-        view = itemView;
         ButterKnife.bind(this, itemView);
-        view.setOnClickListener(this);
-        callback = (OnClickViewHolder) view.getContext();
+        itemView.setOnClickListener(this);
+        callback = (OnClickViewHolder) itemView.getContext();
     }
 
     public void setupViewHolder(Song song, int position) {
         this.song = song;
         this.position = position;
-        if (song.getImage() == null) {
-            imvCover.setScaleType(ImageView.ScaleType.FIT_XY);
-            imvCover.setImageResource(song.getPlaceHolder());
-        } else {
-            imvCover.setScaleType(ImageView.ScaleType.FIT_CENTER);
-            Glide.with(view.getContext())
-                    .load(song.getImage())
-                    .asBitmap()
-                    .thumbnail(0.1f)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .into(imvCover);
-        }
+
+        Glide.with(itemView.getContext())
+                .load(song.getImage())
+                .thumbnail(0.1f)
+                .placeholder(ImageUtils.randomImage())
+                .error(ImageUtils.randomImage())
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(imvCover);
+
         tvName.setText(song.getName());
         tvInfo.setText(song.getArtist() + " | " + song.getAlbum());
         if (song.isHasLine()) {
             vline.setVisibility(View.VISIBLE);
-
         } else {
             vline.setVisibility(View.INVISIBLE);
         }
@@ -82,7 +77,7 @@ public class SongViewHolder extends RecyclerView.ViewHolder implements View.OnCl
 
     @OnClick(R.id.imvMore)
     void onClickMore() {
-        PopupMenu popupMenu = new PopupMenu(view.getContext(), imvMore);
+        PopupMenu popupMenu = new PopupMenu(itemView.getContext(), imvMore);
         popupMenu.getMenuInflater().inflate(R.menu.menu_popup_song, popupMenu.getMenu());
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override

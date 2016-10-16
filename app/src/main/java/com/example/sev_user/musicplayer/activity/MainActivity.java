@@ -9,16 +9,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -41,7 +39,6 @@ import com.example.sev_user.musicplayer.model.SongPlus;
 import com.example.sev_user.musicplayer.service.MusicService;
 import com.example.sev_user.musicplayer.utils.ImageUtils;
 import com.example.sev_user.musicplayer.utils.SharedPreUtil;
-import com.google.gson.Gson;
 import com.squareup.seismic.ShakeDetector;
 
 import java.util.ArrayList;
@@ -193,7 +190,7 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
             currentSong = new SongPlus(musicService.getCurrentSong(), 0, musicService.getCurrentPosition());
             isRunning = true;
             new UpdateUIAsynctask().execute();
-            if (currentAction == "") {
+            if (currentAction.isEmpty()) {
                 initDataService();
             }
         }
@@ -208,7 +205,7 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        initView();
+        initViews();
         if (SharedPreUtil.getInstance(this).getBoolean(Constant.IS_PLAYING_SERVICE, false)) {
             initService();
         }
@@ -308,25 +305,14 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
                 imvSongThumbnail.setScaleType(ImageView.ScaleType.FIT_CENTER);
                 Glide.with(this)
                         .load(musicService.getAlbumCover())
-                        .asBitmap()
                         .thumbnail(0.1f)
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .into(imvSongThumbnail);
             }
 
             Glide.with(this)
                     .load(musicService.getAlbumCover())
-                    .asBitmap()
-                    .thumbnail(0.1f)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .error(musicService.getCurrentPlaceholder())
                     .into(imvCover);
-            if (musicService.getAlbumCover() == null) {
-                imvPlayToolbar.setScaleType(ImageView.ScaleType.FIT_XY);
-            } else {
-                imvPlayToolbar.setScaleType(ImageView.ScaleType.FIT_CENTER);
-            }
-
         }
     }
 
@@ -338,7 +324,7 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
 
     //process service-------------------------
 
-    private void initView() {
+    private void initViews() {
         SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         ShakeDetector sd = new ShakeDetector(this);
         sd.start(sensorManager);
@@ -350,114 +336,6 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
 
         behavior = BottomSheetBehavior.from(layoutPlay);
         behavior.setPeekHeight((int) ImageUtils.convertDpToPixel(50f, this));
-
-        behavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
-            @Override
-            public void onStateChanged(@NonNull View bottomSheet, int newState) {
-                switch (newState) {
-                    case BottomSheetBehavior.STATE_COLLAPSED: {
-                        if (imvPlayToolbar.getVisibility() == View.INVISIBLE) {
-                            layoutList.setVisibility(View.VISIBLE);
-                            Animation animation = AnimationUtils.loadAnimation(MainActivity.this, R.anim.transition_in_left);
-                            animation.setAnimationListener(new Animation.AnimationListener() {
-                                @Override
-                                public void onAnimationStart(Animation animation) {
-
-                                }
-
-                                @Override
-                                public void onAnimationEnd(Animation animation) {
-                                    imvSongThumbnail.setVisibility(View.VISIBLE);
-                                }
-
-                                @Override
-                                public void onAnimationRepeat(Animation animation) {
-
-                                }
-                            });
-
-                            Animation animationPlayToolbar = AnimationUtils.loadAnimation(MainActivity.this, R.anim.transition_in_right);
-                            animationPlayToolbar.setAnimationListener(new Animation.AnimationListener() {
-                                @Override
-                                public void onAnimationStart(Animation animation) {
-
-                                }
-
-                                @Override
-                                public void onAnimationEnd(Animation animation) {
-                                    imvPlayToolbar.setVisibility(View.VISIBLE);
-                                }
-
-                                @Override
-                                public void onAnimationRepeat(Animation animation) {
-
-                                }
-                            });
-
-                            imvSongThumbnail.startAnimation(animation);
-                            imvPlayToolbar.startAnimation(animationPlayToolbar);
-                        }
-                        break;
-                    }
-                    case BottomSheetBehavior.STATE_EXPANDED: {
-                        if (imvSongThumbnail.getVisibility() == View.VISIBLE) {
-                            layoutList.setVisibility(View.INVISIBLE);
-                            Animation animationImvSong = AnimationUtils.loadAnimation(MainActivity.this, R.anim.transition_out_left);
-                            animationImvSong.setAnimationListener(new Animation.AnimationListener() {
-                                @Override
-                                public void onAnimationStart(Animation animation) {
-
-                                }
-
-                                @Override
-                                public void onAnimationEnd(Animation animation) {
-                                    imvSongThumbnail.setVisibility(View.INVISIBLE);
-                                }
-
-                                @Override
-                                public void onAnimationRepeat(Animation animation) {
-
-                                }
-                            });
-
-                            Animation animationPlayToolbar = AnimationUtils.loadAnimation(MainActivity.this, R.anim.transition_out_right);
-                            animationPlayToolbar.setAnimationListener(new Animation.AnimationListener() {
-                                @Override
-                                public void onAnimationStart(Animation animation) {
-
-                                }
-
-                                @Override
-                                public void onAnimationEnd(Animation animation) {
-                                    imvPlayToolbar.setVisibility(View.INVISIBLE);
-                                }
-
-                                @Override
-                                public void onAnimationRepeat(Animation animation) {
-
-                                }
-                            });
-
-                            imvSongThumbnail.startAnimation(animationImvSong);
-                            imvPlayToolbar.startAnimation(animationPlayToolbar);
-                        }
-                        break;
-                    }
-                    case BottomSheetBehavior.STATE_DRAGGING: {
-                        if (layoutList.getVisibility() == View.INVISIBLE && imvPlayToolbar.getVisibility() == View.INVISIBLE) {
-                            layoutList.setVisibility(View.VISIBLE);
-                            return;
-                        }
-                        break;
-                    }
-                }
-            }
-
-            @Override
-            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-
-            }
-        });
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -475,6 +353,14 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
                 if (musicService != null && musicService.isCreated()) {
                     musicService.seekTo(seekBar.getProgress());
                 }
+            }
+        });
+
+        imvCover.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                // để k bị click vào phía sau
+                return true;
             }
         });
     }
@@ -503,7 +389,7 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
         bundle.putString(Constant.ALBUM_COVER, album.getImage());
         bundle.putString(Constant.ALBUM_INFO, album.getNumberOfSong() + " bài hát | " + album.getFirstYear());
         bundle.putString(Constant.ALBUM_ARTIST, album.getArtistName());
-        bundle.putString(Constant.ARRAY_SONG_PLUS, new Gson().toJson(arrSongPlus));
+        bundle.putParcelableArrayList(Constant.ARRAY_SONG_PLUS, arrSongPlus);
         detailAlbumFragment.setArguments(bundle);
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -519,8 +405,8 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
 
         detailArtistFragment = new DetailArtistFragment();
         Bundle bundle = new Bundle();
-        bundle.putString(Constant.ARRAY_SONG_PLUS, new Gson().toJson(arrayList));
-        bundle.putString(Constant.ARTIST, new Gson().toJson(artist));
+        bundle.putParcelableArrayList(Constant.ARRAY_SONG_PLUS, arrayList);
+        bundle.putParcelable(Constant.ARTIST, artist);
         detailArtistFragment.setArguments(bundle);
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -562,8 +448,8 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
         }
         return arrSong;
     }
-    //override OnClickViewHolder interface-------------
 
+    //override OnClickViewHolder interface-------------
     @OnClick({R.id.imvPlay, R.id.imvPlayToolbar, R.id.imvNext, R.id.imvPre, R.id.imvRandom, R.id.imvRepeat, R.id.linearLayoutPlay})
     void onClick(View view) {
         switch (view.getId()) {

@@ -1,9 +1,12 @@
 package com.example.sev_user.musicplayer.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by sev_user on 7/21/2016.
  */
-public class SongPlus {
+public class SongPlus implements Parcelable {
     private Song song;
     private int positionSeekBar;
     private int position;
@@ -13,6 +16,23 @@ public class SongPlus {
         this.positionSeekBar = positionSeekBar;
         this.position = position;
     }
+
+    protected SongPlus(Parcel in) {
+        positionSeekBar = in.readInt();
+        position = in.readInt();
+    }
+
+    public static final Creator<SongPlus> CREATOR = new Creator<SongPlus>() {
+        @Override
+        public SongPlus createFromParcel(Parcel in) {
+            return new SongPlus(in);
+        }
+
+        @Override
+        public SongPlus[] newArray(int size) {
+            return new SongPlus[size];
+        }
+    };
 
     public Song getSong() {
         return song;
@@ -28,5 +48,16 @@ public class SongPlus {
 
     public void setPositionSeekBar(int positionSeekBar) {
         this.positionSeekBar = positionSeekBar;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(positionSeekBar);
+        parcel.writeInt(position);
     }
 }

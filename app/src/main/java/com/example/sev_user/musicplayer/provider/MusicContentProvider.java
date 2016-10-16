@@ -86,7 +86,7 @@ public class MusicContentProvider {
 
         arrNumber.add(Constant.PLAY_SHUFFLE_ALL);
         arrNumber.add("#");
-        String firstLetter = "";
+        String firstLetter;
 
         for (int i = 0; i < arrSong.size(); i++) {
             firstLetter = arrSong.get(i).getName().substring(0, 1);
@@ -160,7 +160,7 @@ public class MusicContentProvider {
         ArrayList<String> arrHeader = new ArrayList<>();
 
         arrNumber.add("#");
-        String firstLetter = "";
+        String firstLetter;
 
         for (int i = 0; i < arrArtist.size(); i++) {
             firstLetter = arrArtist.get(i).getName().substring(0, 1);

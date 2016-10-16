@@ -19,7 +19,6 @@ import butterknife.OnClick;
  * Created by sev_user on 7/14/2016.
  */
 public class ArtistViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-    private final View view;
     @Bind(R.id.tvCover)
     TextView tvCover;
 
@@ -29,7 +28,7 @@ public class ArtistViewHolder extends RecyclerView.ViewHolder implements View.On
     @Bind(R.id.tvInfo)
     TextView tvInfo;
 
-    @Bind(R.id.viewLine)
+    @Bind(R.id.vline)
     View viewLine;
 
     @Bind(R.id.imvMore)
@@ -40,8 +39,7 @@ public class ArtistViewHolder extends RecyclerView.ViewHolder implements View.On
 
     public ArtistViewHolder(View itemView) {
         super(itemView);
-        view = itemView;
-        ButterKnife.bind(this, view);
+        ButterKnife.bind(this, itemView);
         itemView.setOnClickListener(this);
         callback = (OnClickViewHolder) itemView.getContext();
     }
@@ -62,7 +60,7 @@ public class ArtistViewHolder extends RecyclerView.ViewHolder implements View.On
 
     @OnClick(R.id.imvMore)
     void onClickMore() {
-        final PopupMenu popupMenu = new PopupMenu(view.getContext(), imvMore);
+        final PopupMenu popupMenu = new PopupMenu(itemView.getContext(), imvMore);
         popupMenu.getMenuInflater().inflate(R.menu.menu_popup_album_artist, popupMenu.getMenu());
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override

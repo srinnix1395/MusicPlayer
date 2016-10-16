@@ -17,18 +17,16 @@ public class ImageUtils {
             R.color.colorLightPurple,
             R.color.colorGreen,
             R.color.colorOrange,
-            R.color.colorAccent,
             R.color.colorBlue
     };
-
-    public static int PLACE_HOLDER[] = {
-            R.drawable.song_cover_accent,
-            R.drawable.song_cover_blue,
-            R.drawable.song_cover_dark_purple,
-            R.drawable.song_cover_green,
-            R.drawable.song_cover_light_purple,
-            R.drawable.song_cover_orange
+    private static int[] PLACE_HOLDER ={
+            R.drawable.background_no_image_pink,
+            R.drawable.background_no_image_light_purple,
+            R.drawable.background_no_image_green,
+            R.drawable.background_no_image_orange,
+            R.drawable.background_no_image_blue
     };
+
 
     public static int randomImage() {
         Random random = new Random();
@@ -45,8 +43,7 @@ public class ImageUtils {
     public static float convertDpToPixel(float dp, Context context) {
         Resources resources = context.getResources();
         DisplayMetrics metrics = resources.getDisplayMetrics();
-        float px = dp * ((float) metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
-        return px;
+        return dp * ((float) metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
     }
 
 }

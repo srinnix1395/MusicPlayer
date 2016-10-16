@@ -24,7 +24,6 @@ import butterknife.ButterKnife;
  * Created by sev_user on 7/22/2016.
  */
 public class MainFragment extends Fragment {
-    private View view;
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
@@ -43,20 +42,21 @@ public class MainFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_main, container, false);
+        View view = inflater.inflate(R.layout.fragment_main, container, false);
         ButterKnife.bind(this, view);
         return view;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        initView();
+        initViews();
     }
 
-    private void initView() {
+    private void initViews() {
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("NHẠC");
         toolbar.setTitleTextColor(Color.WHITE);
+
         songFragment = new SongFragment();
         albumFragment = new AlbumFragment();
         artistFragment = new ArtistFragment();
@@ -79,7 +79,6 @@ public class MainFragment extends Fragment {
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition(), true);
-
             }
 
             @Override
@@ -91,9 +90,5 @@ public class MainFragment extends Fragment {
 
     public SongFragment getSongFragment() {
         return songFragment;
-    }
-
-    public AlbumFragment getAlbumFragment() {
-        return albumFragment;
     }
 }
