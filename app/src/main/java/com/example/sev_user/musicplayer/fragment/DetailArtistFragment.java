@@ -19,7 +19,6 @@ import com.example.sev_user.musicplayer.adapter.SongAlbumAdapter;
 import com.example.sev_user.musicplayer.constant.Constant;
 import com.example.sev_user.musicplayer.model.Artist;
 import com.example.sev_user.musicplayer.model.SongPlus;
-import com.example.sev_user.musicplayer.utils.ImageUtils;
 
 import java.util.ArrayList;
 
@@ -79,7 +78,7 @@ public class DetailArtistFragment extends Fragment {
         });
 
         tvCover.setText(artist.getName().substring(0, 2));
-        tvCover.setBackgroundColor(ImageUtils.COLORS[3]);
+        tvCover.setBackgroundResource(artist.getColorPlaceHolder());
 
         recyclerViewSong.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerViewSong.setAdapter(adapter);

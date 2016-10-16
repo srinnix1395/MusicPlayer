@@ -194,10 +194,8 @@ public class MusicService extends Service {
 
         notification.contentView = views;
 
-//        PendingIntent pi = PendingIntent.getActivity(this, 0, new Intent(this, SplashActivity.class), 0);
         Intent intentNewTask = new Intent(Constant.ACTION_NEW_TASK);
-        PendingIntent pi = PendingIntent.getBroadcast(this, 0, intentNewTask, 0);
-        notification.contentIntent = pi;
+        notification.contentIntent = PendingIntent.getBroadcast(this, 0, intentNewTask, 0);
     }
 
     @Override

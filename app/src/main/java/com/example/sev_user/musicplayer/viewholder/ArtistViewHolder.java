@@ -46,7 +46,7 @@ public class ArtistViewHolder extends RecyclerView.ViewHolder implements View.On
 
     public void setupViewHolder(Artist artist) {
         this.artist = artist;
-        tvCover.setBackgroundColor(artist.getColorPlaceHolder());
+        tvCover.setBackgroundResource(artist.getColorPlaceHolder());
         tvCover.setText(artist.getName().substring(0, 2));
         tvName.setText(artist.getName());
         tvInfo.setText(artist.getInfo());

@@ -389,7 +389,7 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
 
     private void initBottomSheet() {
         behavior = BottomSheetBehavior.from(layoutPlay);
-        behavior.setPeekHeight((int) ImageUtils.convertDpToPixel(50f, this));
+        behavior.setPeekHeight((int) ImageUtils.convertDpToPixel(56f, this));
 
         behavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
