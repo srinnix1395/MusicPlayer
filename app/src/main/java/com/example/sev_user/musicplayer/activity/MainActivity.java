@@ -3,20 +3,27 @@ package com.example.sev_user.musicplayer.activity;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.Color;
 import android.hardware.SensorManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -24,14 +31,16 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.sev_user.musicplayer.R;
+import com.example.sev_user.musicplayer.adapter.PagerAdapter;
 import com.example.sev_user.musicplayer.callback.OnClickViewHolder;
 import com.example.sev_user.musicplayer.constant.Constant;
+import com.example.sev_user.musicplayer.fragment.AlbumFragment;
+import com.example.sev_user.musicplayer.fragment.ArtistFragment;
 import com.example.sev_user.musicplayer.fragment.DetailAlbumFragment;
 import com.example.sev_user.musicplayer.fragment.DetailArtistFragment;
-import com.example.sev_user.musicplayer.fragment.MainFragment;
 import com.example.sev_user.musicplayer.fragment.SearchFragment;
+import com.example.sev_user.musicplayer.fragment.SongFragment;
 import com.example.sev_user.musicplayer.model.Album;
 import com.example.sev_user.musicplayer.model.Artist;
 import com.example.sev_user.musicplayer.model.Song;
@@ -89,6 +98,19 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
     @Bind(R.id.viewList)
     RelativeLayout layoutList;
 
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
+
+    @Bind(R.id.tabLayout)
+    TabLayout tabLayout;
+
+    @Bind(R.id.viewPager)
+    ViewPager viewPager;
+
+    private SongFragment songFragment;
+    private AlbumFragment albumFragment;
+    private ArtistFragment artistFragment;
+    private PagerAdapter adapter;
     private BottomSheetBehavior behavior;
     private DetailAlbumFragment detailAlbumFragment;
     private DetailArtistFragment detailArtistFragment;
@@ -98,7 +120,6 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
     private boolean isRunning = true;
     private String currentAction = "";
     private boolean isBind;
-    private MainFragment mainFragment;
 
     private Handler mHandlerOnCompletion = new Handler() {
         @Override
@@ -256,7 +277,6 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
     @Override
     public void onBackPressed() {
         if (behavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
-            layoutList.setVisibility(View.VISIBLE);
             behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             return;
         }
@@ -329,13 +349,21 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
         ShakeDetector sd = new ShakeDetector(this);
         sd.start(sensorManager);
 
-        mainFragment = new MainFragment();
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.add(R.id.viewList, mainFragment);
-        transaction.commit();
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("NHẠC");
+        toolbar.setTitleTextColor(Color.WHITE);
 
-        behavior = BottomSheetBehavior.from(layoutPlay);
-        behavior.setPeekHeight((int) ImageUtils.convertDpToPixel(50f, this));
+        songFragment = new SongFragment();
+        albumFragment = new AlbumFragment();
+        artistFragment = new ArtistFragment();
+        ArrayList<Fragment> arrayList = new ArrayList<>();
+        arrayList.add(artistFragment);
+        arrayList.add(albumFragment);
+        arrayList.add(songFragment);
+        adapter = new PagerAdapter(getSupportFragmentManager(), arrayList);
+
+        initViewPager();
+        initBottomSheet();
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -356,11 +384,140 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
             }
         });
 
+
+    }
+
+    private void initBottomSheet() {
+        behavior = BottomSheetBehavior.from(layoutPlay);
+        behavior.setPeekHeight((int) ImageUtils.convertDpToPixel(50f, this));
+
+        behavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                switch (newState) {
+                    case BottomSheetBehavior.STATE_COLLAPSED: {
+                        if (imvPlayToolbar.getVisibility() != View.VISIBLE) {
+                            Animation animation = AnimationUtils.loadAnimation(MainActivity.this, R.anim.transition_in_left);
+                            animation.setAnimationListener(new Animation.AnimationListener() {
+                                @Override
+                                public void onAnimationStart(Animation animation) {
+
+                                }
+
+                                @Override
+                                public void onAnimationEnd(Animation animation) {
+                                    imvSongThumbnail.setVisibility(View.VISIBLE);
+                                }
+
+                                @Override
+                                public void onAnimationRepeat(Animation animation) {
+
+                                }
+                            });
+
+                            Animation animationPlayToolbar = AnimationUtils.loadAnimation(MainActivity.this, R.anim.transition_in_right);
+                            animationPlayToolbar.setAnimationListener(new Animation.AnimationListener() {
+                                @Override
+                                public void onAnimationStart(Animation animation) {
+
+                                }
+
+                                @Override
+                                public void onAnimationEnd(Animation animation) {
+                                    imvPlayToolbar.setVisibility(View.VISIBLE);
+                                }
+
+                                @Override
+                                public void onAnimationRepeat(Animation animation) {
+
+                                }
+                            });
+
+                            imvSongThumbnail.startAnimation(animation);
+                            imvPlayToolbar.startAnimation(animationPlayToolbar);
+                        }
+                        break;
+                    }
+                    case BottomSheetBehavior.STATE_EXPANDED: {
+                        if (imvSongThumbnail.getVisibility() == View.VISIBLE) {
+                            Animation animationImvSong = AnimationUtils.loadAnimation(MainActivity.this, R.anim.transition_out_left);
+                            animationImvSong.setAnimationListener(new Animation.AnimationListener() {
+                                @Override
+                                public void onAnimationStart(Animation animation) {
+
+                                }
+
+                                @Override
+                                public void onAnimationEnd(Animation animation) {
+                                    imvSongThumbnail.setVisibility(View.INVISIBLE);
+                                }
+
+                                @Override
+                                public void onAnimationRepeat(Animation animation) {
+
+                                }
+                            });
+
+                            Animation animationPlayToolbar = AnimationUtils.loadAnimation(MainActivity.this, R.anim.transition_out_right);
+                            animationPlayToolbar.setAnimationListener(new Animation.AnimationListener() {
+                                @Override
+                                public void onAnimationStart(Animation animation) {
+
+                                }
+
+                                @Override
+                                public void onAnimationEnd(Animation animation) {
+                                    imvPlayToolbar.setVisibility(View.INVISIBLE);
+                                }
+
+                                @Override
+                                public void onAnimationRepeat(Animation animation) {
+
+                                }
+                            });
+
+                            imvSongThumbnail.startAnimation(animationImvSong);
+                            imvPlayToolbar.startAnimation(animationPlayToolbar);
+                        }
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+            }
+        });
+
         imvCover.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 // để k bị click vào phía sau
                 return true;
+            }
+        });
+    }
+
+    private void initViewPager() {
+        viewPager.setAdapter(adapter);
+        viewPager.setCurrentItem(2, true);
+        viewPager.setOffscreenPageLimit(3);
+        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition(), true);
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition(), true);
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition(), true);
             }
         });
     }
@@ -382,37 +539,36 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
 
     @Override
     public void onClickAlbum(Album album, int position) {
-        ArrayList<SongPlus> arrSongPlus = getSongOfAlbum(mainFragment.getSongFragment().getArrayListSong(), album);
-        detailAlbumFragment = new DetailAlbumFragment();
+        ArrayList<SongPlus> arrSongPlus = getSongOfAlbum(songFragment.getArrayListSong(), album);
+
         Bundle bundle = new Bundle();
         bundle.putString(Constant.ALBUM_NAME, album.getAlbumName());
         bundle.putString(Constant.ALBUM_COVER, album.getImage());
         bundle.putString(Constant.ALBUM_INFO, album.getNumberOfSong() + " bài hát | " + album.getFirstYear());
         bundle.putString(Constant.ALBUM_ARTIST, album.getArtistName());
         bundle.putParcelableArrayList(Constant.ARRAY_SONG_PLUS, arrSongPlus);
-        detailAlbumFragment.setArguments(bundle);
+        detailAlbumFragment = DetailAlbumFragment.newInstance(bundle);
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(R.anim.slide_in, R.anim.slide_out);
         transaction.add(R.id.viewList, detailAlbumFragment);
         transaction.show(detailAlbumFragment);
-        transaction.hide(mainFragment);
         transaction.commit();
     }
 
     @Override
     public void onClickArtist(Artist artist) {
-        ArrayList<SongPlus> arrayList = getSongOfArtist(mainFragment.getSongFragment().getArrayListSong(), artist);
+        ArrayList<SongPlus> arrayList = getSongOfArtist(songFragment.getArrayListSong(), artist);
 
-        detailArtistFragment = new DetailArtistFragment();
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList(Constant.ARRAY_SONG_PLUS, arrayList);
         bundle.putParcelable(Constant.ARTIST, artist);
-        detailArtistFragment.setArguments(bundle);
+        detailArtistFragment = DetailArtistFragment.newInstance(bundle);
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(R.anim.slide_in, R.anim.slide_out);
         transaction.add(R.id.viewList, detailArtistFragment);
         transaction.show(detailArtistFragment);
-        transaction.hide(mainFragment);
         transaction.commit();
     }
 
@@ -609,18 +765,17 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
 
         if (fragment instanceof DetailAlbumFragment) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.setCustomAnimations(R.anim.slide_in, R.anim.slide_out);
             transaction.remove(detailAlbumFragment);
-            transaction.show(mainFragment);
             transaction.commit();
             return;
         }
 
         if (fragment instanceof DetailArtistFragment) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.setCustomAnimations(R.anim.slide_in, R.anim.slide_out);
             transaction.remove(detailArtistFragment);
-            transaction.show(mainFragment);
             transaction.commit();
-            return;
         }
     }
 
@@ -656,12 +811,12 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
         int totalSecond = currentPosition / 1000;
         String minute = String.valueOf(totalSecond / 60);
         if (minute.length() == 1) {
-            minute = new StringBuilder("0").append(minute).toString();
+            minute = "0" + minute;
         }
 
         String seconds = String.valueOf(totalSecond % 60);
         if (seconds.length() == 1) {
-            seconds = new StringBuffer("0").append(seconds).toString();
+            seconds = "0" + seconds;
         }
         tvCurrentPosition.setText(minute + ":" + seconds);
     }
@@ -673,48 +828,36 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
         int totalSecond = duration / 1000;
         String minute = String.valueOf(totalSecond / 60);
         if (minute.length() == 1) {
-            minute = new StringBuilder("0").append(minute).toString();
+            minute = "0" + minute;
         }
 
         String seconds = String.valueOf(totalSecond % 60);
         if (seconds.length() == 1) {
-            seconds = new StringBuffer("0").append(seconds).toString();
+            seconds = "0" + seconds;
         }
         tvDuration.setText(minute + ":" + seconds);
-        seekBar.setMax(duration);
     }
 
     private void updateDataSong() {
-        if (musicService.isPlaying()) {
-            imvPlay.setActivated(true);
-            imvPlayToolbar.setActivated(true);
-        } else {
-            imvPlay.setActivated(false);
-            imvPlayToolbar.setActivated(false);
-        }
+        imvPlay.setActivated(musicService.isPlaying());
+        imvPlayToolbar.setActivated(musicService.isPlaying());
 
         setTimeDuration();
         seekBar.setMax(musicService.getDuration());
         Glide.with(this)
                 .load(musicService.getAlbumCover())
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .error(musicService.getCurrentPlaceholder())
                 .into(imvCover);
-        if (musicService.getAlbumCover() == null) {
-            imvSongThumbnail.setScaleType(ImageView.ScaleType.FIT_XY);
-            imvSongThumbnail.setImageResource(musicService.getCurrentPlaceholder());
-        } else {
-            imvSongThumbnail.setScaleType(ImageView.ScaleType.FIT_CENTER);
-            Glide.with(this)
-                    .load(musicService.getAlbumCover())
-                    .asBitmap()
-                    .thumbnail(0.1f)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .into(imvSongThumbnail);
-        }
+
+        Glide.with(this)
+                .load(musicService.getAlbumCover())
+                .thumbnail(0.1f)
+                .placeholder(musicService.getCurrentPlaceholder())
+                .error(musicService.getCurrentPlaceholder())
+                .into(imvSongThumbnail);
+
         tvSongName.setText(musicService.getSongName());
         tvArtistName.setText(musicService.getArtistName());
         musicService.updateNotification();
     }
-
 }

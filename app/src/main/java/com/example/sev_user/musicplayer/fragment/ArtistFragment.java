@@ -84,6 +84,7 @@ public class ArtistFragment extends android.support.v4.app.Fragment {
     }
 
     private void initView() {
+        progressBar.setIndeterminate(true);
         progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#333333"), PorterDuff.Mode.SRC_ATOP);
 
         artistArrayList = new ArrayList<>();

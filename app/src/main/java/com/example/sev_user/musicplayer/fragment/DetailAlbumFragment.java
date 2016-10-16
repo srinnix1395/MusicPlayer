@@ -56,6 +56,11 @@ public class DetailAlbumFragment extends Fragment {
     private String info;
     private String artist;
 
+    public static DetailAlbumFragment newInstance(Bundle bundle) {
+        DetailAlbumFragment fragment = new DetailAlbumFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

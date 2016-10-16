@@ -58,6 +58,7 @@ public class AlbumFragment extends Fragment {
     }
 
     private void initView() {
+        progressBar.setIndeterminate(true);
         progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#333333"), PorterDuff.Mode.SRC_ATOP);
 
         albumArrayList = new ArrayList<>();

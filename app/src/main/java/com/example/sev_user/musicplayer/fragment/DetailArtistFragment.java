@@ -46,7 +46,11 @@ public class DetailArtistFragment extends Fragment {
     private SongAlbumAdapter adapter;
     private Artist artist;
 
-
+    public static DetailArtistFragment newInstance(Bundle bundle) {
+        DetailArtistFragment fragment = new DetailArtistFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
