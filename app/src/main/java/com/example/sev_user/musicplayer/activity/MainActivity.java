@@ -108,8 +108,6 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
     ViewPager viewPager;
 
     private SongFragment songFragment;
-    private AlbumFragment albumFragment;
-    private ArtistFragment artistFragment;
     private PagerAdapter adapter;
     private BottomSheetBehavior behavior;
     private DetailAlbumFragment detailAlbumFragment;
@@ -126,8 +124,10 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case Constant.WHAT_UPDATE_UI: {
-                    updateDataSong();
-                    currentSong = new SongPlus(musicService.getCurrentSong(), 0, musicService.getCurrentPosition());
+                    if (mHandlerOnCompletion != null) {
+                        updateDataSong();
+                        currentSong = new SongPlus(musicService.getCurrentSong(), 0, musicService.getCurrentPosition());
+                    }
                     break;
                 }
                 case Constant.WHAT_CLOSE_SERVICE: {
@@ -178,7 +178,6 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
                     break;
                 }
                 case Constant.ACTION_NEXT_MUSIC: {
-                    currentSong = new SongPlus(null, 0, 0);
                     musicService.reUpdateDataFromClient(currentSong, imvRandom.isActivated(), imvRepeat.isActivated());
                     if (musicService.getShuffle()) {
                         musicService.randomSong();
@@ -188,7 +187,6 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
                     break;
                 }
                 case Constant.ACTION_PREV_MUSIC: {
-                    currentSong = new SongPlus(null, 0, 0);
                     musicService.reUpdateDataFromClient(currentSong, imvRandom.isActivated(), imvRepeat.isActivated());
                     if (musicService.getShuffle()) {
                         musicService.randomSong();
@@ -198,7 +196,6 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
                     break;
                 }
                 case Constant.ACTION_PLAY_SHUFFLE: {
-                    currentSong = new SongPlus(null, 0, 0);
                     musicService.reUpdateDataFromClient(currentSong, imvRandom.isActivated(), imvRepeat.isActivated());
                     musicService.randomSong();
                     break;
@@ -305,6 +302,7 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
             unbindService(connection);
             isBind = false;
         }
+        mHandlerOnCompletion = null;
         super.onDestroy();
     }
 
@@ -354,8 +352,8 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
         toolbar.setTitleTextColor(Color.WHITE);
 
         songFragment = new SongFragment();
-        albumFragment = new AlbumFragment();
-        artistFragment = new ArtistFragment();
+        AlbumFragment albumFragment = new AlbumFragment();
+        ArtistFragment artistFragment = new ArtistFragment();
         ArrayList<Fragment> arrayList = new ArrayList<>();
         arrayList.add(artistFragment);
         arrayList.add(albumFragment);

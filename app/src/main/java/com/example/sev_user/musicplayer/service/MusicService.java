@@ -18,7 +18,7 @@ import android.support.v4.app.NotificationCompat;
 import android.widget.RemoteViews;
 
 import com.example.sev_user.musicplayer.R;
-import com.example.sev_user.musicplayer.activity.SplashActivity;
+import com.example.sev_user.musicplayer.activity.MainActivity;
 import com.example.sev_user.musicplayer.constant.Constant;
 import com.example.sev_user.musicplayer.manager.MediaManager;
 import com.example.sev_user.musicplayer.model.Song;
@@ -80,13 +80,13 @@ public class MusicService extends Service {
                     SharedPreUtil.getInstance(MusicService.this).putBoolean(Constant.IS_PLAYING_SERVICE, false);
                     break;
                 }
-                case Constant.ACTION_NEW_TASK:{
+                case Constant.ACTION_NEW_TASK: {
                     if (handler != null) {
                         Message message = new Message();
                         message.what = Constant.WHAT_NEW_TASK;
                         handler.sendMessage(message);
                     }
-                    Intent intent1 = new Intent(context, SplashActivity.class);
+                    Intent intent1 = new Intent(context, MainActivity.class);
                     intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent1);
                     break;
@@ -219,7 +219,7 @@ public class MusicService extends Service {
     }
 
     public void reUpdateDataFromClient(SongPlus songPlus, boolean imvRandomActivated, boolean imvRepeatActivated) {
-        if (songPlus.getSong() != null) {
+        if (songPlus != null && songPlus.getSong() != null) {
             mediaManager.create(songPlus.getPosition());
             mediaManager.seekTo(songPlus.getPositionSeekBar());
         }
