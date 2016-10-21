@@ -8,11 +8,9 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.sev_user.musicplayer.R;
 import com.example.sev_user.musicplayer.callback.OnClickViewHolder;
 import com.example.sev_user.musicplayer.model.Song;
-import com.example.sev_user.musicplayer.utils.ImageUtils;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -56,9 +54,8 @@ public class SongViewHolder extends RecyclerView.ViewHolder implements View.OnCl
         Glide.with(itemView.getContext())
                 .load(song.getImage())
                 .thumbnail(0.1f)
-                .placeholder(ImageUtils.randomImage())
-                .error(ImageUtils.randomImage())
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .placeholder(song.getPlaceHolder())
+                .error(song.getPlaceHolder())
                 .into(imvCover);
 
         tvName.setText(song.getName());

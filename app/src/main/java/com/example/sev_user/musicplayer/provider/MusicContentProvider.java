@@ -35,7 +35,7 @@ public class MusicContentProvider {
             int numberOfAlbum = cursor.getInt(3);
             int color = ImageUtils.randomColor();
 
-            arrayList.add(new Artist(id, name, numberOfAlbum + " album | " + numberOfTrack + " bài hát",color, true));
+            arrayList.add(new Artist(id, name, numberOfAlbum + " album | " + numberOfTrack + " bài hát", color, true));
         }
         cursor.close();
         return arrayList;
@@ -80,149 +80,95 @@ public class MusicContentProvider {
     public ArrayList<Object> getArrSong() {
         ArrayList<Song> arrSong = getSongHasImage();
         ArrayList<Object> arrObjects = new ArrayList<>();
-        ArrayList<Object> arrLetter = new ArrayList<>();
-        ArrayList<Object> arrNumber = new ArrayList<>();
-        ArrayList<String> arrHeader = new ArrayList<>();
 
-        arrNumber.add(Constant.PLAY_SHUFFLE_ALL);
-        arrNumber.add("#");
-        String firstLetter;
+        if (arrSong.size() > 0) {
+            arrObjects.add(Constant.PLAY_SHUFFLE_ALL);
+        }
 
-        for (int i = 0; i < arrSong.size(); i++) {
-            firstLetter = arrSong.get(i).getName().substring(0, 1);
-            if (Character.isLetter(firstLetter.charAt(0))) {
-                arrLetter.add(arrSong.get(i));
+        Comparator<Song> comparator = new Comparator<Song>() {
+            @Override
+            public int compare(Song song, Song t1) {
+                return song.getName().compareToIgnoreCase(t1.getName());
+            }
+        };
+        Collections.sort(arrSong, comparator);
+
+        if (!Character.isLetter(arrSong.get(0).getName().charAt(0))) {
+            arrObjects.add("#");
+        }
+
+        int positionLetter = 0;
+
+        for (int i = 0, size = arrSong.size(); i < size; i++) {
+            if (!Character.isLetter(arrSong.get(i).getName().charAt(0))) {
+                arrObjects.add(arrSong.get(i));
+                positionLetter = i;
             } else {
-                arrNumber.add(arrSong.get(i));
+                ((Song) arrObjects.get(arrObjects.size() - 1)).setHasLine(false);
+                if (positionLetter != 0) {
+                    positionLetter++;
+                }
+                break;
             }
         }
 
-        Comparator<Object> comparator = new Comparator<Object>() {
-            @Override
-            public int compare(Object lhs, Object rhs) {
-                if (((Song) lhs).getName().compareTo(((Song) rhs).getName()) > 0) {
-                    return 1;
-                }
-                if (((Song) lhs).getName().compareTo(((Song) rhs).getName()) < 0) {
-                    return -1;
-                }
-                return 0;
+        String currentLetter;
+        String lastLetter;
+        for (int i = positionLetter, size = arrSong.size(); i < size; i++) {
+            currentLetter = String.valueOf(arrSong.get(i).getName().charAt(0));
+            lastLetter = String.valueOf(arrSong.get(i - 1).getName().charAt(0));
+            if (!currentLetter.equalsIgnoreCase(lastLetter)) {
+                ((Song) arrObjects.get(arrObjects.size() - 1)).setHasLine(false);
+                arrObjects.add(currentLetter);
             }
-        };
-        Collections.sort(arrLetter, comparator);
-
-        for (Song temp : arrSong) {
-            firstLetter = temp.getName().substring(0, 1);
-            if (!arrHeader.contains(firstLetter) && Character.isLetter(firstLetter.charAt(0))) {
-                arrHeader.add(firstLetter);
-            }
+            arrObjects.add(arrSong.get(i));
         }
 
-        Comparator<String> comparatorHeader = new Comparator<String>() {
-            @Override
-            public int compare(String lhs, String rhs) {
-                if (lhs.compareTo(rhs) > 0) {
-                    return 1;
-                }
-                if (lhs.compareTo(rhs) < 0) {
-                    return -1;
-                }
-                return 0;
-            }
-        };
-        Collections.sort(arrHeader, comparatorHeader);
-
-        for (String s : arrHeader) {
-            arrObjects.add(s);
-            for (Song temp : arrSong) {
-                if (temp.getName().substring(0, 1).equals(s)) {
-                    arrObjects.add(temp);
-                }
-            }
-            ((Song) arrObjects.get(arrObjects.size() - 1)).setHasLine(false);
-        }
-
-        if (arrNumber.size() > 2) {
-            ((Song) arrNumber.get(arrNumber.size() - 1)).setHasLine(false);
-            arrNumber.addAll(arrObjects);
-            return arrNumber;
-        }
-
-        arrObjects.add(Constant.PLAY_SHUFFLE_ALL);
         return arrObjects;
     }
 
     public ArrayList<Object> getArrArtist() {
         ArrayList<Artist> arrArtist = getArtist();
         ArrayList<Object> arrObjects = new ArrayList<>();
-        ArrayList<Object> arrLetter = new ArrayList<>();
-        ArrayList<Object> arrNumber = new ArrayList<>();
-        ArrayList<String> arrHeader = new ArrayList<>();
 
-        arrNumber.add("#");
-        String firstLetter;
-
-        for (int i = 0; i < arrArtist.size(); i++) {
-            firstLetter = arrArtist.get(i).getName().substring(0, 1);
-            if (Character.isLetter(firstLetter.charAt(0))) {
-
-                arrLetter.add(arrArtist.get(i));
-            } else if (!firstLetter.substring(0, 1).equals("<")) {
-                arrNumber.add(arrArtist.get(i));
-            }
-        }
-
-        Comparator<Object> comparatorObject = new Comparator<Object>() {
+        Comparator<Artist> comparator = new Comparator<Artist>() {
             @Override
-            public int compare(Object lhs, Object rhs) {
-                if (((Artist) lhs).getName().compareTo(((Artist) rhs).getName()) > 0) {
-                    return 1;
-                }
-                if (((Artist) lhs).getName().compareTo(((Artist) rhs).getName()) < 0) {
-                    return -1;
-                }
-                return 0;
+            public int compare(Artist artist, Artist t1) {
+                return artist.getName().compareToIgnoreCase(t1.getName());
             }
         };
-        Collections.sort(arrLetter, comparatorObject);
+        Collections.sort(arrArtist, comparator);
 
-        for (Artist temp : arrArtist) {
-            firstLetter = temp.getName().substring(0, 1);
-            if (!arrHeader.contains(firstLetter) && Character.isLetter(firstLetter.charAt(0))) {
-                arrHeader.add(firstLetter);
+        if (!Character.isLetter(arrArtist.get(0).getName().charAt(0))) {
+            arrObjects.add("#");
+        }
+
+        int positionLetter = 0;
+
+        for (int i = 0, size = arrArtist.size(); i < size; i++) {
+            if (!Character.isLetter(arrArtist.get(i).getName().charAt(0))) {
+                arrObjects.add(arrArtist.get(i));
+                positionLetter = i;
+            } else {
+                ((Artist) arrObjects.get(arrObjects.size() - 1)).setHasLine(false);
+                if (positionLetter != 0) {
+                    positionLetter++;
+                }
+                break;
             }
         }
 
-        Comparator<String> comparatorHeader = new Comparator<String>() {
-            @Override
-            public int compare(String lhs, String rhs) {
-                if (lhs.compareTo(rhs) > 0) {
-                    return 1;
-                }
-                if (lhs.compareTo(rhs) < 0) {
-                    return -1;
-                }
-                return 0;
+        String currentLetter;
+        String lastLetter;
+        for (int i = positionLetter, size = arrArtist.size(); i < size; i++) {
+            currentLetter = String.valueOf(arrArtist.get(i).getName().charAt(0));
+            lastLetter = String.valueOf(arrArtist.get(i - 1).getName().charAt(0));
+            if (!currentLetter.equalsIgnoreCase(lastLetter)) {
+                ((Artist) arrObjects.get(arrObjects.size() - 1)).setHasLine(false);
+                arrObjects.add(currentLetter);
             }
-        };
-        Collections.sort(arrHeader, comparatorHeader);
-
-        for (String s : arrHeader) {
-            arrObjects.add(s);
-            for (Artist temp : arrArtist) {
-                if (temp.getName().substring(0, 1).equals(s)) {
-                    arrObjects.add(temp);
-                }
-            }
-            ((Artist) arrObjects.get(arrObjects.size() - 1)).setHasLine(false);
+            arrObjects.add(arrArtist.get(i));
         }
-
-        if (arrNumber.size() > 1) {
-            ((Artist) arrNumber.get(arrNumber.size() - 1)).setHasLine(false);
-            arrNumber.addAll(arrObjects);
-            return arrNumber;
-        }
-
         return arrObjects;
     }
 
