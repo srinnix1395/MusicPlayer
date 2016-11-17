@@ -8,9 +8,10 @@
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="3dp"
-        android:paddingEnd="10dp"
-        android:paddingStart="10dp"/>
+        android:scrollbarSize="7dp"
+        android:scrollbarTrackVertical="@color/colorGray"
+        android:scrollbarThumbVertical="@color/colorGrayDisable"
+        android:scrollbars="vertical"/>
 
     <ProgressBar
         android:id="@+id/progressBar"

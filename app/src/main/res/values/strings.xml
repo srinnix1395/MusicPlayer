@@ -8,4 +8,6 @@
     <string name="shakeToShuffle">Lắc để đổi bài</string>
     <string name="play">Phát</string>
     <string name="detail">Chi tiết</string>
+    <string name="sortAZ">Sắp xếp A-Z</string>
+    <string name="sortZA">Sắp xếp Z-A</string>
 </resources>

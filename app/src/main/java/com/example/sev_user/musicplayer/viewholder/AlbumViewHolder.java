@@ -1,5 +1,6 @@
 package com.example.sev_user.musicplayer.viewholder;
 
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
@@ -43,9 +44,20 @@ public class AlbumViewHolder extends RecyclerView.ViewHolder implements View.OnC
         callback = (OnClickViewHolder) itemView.getContext();
     }
 
-    public void setupViewHolder(Album album, int position) {
+    public void setupViewHolder(Album album, int position, int margin, int noMargin) {
         this.album = album;
         this.position = position;
+
+        GridLayoutManager.LayoutParams layoutParams = (GridLayoutManager.LayoutParams) itemView.getLayoutParams();
+
+        if (position % 2 == 0) {
+            layoutParams.leftMargin = margin;
+            layoutParams.rightMargin = noMargin;
+        } else {
+            layoutParams.leftMargin = noMargin;
+            layoutParams.rightMargin = margin;
+        }
+        itemView.requestLayout();
 
         Glide.with(itemView.getContext())
                 .load(album.getImage())

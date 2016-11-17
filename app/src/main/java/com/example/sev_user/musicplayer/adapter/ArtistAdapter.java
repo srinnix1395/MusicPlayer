@@ -1,11 +1,13 @@
 package com.example.sev_user.musicplayer.adapter;
 
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.sev_user.musicplayer.R;
+import com.example.sev_user.musicplayer.custom.ArtistDiffCallback;
 import com.example.sev_user.musicplayer.model.Artist;
 import com.example.sev_user.musicplayer.viewholder.ArtistViewHolder;
 import com.example.sev_user.musicplayer.viewholder.HeaderViewHolder;
@@ -75,6 +77,14 @@ public class ArtistAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         return -1;
     }
 
+    public void swapItems(ArrayList<Object> newList) {
+        final ArtistDiffCallback diffCallback = new ArtistDiffCallback(newList, arrayList);
+        final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
+
+        arrayList.clear();
+        arrayList.addAll(newList);
+        diffResult.dispatchUpdatesTo(this);
+    }
     class EmptyViewHolder extends RecyclerView.ViewHolder {
         public EmptyViewHolder(View itemView) {
             super(itemView);

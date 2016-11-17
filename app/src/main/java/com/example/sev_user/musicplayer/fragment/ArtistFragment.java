@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.example.sev_user.musicplayer.R;
+import com.example.sev_user.musicplayer.adapter.AlbumAdapter;
 import com.example.sev_user.musicplayer.adapter.ArtistAdapter;
 import com.example.sev_user.musicplayer.provider.MusicContentProvider;
 
@@ -39,6 +40,7 @@ public class ArtistFragment extends android.support.v4.app.Fragment {
 
     private ArrayList<Object> artistArrayList;
     private ArtistAdapter adapter;
+    private int sortType = AlbumAdapter.DEFAULT_SORT;
 
     @Nullable
     @Override
@@ -85,7 +87,7 @@ public class ArtistFragment extends android.support.v4.app.Fragment {
 
     private void initView() {
         progressBar.setIndeterminate(true);
-        progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#333333"), PorterDuff.Mode.SRC_ATOP);
+        progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#FF4081"), PorterDuff.Mode.SRC_ATOP);
 
         artistArrayList = new ArrayList<>();
         adapter = new ArtistAdapter(artistArrayList);
@@ -96,5 +98,28 @@ public class ArtistFragment extends android.support.v4.app.Fragment {
         itemAnimator.setAddDuration(1000);
         itemAnimator.setChangeDuration(1000);
         recyclerView.setItemAnimator(itemAnimator);
+    }
+
+    public void sort(int type) {
+        if (type != sortType) {
+            ArrayList<Object> newList = reverseList();
+            adapter.swapItems(newList);
+            sortType = type;
+        }
+    }
+
+    private ArrayList<Object> reverseList() {
+        ArrayList<Object> newList = new ArrayList<>();
+        newList.add(artistArrayList.get(0));
+
+
+        for (int i = artistArrayList.size() - 1, pivot = 1, j = 1; i > 0; i--) {
+            newList.add(pivot, artistArrayList.get(i));
+            j++;
+            if (artistArrayList.get(i) instanceof String) {
+                pivot = j;
+            }
+        }
+        return newList;
     }
 }

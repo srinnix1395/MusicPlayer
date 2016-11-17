@@ -14,7 +14,9 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.example.sev_user.musicplayer.R;
+import com.example.sev_user.musicplayer.adapter.AlbumAdapter;
 import com.example.sev_user.musicplayer.adapter.SongAdapter;
+import com.example.sev_user.musicplayer.model.Song;
 import com.example.sev_user.musicplayer.provider.MusicContentProvider;
 
 import java.util.ArrayList;
@@ -40,7 +42,7 @@ public class SongFragment extends Fragment {
 
     private ArrayList<Object> songArrayList;
     private SongAdapter adapter;
-
+    private int sortType = AlbumAdapter.ASCENDING;
 
     @Nullable
     @Override
@@ -85,7 +87,7 @@ public class SongFragment extends Fragment {
 
     private void initView() {
         progressBar.setIndeterminate(true);
-        progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#333333"), PorterDuff.Mode.SRC_ATOP);
+        progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#FF4081"), PorterDuff.Mode.SRC_ATOP);
 
         songArrayList = new ArrayList<>();
         adapter = new SongAdapter(songArrayList);
@@ -96,9 +98,41 @@ public class SongFragment extends Fragment {
         itemAnimator.setAddDuration(1000);
         itemAnimator.setChangeDuration(1000);
         recyclerView.setItemAnimator(itemAnimator);
+
+
     }
 
     public ArrayList<Object> getArrayListSong() {
         return songArrayList;
+    }
+
+    public Song getFirstSong() {
+        if (songArrayList.size() > 0) {
+            return (Song) songArrayList.get(2);
+        }
+        return null;
+    }
+
+    public void sort(int type) {
+        if (type != sortType) {
+            ArrayList<Object> newList = reverseList();
+            adapter.swapItems(newList);
+            sortType = type;
+        }
+    }
+
+    private ArrayList<Object> reverseList() {
+        ArrayList<Object> newList = new ArrayList<>();
+        newList.add(songArrayList.get(0));
+
+
+        for (int i = songArrayList.size() - 1, pivot = 1, j = 1; i > 0; i--) {
+            newList.add(pivot, songArrayList.get(i));
+            j++;
+            if (songArrayList.get(i) instanceof String) {
+                pivot = j;
+            }
+        }
+        return newList;
     }
 }

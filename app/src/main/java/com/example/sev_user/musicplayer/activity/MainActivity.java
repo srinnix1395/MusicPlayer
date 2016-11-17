@@ -32,6 +32,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.sev_user.musicplayer.R;
+import com.example.sev_user.musicplayer.adapter.AlbumAdapter;
 import com.example.sev_user.musicplayer.adapter.PagerAdapter;
 import com.example.sev_user.musicplayer.callback.OnClickViewHolder;
 import com.example.sev_user.musicplayer.constant.Constant;
@@ -209,7 +210,7 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
             isRunning = true;
             new UpdateUIAsynctask().execute();
             if (currentAction.isEmpty()) {
-                initDataService();
+                initData();
             }
         }
 
@@ -227,6 +228,7 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
         if (SharedPreUtil.getInstance(this).getBoolean(Constant.IS_PLAYING_SERVICE, false)) {
             initService();
         }
+//        initData();
     }
 
     @Override
@@ -267,8 +269,49 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
                 SharedPreUtil.getInstance(this).putBoolean(Constant.SETTING_SHAKE_TO_SHUFFLE, item.isChecked());
                 break;
             }
+            case R.id.miSortAZ: {
+                sortAZ();
+                break;
+            }
+            case R.id.miSortZA: {
+                sortZA();
+                break;
+            }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void sortZA() {
+        switch (viewPager.getCurrentItem()) {
+            case 0:{
+                ((ArtistFragment) adapter.getItem(0)).sort(AlbumAdapter.DESCENDING);
+                break;
+            }
+            case 1:{
+                ((AlbumFragment) adapter.getItem(1)).sort(AlbumAdapter.DESCENDING);
+                break;
+            }
+            case 2:{
+                ((SongFragment) adapter.getItem(2)).sort(AlbumAdapter.DESCENDING);
+                break;
+            }
+        }    }
+
+    private void sortAZ() {
+        switch (viewPager.getCurrentItem()) {
+            case 0:{
+                ((ArtistFragment) adapter.getItem(0)).sort(AlbumAdapter.ASCENDING);
+                break;
+            }
+            case 1:{
+                ((AlbumFragment) adapter.getItem(1)).sort(AlbumAdapter.ASCENDING);
+                break;
+            }
+            case 2:{
+                ((SongFragment) adapter.getItem(2)).sort(AlbumAdapter.ASCENDING);
+                break;
+            }
+        }
     }
 
     @Override
@@ -308,8 +351,8 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
 
     //process service-------------------------
 
-    private void initDataService() {
-        if (musicService.isCreated()) {
+    private void initData() {
+        if (musicService != null && musicService.isCreated()) {
             tvSongName.setText(musicService.getSongName());
             tvArtistName.setText(musicService.getArtistName());
             imvPlay.setActivated(musicService.isPlaying());
@@ -330,6 +373,33 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
             Glide.with(this)
                     .load(musicService.getAlbumCover())
                     .error(musicService.getCurrentPlaceholder())
+                    .into(imvCover);
+        } else {
+            Song song = songFragment.getFirstSong();
+            if (song == null) {
+                return;
+            }
+
+            tvSongName.setText(song.getName());
+            tvArtistName.setText(song.getArtist());
+            imvPlay.setActivated(false);
+            imvPlayToolbar.setActivated(false);
+            setTimeDuration();
+
+            if (song.getImage() == null) {
+                imvSongThumbnail.setScaleType(ImageView.ScaleType.FIT_XY);
+                imvSongThumbnail.setImageResource(song.getPlaceHolder());
+            } else {
+                imvSongThumbnail.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                Glide.with(this)
+                        .load(song.getImage())
+                        .thumbnail(0.1f)
+                        .into(imvSongThumbnail);
+            }
+
+            Glide.with(this)
+                    .load(song.getImage())
+                    .error(song.getPlaceHolder())
                     .into(imvCover);
         }
     }
@@ -502,7 +572,7 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
         viewPager.setCurrentItem(2, true);
         viewPager.setOffscreenPageLimit(3);
         tabLayout.setupWithViewPager(viewPager);
-        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition(), true);

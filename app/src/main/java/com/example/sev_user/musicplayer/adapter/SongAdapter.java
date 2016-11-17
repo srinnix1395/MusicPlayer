@@ -1,5 +1,6 @@
 package com.example.sev_user.musicplayer.adapter;
 
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +8,7 @@ import android.view.ViewGroup;
 
 import com.example.sev_user.musicplayer.R;
 import com.example.sev_user.musicplayer.constant.Constant;
+import com.example.sev_user.musicplayer.custom.SongDiffCallback;
 import com.example.sev_user.musicplayer.model.Song;
 import com.example.sev_user.musicplayer.viewholder.HeaderViewHolder;
 import com.example.sev_user.musicplayer.viewholder.PlayShuffleViewHolder;
@@ -78,13 +80,19 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (arrayList.get(position) instanceof Song) {
             return VIEW_SONG;
         }
-        if (arrayList.get(position) instanceof String) {
-            if (arrayList.get(position).equals(Constant.PLAY_SHUFFLE_ALL)) {
-                return VIEW_PLAY_SHUFFLE;
-            }
-            return VIEW_STRING;
+        if (arrayList.get(position).equals(Constant.PLAY_SHUFFLE_ALL)) {
+            return VIEW_PLAY_SHUFFLE;
         }
-        return -1;
+        return VIEW_STRING;
+    }
+
+    public void swapItems(ArrayList<Object> newList) {
+        final SongDiffCallback diffCallback = new SongDiffCallback(newList, arrayList);
+        final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
+
+        arrayList.clear();
+        arrayList.addAll(newList);
+        diffResult.dispatchUpdatesTo(this);
     }
 
     class EmptyViewHolder extends RecyclerView.ViewHolder {

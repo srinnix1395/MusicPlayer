@@ -5,7 +5,6 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -19,6 +18,7 @@ import com.example.sev_user.musicplayer.model.Album;
 import com.example.sev_user.musicplayer.provider.MusicContentProvider;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.concurrent.Callable;
 
 import butterknife.Bind;
@@ -41,6 +41,7 @@ public class AlbumFragment extends Fragment {
 
     private ArrayList<Album> albumArrayList;
     private AlbumAdapter adapter;
+    private int sortType = AlbumAdapter.DEFAULT_SORT;
 
     @Nullable
     @Override
@@ -59,17 +60,13 @@ public class AlbumFragment extends Fragment {
 
     private void initView() {
         progressBar.setIndeterminate(true);
-        progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#333333"), PorterDuff.Mode.SRC_ATOP);
+        progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#FF4081"), PorterDuff.Mode.SRC_ATOP);
 
         albumArrayList = new ArrayList<>();
-        adapter = new AlbumAdapter(albumArrayList);
+        adapter = new AlbumAdapter(getContext(), albumArrayList);
 
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         recyclerView.setAdapter(adapter);
-        RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
-        itemAnimator.setAddDuration(1000);
-        itemAnimator.setChangeDuration(1000);
-        recyclerView.setItemAnimator(itemAnimator);
     }
 
     private void initData() {
@@ -98,5 +95,16 @@ public class AlbumFragment extends Fragment {
                 });
 
 
+    }
+
+    public void sort(int type) {
+        ArrayList<Album> newList = new ArrayList<>();
+        newList.addAll(albumArrayList);
+
+        if (type != sortType) {
+            Collections.reverse(newList);
+            adapter.swapItems(newList);
+            sortType = type;
+        }
     }
 }
