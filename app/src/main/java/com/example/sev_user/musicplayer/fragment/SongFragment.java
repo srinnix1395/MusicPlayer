@@ -132,7 +132,7 @@ public class SongFragment extends Fragment {
             j++;
             if (object instanceof String) {
                 pivot = j;
-            } else if (((Song) object).getId() == currentSong.getId()) {
+            } else if (currentSong != null && ((Song) object).getId() == currentSong.getId()) {
                 newCurrentPosition = i;
             }
         }
@@ -142,6 +142,7 @@ public class SongFragment extends Fragment {
         } else {
             ((MainActivity) getActivity()).resetArrayAudio(newList, newCurrentPosition);
         }
+
         return newList;
     }
 }

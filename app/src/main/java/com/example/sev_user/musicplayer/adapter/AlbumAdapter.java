@@ -1,6 +1,7 @@
 package com.example.sev_user.musicplayer.adapter;
 
 import android.content.Context;
+import android.os.Handler;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -57,5 +58,11 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumViewHolder> {
         arrayList.clear();
         arrayList.addAll(newList);
         diffResult.dispatchUpdatesTo(this);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                notifyDataSetChanged();
+            }
+        }, 300);
     }
 }

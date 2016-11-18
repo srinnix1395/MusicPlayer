@@ -6,8 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:actionOverflowButtonStyle">@style/MyOverflowButton</item>
-
+        <item name="actionOverflowButtonStyle">@style/MyOverflowButton</item>
     </style>
 
     <!--style tab layout-->
@@ -29,7 +28,6 @@
         <item name="android:tint">#fff</item>
     </style>
     <!--style icon menu overflow-->
-
 
     <style name="MyCustomEditText" parent="AppTheme">
         <item name="colorControlNormal">@color/colorGray</item>

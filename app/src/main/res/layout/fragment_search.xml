@@ -11,16 +11,16 @@
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary">
 
-        <EditText
-            android:id="@+id/etSearch"
-            android:theme="@style/MyCustomEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            android:hint="@string/search"
-            android:textColor="#fff"
-            android:textColorHint="@color/colorGray"
-            android:textSize="20sp"/>
+        <!--<EditText-->
+            <!--android:id="@+id/etSearch"-->
+            <!--android:theme="@style/MyCustomEditText"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginRight="10dp"-->
+            <!--android:hint="@string/search"-->
+            <!--android:textColor="#fff"-->
+            <!--android:textColorHint="@color/colorGray"-->
+            <!--android:textSize="20sp"/>-->
     </android.support.v7.widget.Toolbar>
 
     <android.support.v7.widget.RecyclerView

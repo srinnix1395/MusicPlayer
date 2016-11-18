@@ -272,15 +272,15 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
                 break;
             }
             case R.id.miSortAZ: {
-                if ((detailArtistFragment != null && !detailArtistFragment.isVisible())
-                        || (detailAlbumFragment != null && !detailAlbumFragment.isVisible())) {
+                if ((detailArtistFragment == null || !detailArtistFragment.isVisible())
+                        || detailAlbumFragment == null || !detailAlbumFragment.isVisible()) {
                     sortAZ();
                 }
                 break;
             }
             case R.id.miSortZA: {
-                if ((detailArtistFragment != null && !detailArtistFragment.isVisible())
-                        || (detailAlbumFragment != null && !detailAlbumFragment.isVisible())) {
+                if ((detailArtistFragment == null || !detailArtistFragment.isVisible())
+                        || detailAlbumFragment == null || !detailAlbumFragment.isVisible()) {
                     sortZA();
                 }
                 break;
