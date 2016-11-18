@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.example.sev_user.musicplayer.R;
+import com.example.sev_user.musicplayer.activity.MainActivity;
 import com.example.sev_user.musicplayer.adapter.AlbumAdapter;
 import com.example.sev_user.musicplayer.adapter.SongAdapter;
 import com.example.sev_user.musicplayer.model.Song;
@@ -98,8 +99,6 @@ public class SongFragment extends Fragment {
         itemAnimator.setAddDuration(1000);
         itemAnimator.setChangeDuration(1000);
         recyclerView.setItemAnimator(itemAnimator);
-
-
     }
 
     public ArrayList<Object> getArrayListSong() {
@@ -113,25 +112,35 @@ public class SongFragment extends Fragment {
         return null;
     }
 
-    public void sort(int type) {
+    public void sort(Song currentSong, int type) {
         if (type != sortType) {
-            ArrayList<Object> newList = reverseList();
+            ArrayList<Object> newList = reverseList(currentSong);
             adapter.swapItems(newList);
             sortType = type;
         }
     }
 
-    private ArrayList<Object> reverseList() {
+    private ArrayList<Object> reverseList(Song currentSong) {
+        int newCurrentPosition = 2;
         ArrayList<Object> newList = new ArrayList<>();
         newList.add(songArrayList.get(0));
 
-
         for (int i = songArrayList.size() - 1, pivot = 1, j = 1; i > 0; i--) {
-            newList.add(pivot, songArrayList.get(i));
+            Object object = songArrayList.get(i);
+
+            newList.add(pivot, object);
             j++;
-            if (songArrayList.get(i) instanceof String) {
+            if (object instanceof String) {
                 pivot = j;
+            } else if (((Song) object).getId() == currentSong.getId()) {
+                newCurrentPosition = i;
             }
+        }
+
+        if (currentSong == null) {
+            ((MainActivity) getActivity()).resetArrayAudio(newList, 2);
+        } else {
+            ((MainActivity) getActivity()).resetArrayAudio(newList, newCurrentPosition);
         }
         return newList;
     }

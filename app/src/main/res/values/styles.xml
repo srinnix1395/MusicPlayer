@@ -30,10 +30,12 @@
     </style>
     <!--style icon menu overflow-->
 
-    
-    <style name="MyCustomEditText">
-        <item name="colorControlNormal">#c5c5c5</item>
-        <item name="colorControlActivated">@color/colorAccent</item>
-        <item name="colorControlHighlight">@color/colorAccent</item>
+
+    <style name="MyCustomEditText" parent="AppTheme">
+        <item name="colorControlNormal">@color/colorGray</item>
+        <item name="colorControlActivated">@color/colorGray</item>
+        <item name="colorControlHighlight">@color/colorGray</item>
     </style>
+
+
 </resources>

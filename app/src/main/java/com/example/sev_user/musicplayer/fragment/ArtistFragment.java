@@ -110,10 +110,8 @@ public class ArtistFragment extends android.support.v4.app.Fragment {
 
     private ArrayList<Object> reverseList() {
         ArrayList<Object> newList = new ArrayList<>();
-        newList.add(artistArrayList.get(0));
 
-
-        for (int i = artistArrayList.size() - 1, pivot = 1, j = 1; i > 0; i--) {
+        for (int i = artistArrayList.size() - 1, pivot = 0, j = 0; i >= 0; i--) {
             newList.add(pivot, artistArrayList.get(i));
             j++;
             if (artistArrayList.get(i) instanceof String) {

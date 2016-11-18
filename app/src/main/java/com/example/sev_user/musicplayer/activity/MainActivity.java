@@ -246,18 +246,20 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.miSearch: {
-//                searchFragment = new SearchFragment();
-//                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-//                transaction.add(R.id.viewList, searchFragment);
-//                if (detailAlbumFragment != null && detailAlbumFragment.isVisible()) {
-//                    backToMainFragment(detailAlbumFragment);
-//                }
-//                if (detailArtistFragment != null && detailArtistFragment.isVisible()) {
-//                    backToMainFragment(detailArtistFragment);
-//                }
-//                transaction.show(searchFragment);
-//                transaction.hide(mainFragment);
-//                transaction.commit();
+                searchFragment = new SearchFragment();
+
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
+                transaction.add(R.id.viewList, searchFragment);
+                transaction.show(searchFragment);
+                transaction.commit();
+
+                if (detailAlbumFragment != null && detailAlbumFragment.isVisible()) {
+                    backToMainFragment(detailAlbumFragment);
+                }
+                if (detailArtistFragment != null && detailArtistFragment.isVisible()) {
+                    backToMainFragment(detailArtistFragment);
+                }
                 break;
             }
             case R.id.miPlayShuffle: {
@@ -270,11 +272,17 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
                 break;
             }
             case R.id.miSortAZ: {
-                sortAZ();
+                if ((detailArtistFragment != null && !detailArtistFragment.isVisible())
+                        || (detailAlbumFragment != null && !detailAlbumFragment.isVisible())) {
+                    sortAZ();
+                }
                 break;
             }
             case R.id.miSortZA: {
-                sortZA();
+                if ((detailArtistFragment != null && !detailArtistFragment.isVisible())
+                        || (detailAlbumFragment != null && !detailAlbumFragment.isVisible())) {
+                    sortZA();
+                }
                 break;
             }
         }
@@ -283,34 +291,44 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
 
     private void sortZA() {
         switch (viewPager.getCurrentItem()) {
-            case 0:{
+            case 0: {
                 ((ArtistFragment) adapter.getItem(0)).sort(AlbumAdapter.DESCENDING);
                 break;
             }
-            case 1:{
+            case 1: {
                 ((AlbumFragment) adapter.getItem(1)).sort(AlbumAdapter.DESCENDING);
                 break;
             }
-            case 2:{
-                ((SongFragment) adapter.getItem(2)).sort(AlbumAdapter.DESCENDING);
+            case 2: {
+                ((SongFragment) adapter.getItem(2)).sort(musicService != null ? musicService.getCurrentSong() : null,
+                        AlbumAdapter.DESCENDING);
                 break;
             }
-        }    }
+        }
+    }
 
     private void sortAZ() {
         switch (viewPager.getCurrentItem()) {
-            case 0:{
+            case 0: {
                 ((ArtistFragment) adapter.getItem(0)).sort(AlbumAdapter.ASCENDING);
                 break;
             }
-            case 1:{
+            case 1: {
                 ((AlbumFragment) adapter.getItem(1)).sort(AlbumAdapter.ASCENDING);
                 break;
             }
-            case 2:{
-                ((SongFragment) adapter.getItem(2)).sort(AlbumAdapter.ASCENDING);
+            case 2: {
+                ((SongFragment) adapter.getItem(2)).sort(musicService != null ? musicService.getCurrentSong() : null
+                        , AlbumAdapter.ASCENDING);
                 break;
             }
+        }
+    }
+
+    public void resetArrayAudio(ArrayList<Object> newList, int currentPosition) {
+        if (musicService != null && musicService.isCreated()) {
+            musicService.setListSong(newList);
+            musicService.setCurrentPosition(currentPosition);
         }
     }
 
@@ -823,18 +841,20 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
     }
 
     public void backToMainFragment(Fragment fragment) {
-//        if (fragment instanceof SearchFragment) {
-//            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-//            transaction.remove(searchFragment);
-//            transaction.show(mainFragment);
-//            transaction.commit();
-//            return;
-//        }
+        if (fragment instanceof SearchFragment) {
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
+            transaction.remove(searchFragment);
+            searchFragment.onDestroyView();
+            transaction.commit();
+            return;
+        }
 
         if (fragment instanceof DetailAlbumFragment) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.setCustomAnimations(R.anim.slide_in, R.anim.slide_out);
             transaction.remove(detailAlbumFragment);
+            detailAlbumFragment.onDestroyView();
             transaction.commit();
             return;
         }
@@ -843,6 +863,7 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.setCustomAnimations(R.anim.slide_in, R.anim.slide_out);
             transaction.remove(detailArtistFragment);
+            detailArtistFragment.onDestroyView();
             transaction.commit();
         }
     }

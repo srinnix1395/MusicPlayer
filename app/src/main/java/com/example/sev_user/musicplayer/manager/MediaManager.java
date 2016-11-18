@@ -182,4 +182,12 @@ public class MediaManager implements MediaPlayer.OnCompletionListener {
     public int getCurrentSeekbar() {
         return media.getCurrentPosition();
     }
+
+    public void setArrAudio(ArrayList<Object> arrAudio) {
+        this.arrAudio = arrAudio;
+    }
+
+    public void setCurrentPosition(int currentPosition) {
+        this.currentPosition = currentPosition;
+    }
 }

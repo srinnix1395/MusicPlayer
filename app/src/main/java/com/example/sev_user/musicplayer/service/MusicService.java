@@ -26,11 +26,12 @@ import com.example.sev_user.musicplayer.model.SongPlus;
 import com.example.sev_user.musicplayer.provider.MusicContentProvider;
 import com.example.sev_user.musicplayer.utils.SharedPreUtil;
 
+import java.util.ArrayList;
+
 /**
  * Created by sev_user on 7/18/2016.
  */
 public class MusicService extends Service {
-    private static final String TAG = "MusicService";
     private MediaManager mediaManager;
     private BinderMusic binder = new BinderMusic();
     private boolean isPlayingService = true;
@@ -310,6 +311,14 @@ public class MusicService extends Service {
 
     public Song getCurrentSong() {
         return mediaManager.getCurrentSong();
+    }
+
+    public void setListSong(ArrayList<Object> arrAudio) {
+        mediaManager.setArrAudio(arrAudio);
+    }
+
+    public void setCurrentPosition(int position) {
+        mediaManager.setCurrentPosition(position);
     }
 
     public class BinderMusic extends Binder {
