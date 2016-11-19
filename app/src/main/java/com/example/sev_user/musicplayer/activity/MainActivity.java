@@ -44,6 +44,7 @@ import com.example.sev_user.musicplayer.fragment.SearchFragment;
 import com.example.sev_user.musicplayer.fragment.SongFragment;
 import com.example.sev_user.musicplayer.model.Album;
 import com.example.sev_user.musicplayer.model.Artist;
+import com.example.sev_user.musicplayer.model.BaseModel;
 import com.example.sev_user.musicplayer.model.Song;
 import com.example.sev_user.musicplayer.model.SongPlus;
 import com.example.sev_user.musicplayer.service.MusicService;
@@ -325,7 +326,7 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
         }
     }
 
-    public void resetArrayAudio(ArrayList<Object> newList, int currentPosition) {
+    public void resetArrayAudio(ArrayList<BaseModel> newList, int currentPosition) {
         if (musicService != null && musicService.isCreated()) {
             musicService.setListSong(newList);
             musicService.setCurrentPosition(currentPosition);
@@ -658,10 +659,10 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
         transaction.commit();
     }
 
-    private ArrayList<SongPlus> getSongOfArtist(ArrayList<Object> arrayListSong, Artist artist) {
+    private ArrayList<SongPlus> getSongOfArtist(ArrayList<BaseModel> arrayListSong, Artist artist) {
         ArrayList<SongPlus> arrayList = new ArrayList<>();
-        for (Object obj : arrayListSong) {
-            if (obj instanceof Song && ((Song) obj).getArtistId() == artist.getId()) {
+        for (BaseModel obj : arrayListSong) {
+            if (obj.getTypeModel() == BaseModel.TYPE_SONG && ((Song) obj).getArtistId() == artist.getId()) {
                 arrayList.add(new SongPlus(((Song) obj), 0, arrayListSong.indexOf(obj)));
             }
         }
@@ -681,7 +682,7 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
         updateDataSong();
     }
 
-    private ArrayList<SongPlus> getSongOfAlbum(ArrayList<Object> arrayList, Album album) {
+    private ArrayList<SongPlus> getSongOfAlbum(ArrayList<BaseModel> arrayList, Album album) {
         ArrayList<SongPlus> arrSong = new ArrayList<>();
         for (Object obj : arrayList) {
             if (obj instanceof Song && ((Song) obj).getIdAlbum() == album.getId()) {

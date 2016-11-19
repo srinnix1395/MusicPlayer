@@ -17,14 +17,16 @@ public class ImageUtils {
             R.color.colorLightPurple,
             R.color.colorGreen,
             R.color.colorOrange,
-            R.color.colorBlue
+            R.color.colorBlue,
+            R.color.colorLightGreen
     };
     private static int[] PLACE_HOLDER ={
             R.drawable.background_no_image_pink,
             R.drawable.background_no_image_light_purple,
             R.drawable.background_no_image_green,
             R.drawable.background_no_image_orange,
-            R.drawable.background_no_image_blue
+            R.drawable.background_no_image_blue,
+            R.drawable.background_no_image_light_green
     };
 
 

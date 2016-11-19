@@ -15,6 +15,7 @@ import android.widget.ProgressBar;
 import com.example.sev_user.musicplayer.R;
 import com.example.sev_user.musicplayer.adapter.AlbumAdapter;
 import com.example.sev_user.musicplayer.adapter.ArtistAdapter;
+import com.example.sev_user.musicplayer.model.BaseModel;
 import com.example.sev_user.musicplayer.provider.MusicContentProvider;
 
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ public class ArtistFragment extends android.support.v4.app.Fragment {
     @Bind(R.id.progressBar)
     ProgressBar progressBar;
 
-    private ArrayList<Object> artistArrayList;
+    private ArrayList<BaseModel> artistArrayList;
     private ArtistAdapter adapter;
     private int sortType = AlbumAdapter.DEFAULT_SORT;
 
@@ -58,17 +59,17 @@ public class ArtistFragment extends android.support.v4.app.Fragment {
     }
 
     private void initData() {
-        Single.fromCallable(new Callable<ArrayList<Object>>() {
+        Single.fromCallable(new Callable<ArrayList<BaseModel>>() {
             @Override
-            public ArrayList<Object> call() throws Exception {
+            public ArrayList<BaseModel> call() throws Exception {
                 MusicContentProvider contentProvider = new MusicContentProvider(getContext());
                 return contentProvider.getArrArtist();
             }
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleSubscriber<ArrayList<Object>>() {
+                .subscribe(new SingleSubscriber<ArrayList<BaseModel>>() {
                     @Override
-                    public void onSuccess(ArrayList<Object> value) {
+                    public void onSuccess(ArrayList<BaseModel> value) {
                         artistArrayList.addAll(value);
                         adapter.notifyDataSetChanged();
 
@@ -102,19 +103,19 @@ public class ArtistFragment extends android.support.v4.app.Fragment {
 
     public void sort(int type) {
         if (type != sortType) {
-            ArrayList<Object> newList = reverseList();
+            ArrayList<BaseModel> newList = reverseList();
             adapter.swapItems(newList);
             sortType = type;
         }
     }
 
-    private ArrayList<Object> reverseList() {
-        ArrayList<Object> newList = new ArrayList<>();
+    private ArrayList<BaseModel> reverseList() {
+        ArrayList<BaseModel> newList = new ArrayList<>();
 
         for (int i = artistArrayList.size() - 1, pivot = 0, j = 0; i >= 0; i--) {
             newList.add(pivot, artistArrayList.get(i));
             j++;
-            if (artistArrayList.get(i) instanceof String) {
+            if (artistArrayList.get(i).getTypeModel() == BaseModel.TYPE_HEADER) {
                 pivot = j;
             }
         }

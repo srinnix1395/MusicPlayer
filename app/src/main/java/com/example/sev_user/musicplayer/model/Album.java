@@ -3,7 +3,7 @@ package com.example.sev_user.musicplayer.model;
 /**
  * Created by sev_user on 7/15/2016.
  */
-public class Album {
+public class Album extends BaseModel{
     private int id;
     private String image;
     private String albumName;
@@ -42,5 +42,10 @@ public class Album {
 
     public int getFirstYear() {
         return firstYear;
+    }
+
+    @Override
+    public int getTypeModel() {
+        return BaseModel.TYPE_ALBUM;
     }
 }

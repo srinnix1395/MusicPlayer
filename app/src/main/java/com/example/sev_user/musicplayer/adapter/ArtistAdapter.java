@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import com.example.sev_user.musicplayer.R;
 import com.example.sev_user.musicplayer.custom.ArtistDiffCallback;
 import com.example.sev_user.musicplayer.model.Artist;
+import com.example.sev_user.musicplayer.model.BaseModel;
+import com.example.sev_user.musicplayer.model.Header;
 import com.example.sev_user.musicplayer.viewholder.ArtistViewHolder;
 import com.example.sev_user.musicplayer.viewholder.HeaderViewHolder;
 
@@ -21,9 +23,9 @@ public class ArtistAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private static final int VIEW_ARTIST = 0;
     private static final int VIEW_STRING = 1;
 
-    private ArrayList<Object> arrayList;
+    private ArrayList<BaseModel> arrayList;
 
-    public ArtistAdapter(ArrayList<Object> arrayList) {
+    public ArtistAdapter(ArrayList<BaseModel> arrayList) {
         this.arrayList = arrayList;
     }
 
@@ -54,10 +56,17 @@ public class ArtistAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (arrayList.get(position) instanceof Artist) {
-            ((ArtistViewHolder) holder).setupViewHolder((Artist) arrayList.get(position));
-        } else if (arrayList.get(position) instanceof String) {
-            ((HeaderViewHolder) holder).setupViewHolder((String) arrayList.get(position));
+        switch (arrayList.get(position).getTypeModel()) {
+            case BaseModel.TYPE_ARTIST: {
+                ((ArtistViewHolder) holder).setupViewHolder((Artist) arrayList.get(position));
+                break;
+            }
+            case BaseModel.TYPE_HEADER: {
+                ((HeaderViewHolder) holder).setupViewHolder((Header) arrayList.get(position));
+                break;
+            }
+            default:
+                break;
         }
     }
 
@@ -68,16 +77,13 @@ public class ArtistAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     @Override
     public int getItemViewType(int position) {
-        if (arrayList.get(position) instanceof Artist) {
+        if (arrayList.get(position).getTypeModel() == BaseModel.TYPE_ARTIST) {
             return VIEW_ARTIST;
         }
-        if (arrayList.get(position) instanceof String) {
-            return VIEW_STRING;
-        }
-        return -1;
+        return VIEW_STRING;
     }
 
-    public void swapItems(ArrayList<Object> newList) {
+    public void swapItems(ArrayList<BaseModel> newList) {
         final ArtistDiffCallback diffCallback = new ArtistDiffCallback(newList, arrayList);
         final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
 
@@ -85,6 +91,7 @@ public class ArtistAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         arrayList.addAll(newList);
         diffResult.dispatchUpdatesTo(this);
     }
+
     class EmptyViewHolder extends RecyclerView.ViewHolder {
         public EmptyViewHolder(View itemView) {
             super(itemView);

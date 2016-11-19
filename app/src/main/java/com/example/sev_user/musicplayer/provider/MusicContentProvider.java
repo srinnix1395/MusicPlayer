@@ -8,6 +8,8 @@ import android.provider.MediaStore;
 import com.example.sev_user.musicplayer.constant.Constant;
 import com.example.sev_user.musicplayer.model.Album;
 import com.example.sev_user.musicplayer.model.Artist;
+import com.example.sev_user.musicplayer.model.BaseModel;
+import com.example.sev_user.musicplayer.model.Header;
 import com.example.sev_user.musicplayer.model.Song;
 import com.example.sev_user.musicplayer.utils.ImageUtils;
 
@@ -87,12 +89,12 @@ public class MusicContentProvider {
         return arrSong;
     }
 
-    public ArrayList<Object> getArrSong() {
+    public ArrayList<BaseModel> getArrSong() {
         ArrayList<Song> arrSong = getSongHasImage();
-        ArrayList<Object> arrObjects = new ArrayList<>();
+        ArrayList<BaseModel> arrObjects = new ArrayList<>();
 
         if (arrSong.size() > 0) {
-            arrObjects.add(Constant.PLAY_SHUFFLE_ALL);
+            arrObjects.add(new Header(Constant.PLAY_SHUFFLE_ALL));
         }
 
         Comparator<Song> comparator = new Comparator<Song>() {
@@ -104,7 +106,7 @@ public class MusicContentProvider {
         Collections.sort(arrSong, comparator);
 
         if (!Character.isLetter(arrSong.get(0).getName().charAt(0))) {
-            arrObjects.add("#");
+            arrObjects.add(new Header("#"));
         }
 
         int positionLetter = 0;
@@ -129,7 +131,7 @@ public class MusicContentProvider {
             prevLetter = String.valueOf(arrSong.get(i - 1).getName().charAt(0));
             if (!currentLetter.equalsIgnoreCase(prevLetter)) {
                 ((Song) arrObjects.get(arrObjects.size() - 1)).setHasLine(false);
-                arrObjects.add(currentLetter);
+                arrObjects.add(new Header(currentLetter));
             }
             arrObjects.add(arrSong.get(i));
         }
@@ -141,9 +143,9 @@ public class MusicContentProvider {
         return arrObjects;
     }
 
-    public ArrayList<Object> getArrArtist() {
+    public ArrayList<BaseModel> getArrArtist() {
         ArrayList<Artist> arrArtist = getArtist();
-        ArrayList<Object> arrObjects = new ArrayList<>();
+        ArrayList<BaseModel> arrObjects = new ArrayList<>();
 
         Comparator<Artist> comparator = new Comparator<Artist>() {
             @Override
@@ -154,7 +156,7 @@ public class MusicContentProvider {
         Collections.sort(arrArtist, comparator);
 
         if (!Character.isLetter(arrArtist.get(0).getName().charAt(0))) {
-            arrObjects.add("#");
+            arrObjects.add(new Header("#"));
         }
 
         int positionLetter = 0;
@@ -179,7 +181,7 @@ public class MusicContentProvider {
             lastLetter = String.valueOf(arrArtist.get(i - 1).getName().charAt(0));
             if (!currentLetter.equalsIgnoreCase(lastLetter)) {
                 ((Artist) arrObjects.get(arrObjects.size() - 1)).setHasLine(false);
-                arrObjects.add(currentLetter);
+                arrObjects.add(new Header(currentLetter));
             }
             arrObjects.add(arrArtist.get(i));
         }

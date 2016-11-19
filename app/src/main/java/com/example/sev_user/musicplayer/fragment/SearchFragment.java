@@ -70,7 +70,6 @@ public class SearchFragment extends Fragment {
     }
 
     private void initView() {
-
         toolbar.setNavigationIcon(R.drawable.ic_back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,6 +87,7 @@ public class SearchFragment extends Fragment {
 
         MenuItem searchItem = toolbar.getMenu().findItem(R.id.miSearch);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setIconified(false);
 
         int searchImgId = android.support.v7.appcompat.R.id.search_button;
         ImageView v = (ImageView) searchView.findViewById(searchImgId);
@@ -111,15 +111,12 @@ public class SearchFragment extends Fragment {
         ImageView closeButtonImage = (ImageView) searchView.findViewById(closeButtonId);
         closeButtonImage.setImageResource(R.drawable.ic_close_24dp);
 
-        searchItem.expandActionView();
-        searchView.requestFocus();
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-
         InputMethodManager inputMethodManager = (InputMethodManager) getContext().
                 getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.toggleSoftInputFromWindow(searchView.getApplicationWindowToken(),
                 InputMethodManager.SHOW_FORCED, 0);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
     }
 
     private void initData() {

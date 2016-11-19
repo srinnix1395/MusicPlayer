@@ -3,7 +3,7 @@ package com.example.sev_user.musicplayer.model;
 /**
  * Created by sev_user on 7/15/2016.
  */
-public class Song {
+public class Song extends BaseModel{
     private int id;
     private String image;
     private String name;
@@ -82,5 +82,10 @@ public class Song {
 
     public int getPlaceHolder() {
         return placeHolder;
+    }
+
+    @Override
+    public int getTypeModel() {
+        return BaseModel.TYPE_SONG;
     }
 }

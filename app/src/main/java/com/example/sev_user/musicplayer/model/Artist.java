@@ -6,7 +6,7 @@ import android.os.Parcelable;
 /**
  * Created by sev_user on 7/14/2016.
  */
-public class Artist implements Parcelable{
+public class Artist extends BaseModel implements Parcelable{
     private int id;
     private String name;
     private String info;
@@ -77,5 +77,10 @@ public class Artist implements Parcelable{
         parcel.writeString(info);
         parcel.writeInt(colorPlaceHolder);
         parcel.writeByte((byte) (hasLine ? 1 : 0));
+    }
+
+    @Override
+    public int getTypeModel() {
+        return BaseModel.TYPE_ARTIST;
     }
 }

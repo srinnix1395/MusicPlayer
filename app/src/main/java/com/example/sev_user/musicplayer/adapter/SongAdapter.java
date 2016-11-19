@@ -9,7 +9,10 @@ import android.view.ViewGroup;
 import com.example.sev_user.musicplayer.R;
 import com.example.sev_user.musicplayer.constant.Constant;
 import com.example.sev_user.musicplayer.custom.SongDiffCallback;
+import com.example.sev_user.musicplayer.model.BaseModel;
+import com.example.sev_user.musicplayer.model.Header;
 import com.example.sev_user.musicplayer.model.Song;
+import com.example.sev_user.musicplayer.viewholder.EmptyViewHolder;
 import com.example.sev_user.musicplayer.viewholder.HeaderViewHolder;
 import com.example.sev_user.musicplayer.viewholder.PlayShuffleViewHolder;
 import com.example.sev_user.musicplayer.viewholder.SongViewHolder;
@@ -25,9 +28,9 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int VIEW_STRING = 1;
     private static final int VIEW_PLAY_SHUFFLE = 2;
 
-    private ArrayList<Object> arrayList;
+    private ArrayList<BaseModel> arrayList;
 
-    public SongAdapter(ArrayList<Object> arrayList) {
+    public SongAdapter(ArrayList<BaseModel> arrayList) {
         this.arrayList = arrayList;
     }
 
@@ -63,10 +66,19 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (arrayList.get(position) instanceof Song) {
-            ((SongViewHolder) holder).setupViewHolder((Song) arrayList.get(position), position);
-        } else if (!(arrayList.get(position)).equals(Constant.PLAY_SHUFFLE_ALL)) {
-            ((HeaderViewHolder) holder).setupViewHolder((String) arrayList.get(position));
+        switch (arrayList.get(position).getTypeModel()) {
+            case BaseModel.TYPE_SONG: {
+                ((SongViewHolder) holder).setupViewHolder((Song) arrayList.get(position), position);
+                break;
+            }
+            case BaseModel.TYPE_HEADER: {
+                if (!((Header) arrayList.get(position)).getHeader().equals(Constant.PLAY_SHUFFLE_ALL)) {
+                    ((HeaderViewHolder) holder).setupViewHolder((Header) arrayList.get(position));
+                }
+                break;
+            }
+            default:
+                break;
         }
     }
 
@@ -77,27 +89,22 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public int getItemViewType(int position) {
-        if (arrayList.get(position) instanceof Song) {
+        if (arrayList.get(position).getTypeModel() == BaseModel.TYPE_SONG) {
             return VIEW_SONG;
         }
-        if (arrayList.get(position).equals(Constant.PLAY_SHUFFLE_ALL)) {
+        if (arrayList.get(position).getTypeModel() == BaseModel.TYPE_HEADER
+                && ((Header) arrayList.get(position)).getHeader().equals(Constant.PLAY_SHUFFLE_ALL)) {
             return VIEW_PLAY_SHUFFLE;
         }
         return VIEW_STRING;
     }
 
-    public void swapItems(ArrayList<Object> newList) {
+    public void swapItems(ArrayList<BaseModel> newList) {
         final SongDiffCallback diffCallback = new SongDiffCallback(newList, arrayList);
         final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
 
         arrayList.clear();
         arrayList.addAll(newList);
         diffResult.dispatchUpdatesTo(this);
-    }
-
-    class EmptyViewHolder extends RecyclerView.ViewHolder {
-        public EmptyViewHolder(View view) {
-            super(view);
-        }
     }
 }

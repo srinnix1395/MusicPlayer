@@ -3,7 +3,7 @@ package com.example.sev_user.musicplayer.custom;
 import android.support.v7.util.DiffUtil;
 
 import com.example.sev_user.musicplayer.model.Artist;
-import com.example.sev_user.musicplayer.model.Song;
+import com.example.sev_user.musicplayer.model.BaseModel;
 
 import java.util.ArrayList;
 
@@ -12,10 +12,10 @@ import java.util.ArrayList;
  */
 
 public class ArtistDiffCallback extends DiffUtil.Callback {
-    private ArrayList<Object> newList;
-    private ArrayList<Object> oldList;
+    private ArrayList<BaseModel> newList;
+    private ArrayList<BaseModel> oldList;
 
-    public ArtistDiffCallback(ArrayList<Object> newList, ArrayList<Object> oldList) {
+    public ArtistDiffCallback(ArrayList<BaseModel> newList, ArrayList<BaseModel> oldList) {
         this.newList = newList;
         this.oldList = oldList;
     }
@@ -32,11 +32,11 @@ public class ArtistDiffCallback extends DiffUtil.Callback {
 
     @Override
     public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-        Object oldObj = oldList.get(oldItemPosition);
-        Object newObj = newList.get(newItemPosition);
+        BaseModel oldObj = oldList.get(oldItemPosition);
+        BaseModel newObj = newList.get(newItemPosition);
 
         if (oldObj.getClass().equals(newObj.getClass())) {
-            if (oldObj instanceof Artist) {
+            if (oldObj.getTypeModel() == BaseModel.TYPE_ARTIST) {
                 return (((Artist) oldObj).getId() == ((Artist) newObj).getId());
             }
 
@@ -48,11 +48,11 @@ public class ArtistDiffCallback extends DiffUtil.Callback {
 
     @Override
     public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-        Object oldObj = oldList.get(oldItemPosition);
-        Object newObj = newList.get(newItemPosition);
+        BaseModel oldObj = oldList.get(oldItemPosition);
+        BaseModel newObj = newList.get(newItemPosition);
 
         if (oldObj.getClass().equals(newObj.getClass())) {
-            if (oldObj instanceof Song) {
+            if (oldObj.getTypeModel() == BaseModel.TYPE_ARTIST) {
                 Artist newArtist = (Artist) newObj;
                 Artist oldArtist = (Artist) oldObj;
 

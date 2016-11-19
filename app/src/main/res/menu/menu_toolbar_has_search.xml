@@ -6,15 +6,4 @@
         android:title="@string/search"
         app:actionViewClass="android.support.v7.widget.SearchView"
         app:showAsAction="always" />
-    <item
-        android:id="@+id/miPlayShuffle"
-        android:title="@string/playShuffle"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/miShakeToShuffle"
-        android:checkable="true"
-        android:orderInCategory="200"
-        android:title="@string/shakeToShuffle"
-        android:visible="true"
-        app:showAsAction="never" />
 </menu>

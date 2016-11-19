@@ -21,6 +21,7 @@ import com.example.sev_user.musicplayer.R;
 import com.example.sev_user.musicplayer.activity.MainActivity;
 import com.example.sev_user.musicplayer.constant.Constant;
 import com.example.sev_user.musicplayer.manager.MediaManager;
+import com.example.sev_user.musicplayer.model.BaseModel;
 import com.example.sev_user.musicplayer.model.Song;
 import com.example.sev_user.musicplayer.model.SongPlus;
 import com.example.sev_user.musicplayer.provider.MusicContentProvider;
@@ -313,7 +314,7 @@ public class MusicService extends Service {
         return mediaManager.getCurrentSong();
     }
 
-    public void setListSong(ArrayList<Object> arrAudio) {
+    public void setListSong(ArrayList<BaseModel> arrAudio) {
         mediaManager.setArrAudio(arrAudio);
     }
 

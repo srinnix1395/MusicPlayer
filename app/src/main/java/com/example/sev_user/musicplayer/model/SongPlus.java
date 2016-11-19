@@ -6,7 +6,7 @@ import android.os.Parcelable;
 /**
  * Created by sev_user on 7/21/2016.
  */
-public class SongPlus implements Parcelable {
+public class SongPlus extends BaseModel implements Parcelable {
     private Song song;
     private int positionSeekBar;
     private int position;
@@ -59,5 +59,10 @@ public class SongPlus implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(positionSeekBar);
         parcel.writeInt(position);
+    }
+
+    @Override
+    public int getTypeModel() {
+        return BaseModel.TYPE_SONG_PLUS;
     }
 }

@@ -17,6 +17,7 @@ import com.example.sev_user.musicplayer.R;
 import com.example.sev_user.musicplayer.activity.MainActivity;
 import com.example.sev_user.musicplayer.adapter.AlbumAdapter;
 import com.example.sev_user.musicplayer.adapter.SongAdapter;
+import com.example.sev_user.musicplayer.model.BaseModel;
 import com.example.sev_user.musicplayer.model.Song;
 import com.example.sev_user.musicplayer.provider.MusicContentProvider;
 
@@ -41,7 +42,7 @@ public class SongFragment extends Fragment {
     @Bind(R.id.progressBar)
     ProgressBar progressBar;
 
-    private ArrayList<Object> songArrayList;
+    private ArrayList<BaseModel> songArrayList;
     private SongAdapter adapter;
     private int sortType = AlbumAdapter.ASCENDING;
 
@@ -61,17 +62,17 @@ public class SongFragment extends Fragment {
     }
 
     private void initData() {
-        Single.fromCallable(new Callable<ArrayList<Object>>() {
+        Single.fromCallable(new Callable<ArrayList<BaseModel>>() {
             @Override
-            public ArrayList<Object> call() throws Exception {
+            public ArrayList<BaseModel> call() throws Exception {
                 MusicContentProvider provider = new MusicContentProvider(getContext());
                 return provider.getArrSong();
             }
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleSubscriber<ArrayList<Object>>() {
+                .subscribe(new SingleSubscriber<ArrayList<BaseModel>>() {
                     @Override
-                    public void onSuccess(ArrayList<Object> value) {
+                    public void onSuccess(ArrayList<BaseModel> value) {
                         songArrayList.addAll(value);
                         adapter.notifyDataSetChanged();
 
@@ -101,7 +102,7 @@ public class SongFragment extends Fragment {
         recyclerView.setItemAnimator(itemAnimator);
     }
 
-    public ArrayList<Object> getArrayListSong() {
+    public ArrayList<BaseModel> getArrayListSong() {
         return songArrayList;
     }
 
@@ -114,23 +115,23 @@ public class SongFragment extends Fragment {
 
     public void sort(Song currentSong, int type) {
         if (type != sortType) {
-            ArrayList<Object> newList = reverseList(currentSong);
+            ArrayList<BaseModel> newList = reverseList(currentSong);
             adapter.swapItems(newList);
             sortType = type;
         }
     }
 
-    private ArrayList<Object> reverseList(Song currentSong) {
+    private ArrayList<BaseModel> reverseList(Song currentSong) {
         int newCurrentPosition = 2;
-        ArrayList<Object> newList = new ArrayList<>();
+        ArrayList<BaseModel> newList = new ArrayList<>();
         newList.add(songArrayList.get(0));
 
         for (int i = songArrayList.size() - 1, pivot = 1, j = 1; i > 0; i--) {
-            Object object = songArrayList.get(i);
+            BaseModel object = songArrayList.get(i);
 
             newList.add(pivot, object);
             j++;
-            if (object instanceof String) {
+            if (object.getTypeModel() == BaseModel.TYPE_HEADER) {
                 pivot = j;
             } else if (currentSong != null && ((Song) object).getId() == currentSong.getId()) {
                 newCurrentPosition = i;

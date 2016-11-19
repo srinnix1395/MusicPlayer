@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.example.sev_user.musicplayer.constant.Constant;
+import com.example.sev_user.musicplayer.model.BaseModel;
 import com.example.sev_user.musicplayer.model.Song;
 
 import java.util.ArrayList;
@@ -17,14 +18,14 @@ import java.util.Random;
  */
 public class MediaManager implements MediaPlayer.OnCompletionListener {
     private Context context;
-    private ArrayList<Object> arrAudio;
+    private ArrayList<BaseModel> arrAudio;
     private boolean shuffle = false;
     private int currentPosition;
     private MediaPlayer media;
     private int levelRepeat = Constant.LEVEL_LOOPING_NONE;
     private Handler handler;
 
-    public MediaManager(Context context, ArrayList<Object> arrAudio) {
+    public MediaManager(Context context, ArrayList<BaseModel> arrAudio) {
         this.context = context;
         this.arrAudio = arrAudio;
         currentPosition = arrAudio.size() > 2 ? 2 : 0;
@@ -52,7 +53,7 @@ public class MediaManager implements MediaPlayer.OnCompletionListener {
         } else if (currentPosition < 2) {
             currentPosition = arrAudio.size() - 1;
         }
-        if (arrAudio.get(currentPosition) instanceof String) {
+        if (arrAudio.get(currentPosition).getTypeModel() == BaseModel.TYPE_HEADER) {
             currentPosition += i;
         }
         create(currentPosition);
@@ -93,7 +94,7 @@ public class MediaManager implements MediaPlayer.OnCompletionListener {
     public void randomSong() {
         Random random = new Random();
         int randomNumber = random.nextInt(arrAudio.size());
-        if (arrAudio.get(randomNumber) instanceof String) {
+        if (arrAudio.get(randomNumber).getTypeModel() == BaseModel.TYPE_HEADER) {
             randomNumber++;
         }
         if (randomNumber == 1) {
@@ -183,7 +184,7 @@ public class MediaManager implements MediaPlayer.OnCompletionListener {
         return media.getCurrentPosition();
     }
 
-    public void setArrAudio(ArrayList<Object> arrAudio) {
+    public void setArrAudio(ArrayList<BaseModel> arrAudio) {
         this.arrAudio = arrAudio;
     }
 

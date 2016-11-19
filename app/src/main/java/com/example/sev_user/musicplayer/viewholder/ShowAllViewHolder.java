@@ -5,24 +5,24 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.sev_user.musicplayer.R;
-import com.example.sev_user.musicplayer.model.Header;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
- * Created by sev_user on 7/14/2016.
+ * Created by DELL on 11/19/2016.
  */
-public class HeaderViewHolder extends RecyclerView.ViewHolder {
-    @Bind(R.id.tvHeader)
-    TextView tvHeader;
 
-    public HeaderViewHolder(View itemView) {
+public class ShowAllViewHolder extends RecyclerView.ViewHolder {
+    @Bind(R.id.tvShowAll)
+    TextView tvShowAll;
+
+    public ShowAllViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
     }
 
-    public void setupViewHolder(Header header) {
-        tvHeader.setText(header.getHeader());
+    public void setupData(String type) {
+        tvShowAll.setText(String.format("show all %s", type));
     }
 }
