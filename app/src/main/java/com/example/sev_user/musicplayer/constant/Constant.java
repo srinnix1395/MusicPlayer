@@ -64,4 +64,7 @@ public class Constant {
     public static final String ARRAY_SONG = "array_song";
     public static final String ARRAY_ALBUM = "array_album";
     public static final String ARRAY_ARTIST = "array_artist";
+    public static final String ARRAY = "array";
+    public static final String QUERY = "query";
+    public static final String TYPE = "type";
 }

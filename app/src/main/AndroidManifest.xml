@@ -31,7 +31,7 @@
             <!--</intent-filter>-->
         </activity>
 
-        <activity android:name=".activity.SearchActivity"/>
+        <activity android:name=".activity.ResultActivity"/>
 
         <service android:name=".service.MusicService"/>
 

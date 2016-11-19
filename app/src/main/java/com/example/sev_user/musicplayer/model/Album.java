@@ -13,7 +13,6 @@ public class Album extends BaseModel implements Parcelable{
     private String artistName;
     private int numberOfSong;
     private int firstYear;
-    private boolean hasLine;
 
     public Album(int id, String image, String albumName, String artistName, int numberOfSong, int firstYear) {
         this.id = id;
@@ -78,14 +77,6 @@ public class Album extends BaseModel implements Parcelable{
 
     public int getFirstYear() {
         return firstYear;
-    }
-
-    public boolean isHasLine() {
-        return hasLine;
-    }
-
-    public void setHasLine(boolean hasLine) {
-        this.hasLine = hasLine;
     }
 
     @Override

@@ -51,6 +51,11 @@ public class SongPlus extends BaseModel implements Parcelable {
     }
 
     @Override
+    public int getTypeModel() {
+        return BaseModel.TYPE_SONG_PLUS;
+    }
+
+    @Override
     public int describeContents() {
         return 0;
     }
@@ -59,10 +64,5 @@ public class SongPlus extends BaseModel implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(positionSeekBar);
         parcel.writeInt(position);
-    }
-
-    @Override
-    public int getTypeModel() {
-        return BaseModel.TYPE_SONG_PLUS;
     }
 }

@@ -11,7 +11,6 @@ public class Artist extends BaseModel implements Parcelable{
     private String name;
     private String info;
     private int colorPlaceHolder;
-    private boolean hasLine;
 
     public Artist(int id, String name, String info, int colorPlaceHolder, boolean hasLine) {
         this.id = id;
@@ -53,16 +52,13 @@ public class Artist extends BaseModel implements Parcelable{
         return info;
     }
 
-    public boolean isHasLine() {
-        return hasLine;
-    }
-
-    public void setHasLine(boolean hasLine) {
-        this.hasLine = hasLine;
-    }
-
     public int getColorPlaceHolder() {
         return colorPlaceHolder;
+    }
+
+    @Override
+    public int getTypeModel() {
+        return BaseModel.TYPE_ARTIST;
     }
 
     @Override
@@ -77,10 +73,5 @@ public class Artist extends BaseModel implements Parcelable{
         parcel.writeString(info);
         parcel.writeInt(colorPlaceHolder);
         parcel.writeByte((byte) (hasLine ? 1 : 0));
-    }
-
-    @Override
-    public int getTypeModel() {
-        return BaseModel.TYPE_ARTIST;
     }
 }

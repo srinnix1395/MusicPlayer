@@ -1,13 +1,18 @@
 package com.example.sev_user.musicplayer.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 
 import com.example.sev_user.musicplayer.R;
+import com.example.sev_user.musicplayer.activity.ResultActivity;
+import com.example.sev_user.musicplayer.callback.SearchAdapterCallback;
+import com.example.sev_user.musicplayer.constant.Constant;
 import com.example.sev_user.musicplayer.model.Album;
 import com.example.sev_user.musicplayer.model.Artist;
 import com.example.sev_user.musicplayer.model.BaseModel;
@@ -21,6 +26,8 @@ import com.example.sev_user.musicplayer.viewholder.ShowAllViewHolder;
 import com.example.sev_user.musicplayer.viewholder.SongViewHolder;
 
 import java.util.ArrayList;
+
+import static com.example.sev_user.musicplayer.R.string.song;
 
 /**
  * Created by DELL on 11/19/2016.
@@ -38,13 +45,22 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private ArrayList<Song> songArrayListResult;
     private ArrayList<Album> albumArrayListResult;
     private ArrayList<Artist> artistArrayListResult;
+    private SearchAdapterCallback callback;
+    private SparseIntArray mapSong = new SparseIntArray();
+    private CharSequence query;
+
+    public SearchAdapter(Context context, ArrayList<BaseModel> arrayList, SearchAdapterCallback searchAdapterCallback) {
+        this.context = context;
+        this.arrayList = arrayList;
+        callback = searchAdapterCallback;
+        songArrayListResult = new ArrayList<>();
+        albumArrayListResult = new ArrayList<>();
+        artistArrayListResult = new ArrayList<>();
+    }
 
     public SearchAdapter(Context context, ArrayList<BaseModel> arrayList) {
         this.context = context;
         this.arrayList = arrayList;
-        songArrayListResult = new ArrayList<>();
-        albumArrayListResult = new ArrayList<>();
-        artistArrayListResult = new ArrayList<>();
     }
 
     @Override
@@ -99,14 +115,32 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 break;
             }
             case BaseModel.TYPE_SONG: {
-                ((SongViewHolder) holder).setupViewHolder((Song) arrayList.get(position), position);
+                ((SongViewHolder) holder).setupViewHolder((Song) arrayList.get(position)
+                        , mapSong.get(((Song) arrayList.get(position)).getId()));
                 break;
             }
             case BaseModel.TYPE_HEADER: {
                 if (!((Header) arrayList.get(position)).getHeader().contains("Hiển thị")) {
                     ((HeaderViewHolder) holder).setupViewHolder((Header) arrayList.get(position));
                 } else {
-                    ((ShowAllViewHolder) holder).setupData(((Header) arrayList.get(position)).getHeader());
+                    final String header = ((Header) arrayList.get(position)).getHeader();
+                    ((ShowAllViewHolder) holder).setupData(header);
+                    holder.itemView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(context, ResultActivity.class);
+                            if (header.equals(context.getString(R.string.show_all_album))){
+                                intent.putParcelableArrayListExtra(Constant.ARRAY, albumArrayListResult);
+                            } else if (header.equals(context.getString(R.string.show_all_artist))) {
+                                intent.putParcelableArrayListExtra(Constant.ARRAY, artistArrayListResult);
+                            } else {
+                                intent.putParcelableArrayListExtra(Constant.ARRAY, songArrayListResult);
+                            }
+                            intent.putExtra(Constant.QUERY, query);
+                            intent.putExtra(Constant.TYPE, header.substring(16));
+                            context.startActivity(intent);
+                        }
+                    });
                 }
                 break;
             }
@@ -143,10 +177,11 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
     }
 
-    public Filter getFilter(final ArrayList<Song> songArrayList, final ArrayList<Album> albumArrayList, final ArrayList<Artist> artistArrayList) {
+    public Filter getFilter(final ArrayList<BaseModel> songArrayList, final ArrayList<Album> albumArrayList, final ArrayList<Artist> artistArrayList) {
         return new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence charSequence) {
+                query = charSequence;
                 FilterResults filterResults = new FilterResults();
                 if (charSequence.length() == 0) {
                     filterResults.values = new ArrayList<BaseModel>();
@@ -163,19 +198,25 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 arrayList.clear();
                 arrayList.addAll((ArrayList<BaseModel>) filterResults.values);
 
+                callback.checkResultFilter(arrayList.size() > 0);
+
                 notifyDataSetChanged();
             }
         };
     }
 
-    private ArrayList<BaseModel> searchAll(ArrayList<Song> songArrayList, ArrayList<Album> albumArrayList, ArrayList<Artist> artistArrayList, CharSequence charSequence) {
+    private ArrayList<BaseModel> searchAll(ArrayList<BaseModel> songArrayList, ArrayList<Album> albumArrayList, ArrayList<Artist> artistArrayList, CharSequence charSequence) {
         songArrayListResult.clear();
         albumArrayListResult.clear();
         artistArrayListResult.clear();
+        mapSong.clear();
 
-        for (Song song : songArrayList) {
-            if (song.getName().contains(charSequence)) {
-                songArrayListResult.add(song);
+        arrayList.clear();
+        for (int i = 0, size = songArrayList.size(); i < size; i++) {
+            if (songArrayList.get(i).getTypeModel() == BaseModel.TYPE_SONG
+                    && ((Song) songArrayList.get(i)).getName().contains(charSequence)) {
+                songArrayListResult.add((Song) songArrayList.get(i));
+                mapSong.put(((Song) songArrayList.get(i)).getId(), i);
             }
         }
         for (Album album : albumArrayList) {
@@ -191,34 +232,37 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         ArrayList<BaseModel> arrayListResult = new ArrayList<>();
         if (songArrayListResult.size() > 0) {
-            arrayListResult.add(new Header(context.getString(R.string.song)));
+            arrayListResult.add(new Header(context.getString(song)));
         }
         if (songArrayListResult.size() < 4) {
             for (int i = 0, size = songArrayListResult.size() - 1; i < size; i++) {
                 songArrayListResult.get(i).setHasLine(true);
             }
-            albumArrayList.get(songArrayListResult.size() - 1).setHasLine(false);
-            arrayListResult.addAll(songArrayListResult);
+            if (songArrayListResult.size() > 0) {
+                albumArrayList.get(songArrayListResult.size() - 1).setHasLine(false);
+                arrayListResult.addAll(songArrayListResult);
+            }
         } else {
-            songArrayList.get(0).setHasLine(true);
+            songArrayListResult.get(0).setHasLine(true);
             arrayListResult.add(songArrayListResult.get(0));
-            songArrayList.get(1).setHasLine(true);
+            songArrayListResult.get(1).setHasLine(true);
             arrayListResult.add(songArrayListResult.get(1));
-            songArrayList.get(2).setHasLine(false);
+            songArrayListResult.get(2).setHasLine(false);
             arrayListResult.add(songArrayListResult.get(2));
             arrayListResult.add(new Header(context.getString(R.string.show_all_song)));
         }
 
         if (artistArrayListResult.size() > 0) {
-
             arrayListResult.add(new Header(context.getString(R.string.artist)));
         }
         if (artistArrayListResult.size() < 4) {
             for (int i = 0, size = artistArrayListResult.size() - 1; i < size; i++) {
                 artistArrayListResult.get(i).setHasLine(true);
             }
-            albumArrayList.get(artistArrayListResult.size() - 1).setHasLine(false);
-            arrayListResult.addAll(artistArrayListResult);
+            if (artistArrayListResult.size() > 0) {
+                artistArrayList.get(artistArrayListResult.size() - 1).setHasLine(false);
+                arrayListResult.addAll(artistArrayListResult);
+            }
         } else {
             artistArrayListResult.get(0).setHasLine(true);
             arrayListResult.add(artistArrayListResult.get(0));
@@ -236,8 +280,10 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             for (int i = 0, size = albumArrayListResult.size() - 1; i < size; i++) {
                 albumArrayListResult.get(i).setHasLine(true);
             }
-            albumArrayList.get(albumArrayListResult.size() - 1).setHasLine(false);
-            arrayListResult.addAll(albumArrayListResult);
+            if (albumArrayListResult.size() > 0) {
+                albumArrayList.get(albumArrayListResult.size() - 1).setHasLine(false);
+                arrayListResult.addAll(albumArrayListResult);
+            }
         } else {
             albumArrayListResult.get(0).setHasLine(true);
             arrayListResult.add(albumArrayListResult.get(0));

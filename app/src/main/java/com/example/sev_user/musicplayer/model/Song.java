@@ -6,7 +6,7 @@ import android.os.Parcelable;
 /**
  * Created by sev_user on 7/15/2016.
  */
-public class Song extends BaseModel implements Parcelable{
+public class Song extends BaseModel implements Parcelable {
     private int id;
     private String image;
     private String name;
@@ -15,7 +15,6 @@ public class Song extends BaseModel implements Parcelable{
     private int artistId;
     private String album;
     private int idAlbum;
-    private boolean hasLine;
     private int placeHolder;
 
     public Song(int id, String image, String name, String data, String artist, int artistId, String album, int idAlbum, boolean hasLine, int placeHolder) {
@@ -84,28 +83,12 @@ public class Song extends BaseModel implements Parcelable{
         return album;
     }
 
-    public boolean isHasLine() {
-        return hasLine;
-    }
-
-    public void setHasLine(boolean hasLine) {
-        this.hasLine = hasLine;
-    }
-
     public int getIdAlbum() {
         return idAlbum;
     }
 
-    public void setIdAlbum(int idAlbum) {
-        this.idAlbum = idAlbum;
-    }
-
     public int getArtistId() {
         return artistId;
-    }
-
-    public void setArtistId(int artistId) {
-        this.artistId = artistId;
     }
 
     public int getPlaceHolder() {
@@ -117,7 +100,6 @@ public class Song extends BaseModel implements Parcelable{
         return BaseModel.TYPE_SONG;
     }
 
-    @Override
     public int describeContents() {
         return 0;
     }

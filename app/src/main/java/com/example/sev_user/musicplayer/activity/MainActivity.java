@@ -40,6 +40,7 @@ import com.example.sev_user.musicplayer.fragment.AlbumFragment;
 import com.example.sev_user.musicplayer.fragment.ArtistFragment;
 import com.example.sev_user.musicplayer.fragment.DetailAlbumFragment;
 import com.example.sev_user.musicplayer.fragment.DetailArtistFragment;
+import com.example.sev_user.musicplayer.fragment.SearchFragment;
 import com.example.sev_user.musicplayer.fragment.SongFragment;
 import com.example.sev_user.musicplayer.model.Album;
 import com.example.sev_user.musicplayer.model.Artist;
@@ -111,6 +112,7 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
     private SongFragment songFragment;
     private ArtistFragment artistFragment;
     private AlbumFragment albumFragment;
+    private SearchFragment searchFragment;
     private DetailAlbumFragment detailAlbumFragment;
     private DetailArtistFragment detailArtistFragment;
 
@@ -249,12 +251,21 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.miSearch: {
-                Intent intent = new Intent(this, SearchActivity.class);
-                intent.putParcelableArrayListExtra(Constant.ARRAY_SONG, songFragment.getSongs());
-                intent.putParcelableArrayListExtra(Constant.ARRAY_ALBUM, albumFragment.getAlbumArrayList());
-                intent.putParcelableArrayListExtra(Constant.ARRAY_ARTIST, artistFragment.getArtists());
+                searchFragment = SearchFragment.newInstance(songFragment.getArrayListAll(),
+                        artistFragment.getArtists(), albumFragment.getAlbumArrayList());
 
-                startActivity(intent);
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
+                transaction.add(R.id.viewList, searchFragment);
+                transaction.show(searchFragment);
+                transaction.commit();
+
+                if (detailAlbumFragment != null && detailAlbumFragment.isVisible()) {
+                    backToMainFragment(detailAlbumFragment);
+                }
+                if (detailArtistFragment != null && detailArtistFragment.isVisible()) {
+                    backToMainFragment(detailArtistFragment);
+                }
                 break;
             }
             case R.id.miPlayShuffle: {
@@ -331,6 +342,21 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
     public void onBackPressed() {
         if (behavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
             behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            return;
+        }
+
+        if (searchFragment != null && searchFragment.isVisible()) {
+            if (detailAlbumFragment != null && detailAlbumFragment.isVisible()) {
+                backToMainFragment(detailAlbumFragment);
+                return;
+            }
+
+            if (detailArtistFragment != null && detailArtistFragment.isVisible()) {
+                backToMainFragment(detailArtistFragment);
+                return;
+            }
+            
+            backToMainFragment(searchFragment);
             return;
         }
 
@@ -832,6 +858,15 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
     }
 
     public void backToMainFragment(Fragment fragment) {
+        if (fragment instanceof SearchFragment) {
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
+            transaction.remove(searchFragment);
+            searchFragment.onDestroyView();
+            transaction.commit();
+            return;
+        }
+
         if (fragment instanceof DetailAlbumFragment) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.setCustomAnimations(R.anim.slide_in, R.anim.slide_out);

@@ -17,15 +17,9 @@ public class ShowAllViewHolder extends RecyclerView.ViewHolder {
     @Bind(R.id.tvShowAll)
     TextView tvShowAll;
 
-    public ShowAllViewHolder(View itemView) {
+    public ShowAllViewHolder(final View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
-        itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
     }
 
     public void setupData(String type) {

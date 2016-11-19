@@ -44,7 +44,6 @@ public class SongFragment extends Fragment {
     ProgressBar progressBar;
 
     private ArrayList<BaseModel> songArrayList;
-    private ArrayList<Song> songs;
 
     private SongAdapter adapter;
     private int sortType = AlbumAdapter.ASCENDING;
@@ -69,8 +68,7 @@ public class SongFragment extends Fragment {
             @Override
             public ArrayList<BaseModel> call() throws Exception {
                 MusicContentProvider provider = new MusicContentProvider(getContext());
-                songs = provider.getSongHasImage();
-                return provider.getArrSong(songs);
+                return provider.getArrSong(provider.getSongHasImage());
             }
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -155,9 +153,5 @@ public class SongFragment extends Fragment {
             return (Song) songArrayList.get(2);
         }
         return null;
-    }
-
-    public ArrayList<Song> getSongs() {
-        return songs;
     }
 }
