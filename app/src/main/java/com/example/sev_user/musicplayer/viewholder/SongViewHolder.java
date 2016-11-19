@@ -36,9 +36,9 @@ public class SongViewHolder extends RecyclerView.ViewHolder implements View.OnCl
     @Bind(R.id.imvMore)
     ImageView imvMore;
 
-    private int position;
-    private OnClickViewHolder callback;
-    private Song song;
+    protected int position;
+    protected OnClickViewHolder callback;
+    protected Song song;
 
     public SongViewHolder(View itemView) {
         super(itemView);

@@ -19,7 +19,6 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <service android:name=".service.MusicService"/>
         <activity
             android:name=".activity.MainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -32,6 +31,9 @@
             <!--</intent-filter>-->
         </activity>
 
+        <activity android:name=".activity.SearchActivity"/>
+
+        <service android:name=".service.MusicService"/>
 
         <!--metadata glide-->
         <meta-data

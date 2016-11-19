@@ -107,4 +107,8 @@ public class AlbumFragment extends Fragment {
             sortType = type;
         }
     }
+
+    public ArrayList<Album> getAlbumArrayList() {
+        return albumArrayList;
+    }
 }

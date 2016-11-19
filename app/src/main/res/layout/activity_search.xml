@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              android:layout_marginBottom="?actionBarSize"
               android:background="@color/colorWhiteFade"
               android:orientation="vertical">
 
@@ -10,19 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark">
-
-        <!--<EditText-->
-        <!--android:id="@+id/etSearch"-->
-        <!--android:theme="@style/MyCustomEditText"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginRight="10dp"-->
-        <!--android:hint="@string/search"-->
-        <!--android:textColor="#fff"-->
-        <!--android:textColorHint="@color/colorGray"-->
-        <!--android:textSize="20sp"/>-->
-    </android.support.v7.widget.Toolbar>
+        android:theme="@style/ThemeOverlay.AppCompat.Dark"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"

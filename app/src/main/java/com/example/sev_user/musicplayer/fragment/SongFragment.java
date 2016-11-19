@@ -3,6 +3,7 @@ package com.example.sev_user.musicplayer.fragment;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -43,6 +44,8 @@ public class SongFragment extends Fragment {
     ProgressBar progressBar;
 
     private ArrayList<BaseModel> songArrayList;
+    private ArrayList<Song> songs;
+
     private SongAdapter adapter;
     private int sortType = AlbumAdapter.ASCENDING;
 
@@ -66,7 +69,8 @@ public class SongFragment extends Fragment {
             @Override
             public ArrayList<BaseModel> call() throws Exception {
                 MusicContentProvider provider = new MusicContentProvider(getContext());
-                return provider.getArrSong();
+                songs = provider.getSongHasImage();
+                return provider.getArrSong(songs);
             }
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -102,22 +106,17 @@ public class SongFragment extends Fragment {
         recyclerView.setItemAnimator(itemAnimator);
     }
 
-    public ArrayList<BaseModel> getArrayListSong() {
-        return songArrayList;
-    }
-
-    public Song getFirstSong() {
-        if (songArrayList.size() > 0) {
-            return (Song) songArrayList.get(2);
-        }
-        return null;
-    }
-
     public void sort(Song currentSong, int type) {
         if (type != sortType) {
             ArrayList<BaseModel> newList = reverseList(currentSong);
             adapter.swapItems(newList);
             sortType = type;
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    adapter.notifyDataSetChanged();
+                }
+            }, 500);
         }
     }
 
@@ -145,5 +144,20 @@ public class SongFragment extends Fragment {
         }
 
         return newList;
+    }
+
+    public ArrayList<BaseModel> getArrayListAll() {
+        return songArrayList;
+    }
+
+    public Song getFirstSong() {
+        if (songArrayList.size() > 0) {
+            return (Song) songArrayList.get(2);
+        }
+        return null;
+    }
+
+    public ArrayList<Song> getSongs() {
+        return songs;
     }
 }

@@ -61,4 +61,7 @@ public class Constant {
     public static final String ALBUM_ARTIST = "album_artist";
     public static final String ARTIST = "artist";
     public static final String SETTING_SHAKE_TO_SHUFFLE = "shake_shuffle";
+    public static final String ARRAY_SONG = "array_song";
+    public static final String ARRAY_ALBUM = "array_album";
+    public static final String ARRAY_ARTIST = "array_artist";
 }

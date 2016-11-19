@@ -33,16 +33,18 @@ public class MediaManager implements MediaPlayer.OnCompletionListener {
     }
 
     public void create(int position) {
-        currentPosition = position;
-        if (media != null) {
-            media.reset();
-            media.release();
-        }
-        media = MediaPlayer.create(context, Uri.parse(((Song) arrAudio.get(currentPosition)).getData()));
-        if (media != null) {
-            media.setOnCompletionListener(this);
-        } else {
-            changeSong(1);
+        if (arrAudio.get(currentPosition).getTypeModel() == BaseModel.TYPE_SONG) {
+            currentPosition = position;
+            if (media != null) {
+                media.reset();
+                media.release();
+            }
+            media = MediaPlayer.create(context, Uri.parse(((Song) arrAudio.get(currentPosition)).getData()));
+            if (media != null) {
+                media.setOnCompletionListener(this);
+            } else {
+                changeSong(1);
+            }
         }
     }
 
@@ -177,10 +179,10 @@ public class MediaManager implements MediaPlayer.OnCompletionListener {
     }
 
     public Song getCurrentSong() {
-        return (Song) arrAudio.get(currentPosition);
+        return arrAudio.get(currentPosition) instanceof Song ? (Song) arrAudio.get(currentPosition) : null;
     }
 
-    public int getCurrentSeekbar() {
+    public int getCurrentSeekBar() {
         return media.getCurrentPosition();
     }
 

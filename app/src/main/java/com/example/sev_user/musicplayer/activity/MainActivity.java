@@ -40,7 +40,6 @@ import com.example.sev_user.musicplayer.fragment.AlbumFragment;
 import com.example.sev_user.musicplayer.fragment.ArtistFragment;
 import com.example.sev_user.musicplayer.fragment.DetailAlbumFragment;
 import com.example.sev_user.musicplayer.fragment.DetailArtistFragment;
-import com.example.sev_user.musicplayer.fragment.SearchFragment;
 import com.example.sev_user.musicplayer.fragment.SongFragment;
 import com.example.sev_user.musicplayer.model.Album;
 import com.example.sev_user.musicplayer.model.Artist;
@@ -110,11 +109,14 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
     ViewPager viewPager;
 
     private SongFragment songFragment;
-    private PagerAdapter adapter;
-    private BottomSheetBehavior behavior;
+    private ArtistFragment artistFragment;
+    private AlbumFragment albumFragment;
     private DetailAlbumFragment detailAlbumFragment;
     private DetailArtistFragment detailArtistFragment;
-    private SearchFragment searchFragment;
+
+    private PagerAdapter adapter;
+    private BottomSheetBehavior behavior;
+
     private MusicService musicService;
     private SongPlus currentSong;
     private boolean isRunning = true;
@@ -247,20 +249,12 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.miSearch: {
-                searchFragment = new SearchFragment();
+                Intent intent = new Intent(this, SearchActivity.class);
+                intent.putParcelableArrayListExtra(Constant.ARRAY_SONG, songFragment.getSongs());
+                intent.putParcelableArrayListExtra(Constant.ARRAY_ALBUM, albumFragment.getAlbumArrayList());
+                intent.putParcelableArrayListExtra(Constant.ARRAY_ARTIST, artistFragment.getArtists());
 
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
-                transaction.add(R.id.viewList, searchFragment);
-                transaction.show(searchFragment);
-                transaction.commit();
-
-                if (detailAlbumFragment != null && detailAlbumFragment.isVisible()) {
-                    backToMainFragment(detailAlbumFragment);
-                }
-                if (detailArtistFragment != null && detailArtistFragment.isVisible()) {
-                    backToMainFragment(detailArtistFragment);
-                }
+                startActivity(intent);
                 break;
             }
             case R.id.miPlayShuffle: {
@@ -293,15 +287,15 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
     private void sortZA() {
         switch (viewPager.getCurrentItem()) {
             case 0: {
-                ((ArtistFragment) adapter.getItem(0)).sort(AlbumAdapter.DESCENDING);
+                artistFragment.sort(AlbumAdapter.DESCENDING);
                 break;
             }
             case 1: {
-                ((AlbumFragment) adapter.getItem(1)).sort(AlbumAdapter.DESCENDING);
+                albumFragment.sort(AlbumAdapter.DESCENDING);
                 break;
             }
             case 2: {
-                ((SongFragment) adapter.getItem(2)).sort(musicService != null ? musicService.getCurrentSong() : null,
+                songFragment.sort(musicService != null ? musicService.getCurrentSong() : null,
                         AlbumAdapter.DESCENDING);
                 break;
             }
@@ -311,15 +305,15 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
     private void sortAZ() {
         switch (viewPager.getCurrentItem()) {
             case 0: {
-                ((ArtistFragment) adapter.getItem(0)).sort(AlbumAdapter.ASCENDING);
+                artistFragment.sort(AlbumAdapter.ASCENDING);
                 break;
             }
             case 1: {
-                ((AlbumFragment) adapter.getItem(1)).sort(AlbumAdapter.ASCENDING);
+                albumFragment.sort(AlbumAdapter.ASCENDING);
                 break;
             }
             case 2: {
-                ((SongFragment) adapter.getItem(2)).sort(musicService != null ? musicService.getCurrentSong() : null
+                songFragment.sort(musicService != null ? musicService.getCurrentSong() : null
                         , AlbumAdapter.ASCENDING);
                 break;
             }
@@ -340,10 +334,6 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
             return;
         }
 
-        if (searchFragment != null && searchFragment.isVisible()) {
-            backToMainFragment(searchFragment);
-            return;
-        }
         if (detailAlbumFragment != null && detailAlbumFragment.isVisible()) {
             backToMainFragment(detailAlbumFragment);
             return;
@@ -441,8 +431,8 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
         toolbar.setTitleTextColor(Color.WHITE);
 
         songFragment = new SongFragment();
-        AlbumFragment albumFragment = new AlbumFragment();
-        ArtistFragment artistFragment = new ArtistFragment();
+        albumFragment = new AlbumFragment();
+        artistFragment = new ArtistFragment();
         ArrayList<Fragment> arrayList = new ArrayList<>();
         arrayList.add(artistFragment);
         arrayList.add(albumFragment);
@@ -626,7 +616,7 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
 
     @Override
     public void onClickAlbum(Album album, int position) {
-        ArrayList<SongPlus> arrSongPlus = getSongOfAlbum(songFragment.getArrayListSong(), album);
+        ArrayList<SongPlus> arrSongPlus = getSongOfAlbum(songFragment.getArrayListAll(), album);
 
         Bundle bundle = new Bundle();
         bundle.putString(Constant.ALBUM_NAME, album.getAlbumName());
@@ -645,7 +635,7 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
 
     @Override
     public void onClickArtist(Artist artist) {
-        ArrayList<SongPlus> arrayList = getSongOfArtist(songFragment.getArrayListSong(), artist);
+        ArrayList<SongPlus> arrayList = getSongOfArtist(songFragment.getArrayListAll(), artist);
 
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList(Constant.ARRAY_SONG_PLUS, arrayList);
@@ -842,15 +832,6 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
     }
 
     public void backToMainFragment(Fragment fragment) {
-        if (fragment instanceof SearchFragment) {
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
-            transaction.remove(searchFragment);
-            searchFragment.onDestroyView();
-            transaction.commit();
-            return;
-        }
-
         if (fragment instanceof DetailAlbumFragment) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.setCustomAnimations(R.anim.slide_in, R.anim.slide_out);

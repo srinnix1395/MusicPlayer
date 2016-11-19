@@ -12,14 +12,14 @@ import com.example.sev_user.musicplayer.R;
 import com.example.sev_user.musicplayer.custom.AlbumDiffCallback;
 import com.example.sev_user.musicplayer.model.Album;
 import com.example.sev_user.musicplayer.utils.ImageUtils;
-import com.example.sev_user.musicplayer.viewholder.AlbumViewHolder;
+import com.example.sev_user.musicplayer.viewholder.AlbumGridViewHolder;
 
 import java.util.ArrayList;
 
 /**
  * Created by sev_user on 7/15/2016.
  */
-public class AlbumAdapter extends RecyclerView.Adapter<AlbumViewHolder> {
+public class AlbumAdapter extends RecyclerView.Adapter<AlbumGridViewHolder> {
     public static final int ASCENDING = 0;
     public static final int DESCENDING = 1;
     public static final int DEFAULT_SORT = ASCENDING;
@@ -35,14 +35,14 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumViewHolder> {
     }
 
     @Override
-    public AlbumViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public AlbumGridViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.view_holder_album, parent, false);
-        return new AlbumViewHolder(view);
+        return new AlbumGridViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(AlbumViewHolder holder, int position) {
+    public void onBindViewHolder(AlbumGridViewHolder holder, int position) {
         holder.setupViewHolder(arrayList.get(position), position, margin, noMargin);
     }
 

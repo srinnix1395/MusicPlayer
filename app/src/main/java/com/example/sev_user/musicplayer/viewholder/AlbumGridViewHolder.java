@@ -21,7 +21,7 @@ import butterknife.OnClick;
 /**
  * Created by sev_user on 7/15/2016.
  */
-public class AlbumViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+public class AlbumGridViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     @Bind(R.id.imvAlbumArt)
     ImageView imvAlbumArt;
 
@@ -38,7 +38,7 @@ public class AlbumViewHolder extends RecyclerView.ViewHolder implements View.OnC
     private Album album;
     private int position;
 
-    public AlbumViewHolder(View itemView) {
+    public AlbumGridViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
         callback = (OnClickViewHolder) itemView.getContext();

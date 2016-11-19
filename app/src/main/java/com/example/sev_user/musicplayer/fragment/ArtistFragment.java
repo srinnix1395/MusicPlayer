@@ -3,6 +3,7 @@ package com.example.sev_user.musicplayer.fragment;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,6 +16,7 @@ import android.widget.ProgressBar;
 import com.example.sev_user.musicplayer.R;
 import com.example.sev_user.musicplayer.adapter.AlbumAdapter;
 import com.example.sev_user.musicplayer.adapter.ArtistAdapter;
+import com.example.sev_user.musicplayer.model.Artist;
 import com.example.sev_user.musicplayer.model.BaseModel;
 import com.example.sev_user.musicplayer.provider.MusicContentProvider;
 
@@ -40,6 +42,8 @@ public class ArtistFragment extends android.support.v4.app.Fragment {
     ProgressBar progressBar;
 
     private ArrayList<BaseModel> artistArrayList;
+    private ArrayList<Artist> artists;
+
     private ArtistAdapter adapter;
     private int sortType = AlbumAdapter.DEFAULT_SORT;
 
@@ -63,7 +67,8 @@ public class ArtistFragment extends android.support.v4.app.Fragment {
             @Override
             public ArrayList<BaseModel> call() throws Exception {
                 MusicContentProvider contentProvider = new MusicContentProvider(getContext());
-                return contentProvider.getArrArtist();
+                artists = contentProvider.getArtist();
+                return contentProvider.getArrArtist(artists);
             }
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -106,6 +111,12 @@ public class ArtistFragment extends android.support.v4.app.Fragment {
             ArrayList<BaseModel> newList = reverseList();
             adapter.swapItems(newList);
             sortType = type;
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    adapter.notifyDataSetChanged();
+                }
+            }, 500);
         }
     }
 
@@ -120,5 +131,9 @@ public class ArtistFragment extends android.support.v4.app.Fragment {
             }
         }
         return newList;
+    }
+
+    public ArrayList<Artist> getArtists() {
+        return artists;
     }
 }

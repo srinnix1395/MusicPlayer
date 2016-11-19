@@ -1,9 +1,12 @@
 package com.example.sev_user.musicplayer.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by sev_user on 7/15/2016.
  */
-public class Song extends BaseModel{
+public class Song extends BaseModel implements Parcelable{
     private int id;
     private String image;
     private String name;
@@ -27,6 +30,31 @@ public class Song extends BaseModel{
         this.hasLine = hasLine;
         this.placeHolder = placeHolder;
     }
+
+    protected Song(Parcel in) {
+        id = in.readInt();
+        image = in.readString();
+        name = in.readString();
+        data = in.readString();
+        artist = in.readString();
+        artistId = in.readInt();
+        album = in.readString();
+        idAlbum = in.readInt();
+        hasLine = in.readByte() != 0;
+        placeHolder = in.readInt();
+    }
+
+    public static final Creator<Song> CREATOR = new Creator<Song>() {
+        @Override
+        public Song createFromParcel(Parcel in) {
+            return new Song(in);
+        }
+
+        @Override
+        public Song[] newArray(int size) {
+            return new Song[size];
+        }
+    };
 
     public int getId() {
         return id;
@@ -87,5 +115,24 @@ public class Song extends BaseModel{
     @Override
     public int getTypeModel() {
         return BaseModel.TYPE_SONG;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(id);
+        parcel.writeString(image);
+        parcel.writeString(name);
+        parcel.writeString(data);
+        parcel.writeString(artist);
+        parcel.writeInt(artistId);
+        parcel.writeString(album);
+        parcel.writeInt(idAlbum);
+        parcel.writeByte((byte) (hasLine ? 1 : 0));
+        parcel.writeInt(placeHolder);
     }
 }

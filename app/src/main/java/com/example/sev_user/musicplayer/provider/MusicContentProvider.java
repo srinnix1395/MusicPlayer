@@ -27,7 +27,7 @@ public class MusicContentProvider {
         contentResolver = context.getContentResolver();
     }
 
-    private ArrayList<Artist> getArtist() {
+    public ArrayList<Artist> getArtist() {
         Cursor cursor = contentResolver.query(MediaStore.Audio.Artists.EXTERNAL_CONTENT_URI, Constant.COLUMN_ARTIST, null, null, null);
         ArrayList<Artist> arrayList = new ArrayList<>();
         while (cursor.moveToNext()) {
@@ -89,11 +89,10 @@ public class MusicContentProvider {
         return arrSong;
     }
 
-    public ArrayList<BaseModel> getArrSong() {
-        ArrayList<Song> arrSong = getSongHasImage();
+    public ArrayList<BaseModel> getArrSong(ArrayList<Song> songs) {
         ArrayList<BaseModel> arrObjects = new ArrayList<>();
 
-        if (arrSong.size() > 0) {
+        if (songs.size() > 0) {
             arrObjects.add(new Header(Constant.PLAY_SHUFFLE_ALL));
         }
 
@@ -103,17 +102,17 @@ public class MusicContentProvider {
                 return song.getName().compareToIgnoreCase(t1.getName());
             }
         };
-        Collections.sort(arrSong, comparator);
+        Collections.sort(songs, comparator);
 
-        if (!Character.isLetter(arrSong.get(0).getName().charAt(0))) {
+        if (!Character.isLetter(songs.get(0).getName().charAt(0))) {
             arrObjects.add(new Header("#"));
         }
 
         int positionLetter = 0;
 
-        for (int i = 0, size = arrSong.size(); i < size; i++) {
-            if (!Character.isLetter(arrSong.get(i).getName().charAt(0))) {
-                arrObjects.add(arrSong.get(i));
+        for (int i = 0, size = songs.size(); i < size; i++) {
+            if (!Character.isLetter(songs.get(i).getName().charAt(0))) {
+                arrObjects.add(songs.get(i));
                 positionLetter = i;
             } else {
                 ((Song) arrObjects.get(arrObjects.size() - 1)).setHasLine(false);
@@ -126,14 +125,14 @@ public class MusicContentProvider {
 
         String currentLetter;
         String prevLetter;
-        for (int i = positionLetter, size = arrSong.size(); i < size; i++) {
-            currentLetter = String.valueOf(arrSong.get(i).getName().charAt(0));
-            prevLetter = String.valueOf(arrSong.get(i - 1).getName().charAt(0));
+        for (int i = positionLetter, size = songs.size(); i < size; i++) {
+            currentLetter = String.valueOf(songs.get(i).getName().charAt(0));
+            prevLetter = String.valueOf(songs.get(i - 1).getName().charAt(0));
             if (!currentLetter.equalsIgnoreCase(prevLetter)) {
                 ((Song) arrObjects.get(arrObjects.size() - 1)).setHasLine(false);
                 arrObjects.add(new Header(currentLetter));
             }
-            arrObjects.add(arrSong.get(i));
+            arrObjects.add(songs.get(i));
         }
 
         if (arrObjects.size() > 0) {
@@ -143,8 +142,7 @@ public class MusicContentProvider {
         return arrObjects;
     }
 
-    public ArrayList<BaseModel> getArrArtist() {
-        ArrayList<Artist> arrArtist = getArtist();
+    public ArrayList<BaseModel> getArrArtist(ArrayList<Artist> artists) {
         ArrayList<BaseModel> arrObjects = new ArrayList<>();
 
         Comparator<Artist> comparator = new Comparator<Artist>() {
@@ -153,17 +151,17 @@ public class MusicContentProvider {
                 return artist.getName().compareToIgnoreCase(t1.getName());
             }
         };
-        Collections.sort(arrArtist, comparator);
+        Collections.sort(artists, comparator);
 
-        if (!Character.isLetter(arrArtist.get(0).getName().charAt(0))) {
+        if (!Character.isLetter(artists.get(0).getName().charAt(0))) {
             arrObjects.add(new Header("#"));
         }
 
         int positionLetter = 0;
 
-        for (int i = 0, size = arrArtist.size(); i < size; i++) {
-            if (!Character.isLetter(arrArtist.get(i).getName().charAt(0))) {
-                arrObjects.add(arrArtist.get(i));
+        for (int i = 0, size = artists.size(); i < size; i++) {
+            if (!Character.isLetter(artists.get(i).getName().charAt(0))) {
+                arrObjects.add(artists.get(i));
                 positionLetter = i;
             } else {
                 ((Artist) arrObjects.get(arrObjects.size() - 1)).setHasLine(false);
@@ -176,14 +174,14 @@ public class MusicContentProvider {
 
         String currentLetter;
         String lastLetter;
-        for (int i = positionLetter, size = arrArtist.size(); i < size; i++) {
-            currentLetter = String.valueOf(arrArtist.get(i).getName().charAt(0));
-            lastLetter = String.valueOf(arrArtist.get(i - 1).getName().charAt(0));
+        for (int i = positionLetter, size = artists.size(); i < size; i++) {
+            currentLetter = String.valueOf(artists.get(i).getName().charAt(0));
+            lastLetter = String.valueOf(artists.get(i - 1).getName().charAt(0));
             if (!currentLetter.equalsIgnoreCase(lastLetter)) {
                 ((Artist) arrObjects.get(arrObjects.size() - 1)).setHasLine(false);
                 arrObjects.add(new Header(currentLetter));
             }
-            arrObjects.add(arrArtist.get(i));
+            arrObjects.add(artists.get(i));
         }
 
         if (arrObjects.size() > 0) {
@@ -192,7 +190,7 @@ public class MusicContentProvider {
         return arrObjects;
     }
 
-    private ArrayList<Song> getSongHasImage() {
+    public ArrayList<Song> getSongHasImage() {
         ArrayList<Song> arrSong = getSongs();
         String[] columns = {
                 MediaStore.Audio.Albums._ID,

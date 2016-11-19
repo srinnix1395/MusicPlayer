@@ -110,7 +110,7 @@ public class MusicService extends Service {
     public void onCreate() {
         super.onCreate();
         MusicContentProvider contentProvider = new MusicContentProvider(this);
-        mediaManager = new MediaManager(this, contentProvider.getArrSong());
+        mediaManager = new MediaManager(this, contentProvider.getArrSong(contentProvider.getSongHasImage()));
         if (!isRegistered) {
             IntentFilter filter = new IntentFilter();
             filter.addAction(Constant.ACTION_PLAY_MUSIC);
@@ -291,7 +291,7 @@ public class MusicService extends Service {
     }
 
     public int getCurrentSeekbar() {
-        return mediaManager.getCurrentSeekbar();
+        return mediaManager.getCurrentSeekBar();
     }
 
     public int getCurrentPosition() {

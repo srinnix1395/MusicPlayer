@@ -10,4 +10,9 @@
     <string name="detail">Chi tiết</string>
     <string name="sortAZ">Sắp xếp A-Z</string>
     <string name="sortZA">Sắp xếp Z-A</string>
+    <string name="artist">Nghệ sỹ</string>
+    <string name="song">Bài hát</string>
+    <string name="show_all_song">Hiển thị tất cả bài hát</string>
+    <string name="show_all_artist">Hiển thị tất cả nghệ sỹ</string>
+    <string name="show_all_album">Hiển thị tất cả album</string>
 </resources>
