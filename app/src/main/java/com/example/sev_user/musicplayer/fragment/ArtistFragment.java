@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.example.sev_user.musicplayer.R;
+import com.example.sev_user.musicplayer.activity.MainActivity;
 import com.example.sev_user.musicplayer.adapter.AlbumAdapter;
 import com.example.sev_user.musicplayer.adapter.ArtistAdapter;
 import com.example.sev_user.musicplayer.model.Artist;
@@ -96,7 +97,7 @@ public class ArtistFragment extends android.support.v4.app.Fragment {
         progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#FF4081"), PorterDuff.Mode.SRC_ATOP);
 
         artistArrayList = new ArrayList<>();
-        adapter = new ArtistAdapter(artistArrayList);
+        adapter = new ArtistAdapter(artistArrayList, ((MainActivity) getActivity()));
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);

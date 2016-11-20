@@ -11,6 +11,7 @@ import android.widget.Filter;
 
 import com.example.sev_user.musicplayer.R;
 import com.example.sev_user.musicplayer.activity.ResultActivity;
+import com.example.sev_user.musicplayer.callback.OnClickViewHolderCallback;
 import com.example.sev_user.musicplayer.callback.SearchAdapterCallback;
 import com.example.sev_user.musicplayer.constant.Constant;
 import com.example.sev_user.musicplayer.model.Album;
@@ -48,6 +49,7 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private SearchAdapterCallback callback;
     private SparseIntArray mapSong = new SparseIntArray();
     private CharSequence query;
+    private OnClickViewHolderCallback onClickViewHolderCallback;
 
     public SearchAdapter(Context context, ArrayList<BaseModel> arrayList, SearchAdapterCallback searchAdapterCallback) {
         this.context = context;
@@ -58,9 +60,10 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         artistArrayListResult = new ArrayList<>();
     }
 
-    public SearchAdapter(Context context, ArrayList<BaseModel> arrayList) {
+    public SearchAdapter(Context context, ArrayList<BaseModel> arrayList, OnClickViewHolderCallback onClickViewHolderCallback) {
         this.context = context;
         this.arrayList = arrayList;
+        this.onClickViewHolderCallback = onClickViewHolderCallback;
     }
 
     @Override
@@ -71,17 +74,17 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         switch (viewType) {
             case ITEM_VIEW_TYPE_ITEM_ALBUM: {
                 view = inflater.inflate(R.layout.view_holder_song, parent, false);
-                viewHolder = new AlbumListViewHolder(view);
+                viewHolder = new AlbumListViewHolder(view, onClickViewHolderCallback);
                 break;
             }
             case ITEM_VIEW_TYPE_ITEM_SONG: {
                 view = inflater.inflate(R.layout.view_holder_song, parent, false);
-                viewHolder = new SongViewHolder(view);
+                viewHolder = new SongViewHolder(view, onClickViewHolderCallback);
                 break;
             }
             case ITEM_VIEW_TYPE_ITEM_ARTIST: {
                 view = inflater.inflate(R.layout.view_holder_artist, parent, false);
-                viewHolder = new ArtistViewHolder(view);
+                viewHolder = new ArtistViewHolder(view, onClickViewHolderCallback);
                 break;
             }
             case ITEM_VIEW_TYPE_HEADER: {
@@ -129,7 +132,7 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                         @Override
                         public void onClick(View view) {
                             Intent intent = new Intent(context, ResultActivity.class);
-                            if (header.equals(context.getString(R.string.show_all_album))){
+                            if (header.equals(context.getString(R.string.show_all_album))) {
                                 intent.putParcelableArrayListExtra(Constant.ARRAY, albumArrayListResult);
                             } else if (header.equals(context.getString(R.string.show_all_artist))) {
                                 intent.putParcelableArrayListExtra(Constant.ARRAY, artistArrayListResult);

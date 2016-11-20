@@ -10,8 +10,8 @@
 # Add any project specific keep options here:
 
 # If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript callback
+# and specify the fully qualified class name to the JavaScript onClickViewHolderCallback
 # class:
-#-keepclassmembers class fqcn.of.javascript.callback.for.webview {
+#-keepclassmembers class fqcn.of.javascript.onClickViewHolderCallback.for.webview {
 #   public *;
 #}

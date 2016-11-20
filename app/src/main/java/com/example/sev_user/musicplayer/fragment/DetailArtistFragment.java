@@ -94,6 +94,6 @@ public class DetailArtistFragment extends Fragment {
     private void initData(Bundle bundle) {
         artist = bundle.getParcelable(Constant.ARTIST);
         arraySong = bundle.getParcelableArrayList(Constant.ARRAY_SONG_PLUS);
-        adapter = new SongAlbumAdapter(arraySong);
+        adapter = new SongAlbumAdapter(arraySong, ((MainActivity) getActivity()));
     }
 }

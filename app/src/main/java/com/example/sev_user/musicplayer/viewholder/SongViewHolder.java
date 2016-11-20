@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.sev_user.musicplayer.R;
-import com.example.sev_user.musicplayer.callback.OnClickViewHolder;
+import com.example.sev_user.musicplayer.callback.OnClickViewHolderCallback;
 import com.example.sev_user.musicplayer.model.Song;
 
 import butterknife.Bind;
@@ -37,14 +37,14 @@ public class SongViewHolder extends RecyclerView.ViewHolder implements View.OnCl
     ImageView imvMore;
 
     protected int position;
-    protected OnClickViewHolder callback;
+    protected OnClickViewHolderCallback callback;
     protected Song song;
 
-    public SongViewHolder(View itemView) {
+    public SongViewHolder(View itemView, OnClickViewHolderCallback callback) {
         super(itemView);
         ButterKnife.bind(this, itemView);
+        this.callback = callback;
         itemView.setOnClickListener(this);
-        callback = (OnClickViewHolder) itemView.getContext();
     }
 
     public void setupViewHolder(Song song, int position) {

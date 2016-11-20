@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.sev_user.musicplayer.R;
+import com.example.sev_user.musicplayer.callback.OnClickViewHolderCallback;
 import com.example.sev_user.musicplayer.custom.ArtistDiffCallback;
 import com.example.sev_user.musicplayer.model.Artist;
 import com.example.sev_user.musicplayer.model.BaseModel;
@@ -24,9 +25,11 @@ public class ArtistAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private static final int VIEW_STRING = 1;
 
     private ArrayList<BaseModel> arrayList;
+    private OnClickViewHolderCallback onClickViewHolderCallback;
 
-    public ArtistAdapter(ArrayList<BaseModel> arrayList) {
+    public ArtistAdapter(ArrayList<BaseModel> arrayList, OnClickViewHolderCallback onClickViewHolderCallback) {
         this.arrayList = arrayList;
+        this.onClickViewHolderCallback = onClickViewHolderCallback;
     }
 
     @Override
@@ -37,7 +40,7 @@ public class ArtistAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         switch (viewType) {
             case VIEW_ARTIST: {
                 view = inflater.inflate(R.layout.view_holder_artist, parent, false);
-                viewHolder = new ArtistViewHolder(view);
+                viewHolder = new ArtistViewHolder(view, onClickViewHolderCallback);
                 break;
             }
             case VIEW_STRING: {

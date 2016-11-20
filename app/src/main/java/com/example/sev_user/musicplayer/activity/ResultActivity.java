@@ -12,13 +12,12 @@ import android.view.View;
 
 import com.example.sev_user.musicplayer.R;
 import com.example.sev_user.musicplayer.adapter.SearchAdapter;
-import com.example.sev_user.musicplayer.callback.OnClickViewHolder;
+import com.example.sev_user.musicplayer.callback.OnClickViewHolderCallback;
 import com.example.sev_user.musicplayer.constant.Constant;
 import com.example.sev_user.musicplayer.model.Album;
 import com.example.sev_user.musicplayer.model.Artist;
 import com.example.sev_user.musicplayer.model.BaseModel;
 import com.example.sev_user.musicplayer.model.Song;
-import com.example.sev_user.musicplayer.model.SongPlus;
 
 import java.util.ArrayList;
 
@@ -29,15 +28,13 @@ import butterknife.ButterKnife;
  * Created by DELL on 11/19/2016.
  */
 
-public class ResultActivity extends AppCompatActivity implements OnClickViewHolder {
+public class ResultActivity extends AppCompatActivity implements OnClickViewHolderCallback {
     @Bind(R.id.toolbar)
     Toolbar toolbar;
 
     @Bind(R.id.recyclerView)
     RecyclerView recyclerView;
 
-    private SearchAdapter adapter;
-    private ArrayList<BaseModel> arrayList;
     private String query;
     private String type;
 
@@ -67,16 +64,15 @@ public class ResultActivity extends AppCompatActivity implements OnClickViewHold
 
     private void initData() {
         Intent intent = getIntent();
-        arrayList = intent.getParcelableArrayListExtra(Constant.ARRAY);
+        ArrayList<BaseModel> arrayList = intent.getParcelableArrayListExtra(Constant.ARRAY);
         query = intent.getStringExtra(Constant.QUERY);
         type = intent.getStringExtra(Constant.TYPE);
 
         for (BaseModel model : arrayList) {
             model.setHasLine(true);
         }
-        adapter = new SearchAdapter(this, arrayList);
 
-        recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(new SearchAdapter(this, arrayList, this));
     }
 
     @Override
@@ -91,16 +87,6 @@ public class ResultActivity extends AppCompatActivity implements OnClickViewHold
 
     @Override
     public void onClickArtist(Artist artist) {
-
-    }
-
-    @Override
-    public void onClickPlayShuffle() {
-
-    }
-
-    @Override
-    public void onClickSongAlbum(SongPlus songPlus) {
 
     }
 }

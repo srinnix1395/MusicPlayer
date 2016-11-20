@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.sev_user.musicplayer.R;
+import com.example.sev_user.musicplayer.callback.OnClickShuffleCallback;
+import com.example.sev_user.musicplayer.callback.OnClickViewHolderCallback;
 import com.example.sev_user.musicplayer.constant.Constant;
 import com.example.sev_user.musicplayer.custom.SongDiffCallback;
 import com.example.sev_user.musicplayer.model.BaseModel;
@@ -29,9 +31,14 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int VIEW_PLAY_SHUFFLE = 2;
 
     private ArrayList<BaseModel> arrayList;
+    private OnClickViewHolderCallback onClickViewHolderCallback;
+    private OnClickShuffleCallback onClickShuffleCallback;
 
-    public SongAdapter(ArrayList<BaseModel> arrayList) {
+    public SongAdapter(ArrayList<BaseModel> arrayList, OnClickViewHolderCallback onClickViewHolderCallback
+            , OnClickShuffleCallback onClickShuffleCallback) {
         this.arrayList = arrayList;
+        this.onClickViewHolderCallback = onClickViewHolderCallback;
+        this.onClickShuffleCallback = onClickShuffleCallback;
     }
 
     @Override
@@ -42,7 +49,7 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         switch (viewType) {
             case VIEW_SONG: {
                 view = inflater.inflate(R.layout.view_holder_song, parent, false);
-                viewHolder = new SongViewHolder(view);
+                viewHolder = new SongViewHolder(view, onClickViewHolderCallback);
                 break;
             }
             case VIEW_STRING: {
@@ -52,7 +59,7 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             }
             case VIEW_PLAY_SHUFFLE: {
                 view = inflater.inflate(R.layout.view_holder_play_shuffle, parent, false);
-                viewHolder = new PlayShuffleViewHolder(view);
+                viewHolder = new PlayShuffleViewHolder(view, onClickShuffleCallback);
                 break;
             }
             default: {

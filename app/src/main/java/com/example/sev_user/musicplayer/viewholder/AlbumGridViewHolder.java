@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.sev_user.musicplayer.R;
-import com.example.sev_user.musicplayer.callback.OnClickViewHolder;
+import com.example.sev_user.musicplayer.callback.OnClickViewHolderCallback;
 import com.example.sev_user.musicplayer.model.Album;
 import com.example.sev_user.musicplayer.utils.ImageUtils;
 
@@ -34,14 +34,14 @@ public class AlbumGridViewHolder extends RecyclerView.ViewHolder implements View
     @Bind(R.id.imvMore)
     ImageView imvMore;
 
-    private OnClickViewHolder callback;
+    private OnClickViewHolderCallback callback;
     private Album album;
     private int position;
 
     public AlbumGridViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
-        callback = (OnClickViewHolder) itemView.getContext();
+        callback = (OnClickViewHolderCallback) itemView.getContext();
     }
 
     public void setupViewHolder(Album album, int position, int margin, int noMargin) {

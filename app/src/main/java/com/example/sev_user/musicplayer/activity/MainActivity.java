@@ -34,7 +34,9 @@ import com.bumptech.glide.Glide;
 import com.example.sev_user.musicplayer.R;
 import com.example.sev_user.musicplayer.adapter.AlbumAdapter;
 import com.example.sev_user.musicplayer.adapter.PagerAdapter;
-import com.example.sev_user.musicplayer.callback.OnClickViewHolder;
+import com.example.sev_user.musicplayer.callback.OnClickShuffleCallback;
+import com.example.sev_user.musicplayer.callback.OnClickSongAlbumCallback;
+import com.example.sev_user.musicplayer.callback.OnClickViewHolderCallback;
 import com.example.sev_user.musicplayer.constant.Constant;
 import com.example.sev_user.musicplayer.fragment.AlbumFragment;
 import com.example.sev_user.musicplayer.fragment.ArtistFragment;
@@ -58,7 +60,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends AppCompatActivity implements OnClickViewHolder, ShakeDetector.Listener {
+public class MainActivity extends AppCompatActivity implements OnClickViewHolderCallback, ShakeDetector.Listener
+        , OnClickShuffleCallback, OnClickSongAlbumCallback {
     private static final String TAG = "MainActivity";
 
     @Bind(R.id.bottom_sheet)
@@ -626,7 +629,7 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
     }
 
 
-    //override OnClickViewHolder interface-------------
+    //override OnClickViewHolderCallback interface-------------
     @Override
     public void onClickSong(Song song, int position) {
         currentSong = new SongPlus(song, 0, position);
@@ -708,7 +711,7 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
         return arrSong;
     }
 
-    //override OnClickViewHolder interface-------------
+    //override OnClickViewHolderCallback interface-------------
     @OnClick({R.id.imvPlay, R.id.imvPlayToolbar, R.id.imvNext, R.id.imvPre, R.id.imvRandom, R.id.imvRepeat, R.id.linearLayoutPlay})
     void onClick(View view) {
         switch (view.getId()) {

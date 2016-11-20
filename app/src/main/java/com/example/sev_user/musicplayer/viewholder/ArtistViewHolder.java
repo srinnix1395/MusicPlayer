@@ -8,7 +8,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.example.sev_user.musicplayer.R;
-import com.example.sev_user.musicplayer.callback.OnClickViewHolder;
+import com.example.sev_user.musicplayer.callback.OnClickViewHolderCallback;
 import com.example.sev_user.musicplayer.model.Artist;
 
 import butterknife.Bind;
@@ -34,14 +34,14 @@ public class ArtistViewHolder extends RecyclerView.ViewHolder implements View.On
     @Bind(R.id.imvMore)
     ImageView imvMore;
 
-    private OnClickViewHolder callback;
+    private OnClickViewHolderCallback callback;
     private Artist artist;
 
-    public ArtistViewHolder(View itemView) {
+    public ArtistViewHolder(View itemView, OnClickViewHolderCallback callback) {
         super(itemView);
         ButterKnife.bind(this, itemView);
         itemView.setOnClickListener(this);
-        callback = (OnClickViewHolder) itemView.getContext();
+        this.callback = callback;
     }
 
     public void setupViewHolder(Artist artist) {

@@ -94,7 +94,7 @@ public class DetailAlbumFragment extends Fragment {
     }
 
     private void initData() {
-        albumAdapter = new SongAlbumAdapter(arrayList);
+        albumAdapter = new SongAlbumAdapter(arrayList, (MainActivity) getActivity());
     }
 
     private void initView() {

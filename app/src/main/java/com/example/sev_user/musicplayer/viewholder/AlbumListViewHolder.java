@@ -6,6 +6,7 @@ import android.widget.PopupMenu;
 
 import com.bumptech.glide.Glide;
 import com.example.sev_user.musicplayer.R;
+import com.example.sev_user.musicplayer.callback.OnClickViewHolderCallback;
 import com.example.sev_user.musicplayer.model.Album;
 import com.example.sev_user.musicplayer.utils.ImageUtils;
 
@@ -17,8 +18,8 @@ public class AlbumListViewHolder extends SongViewHolder {
 
     private Album album;
 
-    public AlbumListViewHolder(View itemView) {
-        super(itemView);
+    public AlbumListViewHolder(View itemView, OnClickViewHolderCallback callback) {
+        super(itemView, callback);
     }
 
     public void setupViewHolder(Album album, int position) {

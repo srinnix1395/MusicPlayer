@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.sev_user.musicplayer.R;
+import com.example.sev_user.musicplayer.callback.OnClickViewHolderCallback;
 import com.example.sev_user.musicplayer.model.SongPlus;
 import com.example.sev_user.musicplayer.viewholder.SongAlbumViewHolder;
 
@@ -16,15 +17,17 @@ import java.util.ArrayList;
  */
 public class SongAlbumAdapter extends RecyclerView.Adapter<SongAlbumViewHolder> {
     private ArrayList<SongPlus> arrayList;
+    private OnClickViewHolderCallback callback;
 
-    public SongAlbumAdapter(ArrayList<SongPlus> arrayList) {
+    public SongAlbumAdapter(ArrayList<SongPlus> arrayList, OnClickViewHolderCallback callback) {
         this.arrayList = arrayList;
+        this.callback = callback;
     }
 
     @Override
     public SongAlbumViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_holder_song_album, parent, false);
-        return new SongAlbumViewHolder(view);
+        return new SongAlbumViewHolder(view, callback);
     }
 
     @Override

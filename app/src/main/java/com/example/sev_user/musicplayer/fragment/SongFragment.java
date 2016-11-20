@@ -94,7 +94,7 @@ public class SongFragment extends Fragment {
         progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#FF4081"), PorterDuff.Mode.SRC_ATOP);
 
         songArrayList = new ArrayList<>();
-        adapter = new SongAdapter(songArrayList);
+        adapter = new SongAdapter(songArrayList, ((MainActivity) getActivity()), ((MainActivity) getActivity()));
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
