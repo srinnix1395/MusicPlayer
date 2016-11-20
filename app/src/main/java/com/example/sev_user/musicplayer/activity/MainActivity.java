@@ -359,26 +359,6 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
 
         FragmentManager fragmentManager = getSupportFragmentManager();
 
-        if (fragmentManager.findFragmentByTag(TAG_FRAGMENT_RESULT) != null) {
-            backToMainFragment(getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT_RESULT));
-            return;
-        }
-
-        if (fragmentManager.findFragmentByTag(TAG_FRAGMENT_SEARCH) != null) {
-            if (fragmentManager.findFragmentByTag(TAG_FRAGMENT_DETAIL_ALBUM) != null) {
-                backToMainFragment(fragmentManager.findFragmentByTag(TAG_FRAGMENT_DETAIL_ALBUM));
-                return;
-            }
-
-            if (fragmentManager.findFragmentByTag(TAG_FRAGMENT_DETAIL_ARTIST) != null) {
-                backToMainFragment(fragmentManager.findFragmentByTag(TAG_FRAGMENT_DETAIL_ARTIST));
-                return;
-            }
-
-            backToMainFragment(fragmentManager.findFragmentByTag(TAG_FRAGMENT_SEARCH));
-            return;
-        }
-
         if (fragmentManager.findFragmentByTag(TAG_FRAGMENT_DETAIL_ALBUM) != null) {
             backToMainFragment(fragmentManager.findFragmentByTag(TAG_FRAGMENT_DETAIL_ALBUM));
             return;
@@ -386,6 +366,16 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
 
         if (fragmentManager.findFragmentByTag(TAG_FRAGMENT_DETAIL_ARTIST) != null) {
             backToMainFragment(fragmentManager.findFragmentByTag(TAG_FRAGMENT_DETAIL_ARTIST));
+            return;
+        }
+
+        if (fragmentManager.findFragmentByTag(TAG_FRAGMENT_RESULT) != null) {
+            backToMainFragment(getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT_RESULT));
+            return;
+        }
+
+        if (fragmentManager.findFragmentByTag(TAG_FRAGMENT_SEARCH) != null) {
+            backToMainFragment(fragmentManager.findFragmentByTag(TAG_FRAGMENT_SEARCH));
             return;
         }
 
