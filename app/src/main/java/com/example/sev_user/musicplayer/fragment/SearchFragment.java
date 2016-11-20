@@ -1,6 +1,5 @@
 package com.example.sev_user.musicplayer.fragment;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -15,11 +14,11 @@ import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ImageSpan;
+import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -32,6 +31,7 @@ import com.example.sev_user.musicplayer.model.Album;
 import com.example.sev_user.musicplayer.model.Artist;
 import com.example.sev_user.musicplayer.model.BaseModel;
 import com.example.sev_user.musicplayer.utils.ImageUtils;
+import com.example.sev_user.musicplayer.utils.UIHelpers;
 
 import java.util.ArrayList;
 
@@ -87,12 +87,7 @@ public class SearchFragment extends Fragment implements SearchAdapterCallback {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                View view = getActivity().getCurrentFocus();
-                if (view != null) {
-                    InputMethodManager imm = (InputMethodManager) getContext().
-                            getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                }
+                UIHelpers.closeSoftKeyboard(getActivity());
                 ((MainActivity) getActivity()).backToMainFragment(SearchFragment.this);
             }
         });
@@ -137,17 +132,14 @@ public class SearchFragment extends Fragment implements SearchAdapterCallback {
         ImageView closeButtonImage = (ImageView) searchView.findViewById(closeButtonId);
         closeButtonImage.setImageResource(R.drawable.ic_close_24dp);
 
-        InputMethodManager inputMethodManager = (InputMethodManager) getContext().
-                getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputMethodManager.toggleSoftInputFromWindow(searchView.getApplicationWindowToken(),
-                InputMethodManager.SHOW_FORCED, 0);
+        UIHelpers.openSoftKeyboard(getContext(), searchView);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
     private void initData() {
         ArrayList<BaseModel> arrayList = new ArrayList<>();
-        adapter = new SearchAdapter(getContext(), arrayList, this);
+        adapter = new SearchAdapter(getActivity(), arrayList, this, ((MainActivity) getActivity()));
 
         recyclerView.setAdapter(adapter);
     }
@@ -173,5 +165,9 @@ public class SearchFragment extends Fragment implements SearchAdapterCallback {
             recyclerView.setVisibility(View.INVISIBLE);
             layoutNotFound.setVisibility(View.VISIBLE);
         }
+    }
+
+    public SparseIntArray getMapResult() {
+        return adapter.getMapResult();
     }
 }

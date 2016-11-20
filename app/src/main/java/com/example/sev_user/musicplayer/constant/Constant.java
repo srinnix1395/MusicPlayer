@@ -67,4 +67,5 @@ public class Constant {
     public static final String ARRAY = "array";
     public static final String QUERY = "query";
     public static final String TYPE = "type";
+    public static final String MAP_RESULT = "map_result";
 }

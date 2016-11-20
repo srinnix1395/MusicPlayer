@@ -4,7 +4,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -73,8 +72,7 @@ public class DetailArtistFragment extends Fragment {
     }
 
     private void initView() {
-        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-        getActivity().setTitle(artist.getName());
+        toolbar.setTitle(artist.getName());
         toolbar.setTitleTextColor(Color.WHITE);
         toolbar.setNavigationIcon(R.drawable.ic_back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {

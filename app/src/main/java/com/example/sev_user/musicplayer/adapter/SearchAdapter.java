@@ -1,7 +1,8 @@
 package com.example.sev_user.musicplayer.adapter;
 
+import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
@@ -10,15 +11,16 @@ import android.view.ViewGroup;
 import android.widget.Filter;
 
 import com.example.sev_user.musicplayer.R;
-import com.example.sev_user.musicplayer.activity.ResultActivity;
 import com.example.sev_user.musicplayer.callback.OnClickViewHolderCallback;
 import com.example.sev_user.musicplayer.callback.SearchAdapterCallback;
+import com.example.sev_user.musicplayer.callback.ShowAllResultCallback;
 import com.example.sev_user.musicplayer.constant.Constant;
 import com.example.sev_user.musicplayer.model.Album;
 import com.example.sev_user.musicplayer.model.Artist;
 import com.example.sev_user.musicplayer.model.BaseModel;
 import com.example.sev_user.musicplayer.model.Header;
 import com.example.sev_user.musicplayer.model.Song;
+import com.example.sev_user.musicplayer.utils.UIHelpers;
 import com.example.sev_user.musicplayer.viewholder.AlbumListViewHolder;
 import com.example.sev_user.musicplayer.viewholder.ArtistViewHolder;
 import com.example.sev_user.musicplayer.viewholder.EmptyViewHolder;
@@ -46,15 +48,19 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private ArrayList<Song> songArrayListResult;
     private ArrayList<Album> albumArrayListResult;
     private ArrayList<Artist> artistArrayListResult;
-    private SearchAdapterCallback callback;
     private SparseIntArray mapSong = new SparseIntArray();
     private CharSequence query;
     private OnClickViewHolderCallback onClickViewHolderCallback;
+    private SearchAdapterCallback searchAdapterCallback;
+    private ShowAllResultCallback showAllResultCallback;
 
-    public SearchAdapter(Context context, ArrayList<BaseModel> arrayList, SearchAdapterCallback searchAdapterCallback) {
+    public SearchAdapter(Context context, ArrayList<BaseModel> arrayList,
+                         SearchAdapterCallback searchAdapterCallback, OnClickViewHolderCallback onClickViewHolderCallback) {
         this.context = context;
         this.arrayList = arrayList;
-        callback = searchAdapterCallback;
+        this.searchAdapterCallback = searchAdapterCallback;
+        this.showAllResultCallback = (ShowAllResultCallback) context;
+        this.onClickViewHolderCallback = onClickViewHolderCallback;
         songArrayListResult = new ArrayList<>();
         albumArrayListResult = new ArrayList<>();
         artistArrayListResult = new ArrayList<>();
@@ -131,17 +137,19 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     holder.itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Intent intent = new Intent(context, ResultActivity.class);
+                            Bundle bundle = new Bundle();
                             if (header.equals(context.getString(R.string.show_all_album))) {
-                                intent.putParcelableArrayListExtra(Constant.ARRAY, albumArrayListResult);
+                                bundle.putParcelableArrayList(Constant.ARRAY, albumArrayListResult);
                             } else if (header.equals(context.getString(R.string.show_all_artist))) {
-                                intent.putParcelableArrayListExtra(Constant.ARRAY, artistArrayListResult);
+                                bundle.putParcelableArrayList(Constant.ARRAY, artistArrayListResult);
                             } else {
-                                intent.putParcelableArrayListExtra(Constant.ARRAY, songArrayListResult);
+                                bundle.putParcelableArrayList(Constant.ARRAY, songArrayListResult);
                             }
-                            intent.putExtra(Constant.QUERY, query);
-                            intent.putExtra(Constant.TYPE, header.substring(16));
-                            context.startActivity(intent);
+                            bundle.putString(Constant.QUERY, String.valueOf(query));
+                            bundle.putString(Constant.TYPE, header.substring(16));
+
+                            UIHelpers.closeSoftKeyboard((Activity) context);
+                            showAllResultCallback.showAllResult(bundle);
                         }
                     });
                 }
@@ -201,7 +209,7 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 arrayList.clear();
                 arrayList.addAll((ArrayList<BaseModel>) filterResults.values);
 
-                callback.checkResultFilter(arrayList.size() > 0);
+                searchAdapterCallback.checkResultFilter(arrayList.size() > 0);
 
                 notifyDataSetChanged();
             }
@@ -297,5 +305,13 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             arrayListResult.add(new Header(context.getString(R.string.show_all_album)));
         }
         return arrayListResult;
+    }
+
+    public void setMapSong(SparseIntArray mapSong) {
+        this.mapSong = mapSong;
+    }
+
+    public SparseIntArray getMapResult() {
+        return mapSong;
     }
 }

@@ -14,10 +14,12 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.SparseIntArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -37,11 +39,14 @@ import com.example.sev_user.musicplayer.adapter.PagerAdapter;
 import com.example.sev_user.musicplayer.callback.OnClickShuffleCallback;
 import com.example.sev_user.musicplayer.callback.OnClickSongAlbumCallback;
 import com.example.sev_user.musicplayer.callback.OnClickViewHolderCallback;
+import com.example.sev_user.musicplayer.callback.ResultFragmentCallback;
+import com.example.sev_user.musicplayer.callback.ShowAllResultCallback;
 import com.example.sev_user.musicplayer.constant.Constant;
 import com.example.sev_user.musicplayer.fragment.AlbumFragment;
 import com.example.sev_user.musicplayer.fragment.ArtistFragment;
 import com.example.sev_user.musicplayer.fragment.DetailAlbumFragment;
 import com.example.sev_user.musicplayer.fragment.DetailArtistFragment;
+import com.example.sev_user.musicplayer.fragment.ResultFragment;
 import com.example.sev_user.musicplayer.fragment.SearchFragment;
 import com.example.sev_user.musicplayer.fragment.SongFragment;
 import com.example.sev_user.musicplayer.model.Album;
@@ -61,8 +66,13 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity implements OnClickViewHolderCallback, ShakeDetector.Listener
-        , OnClickShuffleCallback, OnClickSongAlbumCallback {
-    private static final String TAG = "MainActivity";
+        , OnClickShuffleCallback, OnClickSongAlbumCallback, ShowAllResultCallback, ResultFragmentCallback {
+
+    private static final String TAG_FRAGMENT_RESULT = "TAG_FRAGMENT_RESULT";
+    private static final String TAG_FRAGMENT_DETAIL_ALBUM = "TAG_FRAGMENT_DETAIL_ALBUM";
+    private static final String TAG_FRAGMENT_DETAIL_ARTIST = "TAG_FRAGMENT_DETAIL_ARTIST";
+    private static final String TAG_FRAGMENT_SEARCH = "TAG_FRAGMENT_SEARCH";
+
 
     @Bind(R.id.bottom_sheet)
     LinearLayout layoutPlay;
@@ -115,9 +125,6 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
     private SongFragment songFragment;
     private ArtistFragment artistFragment;
     private AlbumFragment albumFragment;
-    private SearchFragment searchFragment;
-    private DetailAlbumFragment detailAlbumFragment;
-    private DetailArtistFragment detailArtistFragment;
 
     private PagerAdapter adapter;
     private BottomSheetBehavior behavior;
@@ -254,19 +261,21 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.miSearch: {
-                searchFragment = SearchFragment.newInstance(songFragment.getArrayListAll(),
+                SearchFragment searchFragment = SearchFragment.newInstance(songFragment.getArrayListAll(),
                         artistFragment.getArtists(), albumFragment.getAlbumArrayList());
 
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 transaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
-                transaction.add(R.id.viewList, searchFragment);
+                transaction.add(R.id.viewList, searchFragment, TAG_FRAGMENT_SEARCH);
                 transaction.show(searchFragment);
                 transaction.commit();
 
-                if (detailAlbumFragment != null && detailAlbumFragment.isVisible()) {
+                Fragment detailAlbumFragment = getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT_DETAIL_ALBUM);
+                if (detailAlbumFragment != null) {
                     backToMainFragment(detailAlbumFragment);
                 }
-                if (detailArtistFragment != null && detailArtistFragment.isVisible()) {
+                Fragment detailArtistFragment = getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT_DETAIL_ARTIST);
+                if (detailArtistFragment != null) {
                     backToMainFragment(detailArtistFragment);
                 }
                 break;
@@ -281,15 +290,15 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
                 break;
             }
             case R.id.miSortAZ: {
-                if ((detailArtistFragment == null || !detailArtistFragment.isVisible())
-                        || detailAlbumFragment == null || !detailAlbumFragment.isVisible()) {
+                if (getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT_DETAIL_ALBUM) == null
+                        || getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT_DETAIL_ARTIST) == null) {
                     sortAZ();
                 }
                 break;
             }
             case R.id.miSortZA: {
-                if ((detailArtistFragment == null || !detailArtistFragment.isVisible())
-                        || detailAlbumFragment == null || !detailAlbumFragment.isVisible()) {
+                if (getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT_DETAIL_ALBUM) == null
+                        || getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT_DETAIL_ARTIST) == null) {
                     sortZA();
                 }
                 break;
@@ -348,28 +357,35 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
             return;
         }
 
-        if (searchFragment != null && searchFragment.isVisible()) {
-            if (detailAlbumFragment != null && detailAlbumFragment.isVisible()) {
-                backToMainFragment(detailAlbumFragment);
-                return;
-            }
+        FragmentManager fragmentManager = getSupportFragmentManager();
 
-            if (detailArtistFragment != null && detailArtistFragment.isVisible()) {
-                backToMainFragment(detailArtistFragment);
-                return;
-            }
-            
-            backToMainFragment(searchFragment);
+        if (fragmentManager.findFragmentByTag(TAG_FRAGMENT_RESULT) != null) {
+            backToMainFragment(getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT_RESULT));
             return;
         }
 
-        if (detailAlbumFragment != null && detailAlbumFragment.isVisible()) {
-            backToMainFragment(detailAlbumFragment);
+        if (fragmentManager.findFragmentByTag(TAG_FRAGMENT_SEARCH) != null) {
+            if (fragmentManager.findFragmentByTag(TAG_FRAGMENT_DETAIL_ALBUM) != null) {
+                backToMainFragment(fragmentManager.findFragmentByTag(TAG_FRAGMENT_DETAIL_ALBUM));
+                return;
+            }
+
+            if (fragmentManager.findFragmentByTag(TAG_FRAGMENT_DETAIL_ARTIST) != null) {
+                backToMainFragment(fragmentManager.findFragmentByTag(TAG_FRAGMENT_DETAIL_ARTIST));
+                return;
+            }
+
+            backToMainFragment(fragmentManager.findFragmentByTag(TAG_FRAGMENT_SEARCH));
             return;
         }
 
-        if (detailArtistFragment != null && detailArtistFragment.isVisible()) {
-            backToMainFragment(detailArtistFragment);
+        if (fragmentManager.findFragmentByTag(TAG_FRAGMENT_DETAIL_ALBUM) != null) {
+            backToMainFragment(fragmentManager.findFragmentByTag(TAG_FRAGMENT_DETAIL_ALBUM));
+            return;
+        }
+
+        if (fragmentManager.findFragmentByTag(TAG_FRAGMENT_DETAIL_ARTIST) != null) {
+            backToMainFragment(fragmentManager.findFragmentByTag(TAG_FRAGMENT_DETAIL_ARTIST));
             return;
         }
 
@@ -653,11 +669,11 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
         bundle.putString(Constant.ALBUM_INFO, album.getNumberOfSong() + " bài hát | " + album.getFirstYear());
         bundle.putString(Constant.ALBUM_ARTIST, album.getArtistName());
         bundle.putParcelableArrayList(Constant.ARRAY_SONG_PLUS, arrSongPlus);
-        detailAlbumFragment = DetailAlbumFragment.newInstance(bundle);
+        DetailAlbumFragment detailAlbumFragment = DetailAlbumFragment.newInstance(bundle);
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(R.anim.slide_in, R.anim.slide_out);
-        transaction.add(R.id.viewList, detailAlbumFragment);
+        transaction.add(R.id.viewList, detailAlbumFragment, TAG_FRAGMENT_DETAIL_ALBUM);
         transaction.show(detailAlbumFragment);
         transaction.commit();
     }
@@ -669,11 +685,11 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList(Constant.ARRAY_SONG_PLUS, arrayList);
         bundle.putParcelable(Constant.ARTIST, artist);
-        detailArtistFragment = DetailArtistFragment.newInstance(bundle);
+        DetailArtistFragment detailArtistFragment = DetailArtistFragment.newInstance(bundle);
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(R.anim.slide_in, R.anim.slide_out);
-        transaction.add(R.id.viewList, detailArtistFragment);
+        transaction.add(R.id.viewList, detailArtistFragment, TAG_FRAGMENT_DETAIL_ARTIST);
         transaction.show(detailArtistFragment);
         transaction.commit();
     }
@@ -861,32 +877,38 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
     }
 
     public void backToMainFragment(Fragment fragment) {
-        if (fragment instanceof SearchFragment) {
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+        if (fragment instanceof DetailAlbumFragment || fragment instanceof DetailArtistFragment) {
+            transaction.setCustomAnimations(R.anim.slide_in, R.anim.slide_out);
+        }
+
+
+        if (fragment instanceof ResultFragment || fragment instanceof SearchFragment) {
             transaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
-            transaction.remove(searchFragment);
-            searchFragment.onDestroyView();
-            transaction.commit();
-            return;
         }
 
-        if (fragment instanceof DetailAlbumFragment) {
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.setCustomAnimations(R.anim.slide_in, R.anim.slide_out);
-            transaction.remove(detailAlbumFragment);
-            detailAlbumFragment.onDestroyView();
-            transaction.commit();
-            return;
-        }
-
-        if (fragment instanceof DetailArtistFragment) {
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.setCustomAnimations(R.anim.slide_in, R.anim.slide_out);
-            transaction.remove(detailArtistFragment);
-            detailArtistFragment.onDestroyView();
-            transaction.commit();
-        }
+        transaction.remove(fragment);
+        fragment.onDestroyView();
+        transaction.commit();
     }
+
+    @Override
+    public void showAllResult(Bundle bundle) {
+        ResultFragment resultFragment = new ResultFragment();
+        resultFragment.setArguments(bundle);
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
+        transaction.add(R.id.viewList, resultFragment, TAG_FRAGMENT_RESULT);
+        transaction.commit();
+    }
+
+    @Override
+    public SparseIntArray getMapResult() {
+        return ((SearchFragment) getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT_SEARCH)).getMapResult();
+    }
+
 
     //update UI--------------------------------------------------
     class UpdateUIAsynctask extends AsyncTask<Void, Void, Void> {
