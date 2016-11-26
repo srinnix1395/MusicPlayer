@@ -3,12 +3,12 @@
               xmlns:app="http://schemas.android.com/apk/res-auto"
               android:id="@+id/layout"
               android:layout_width="match_parent"
-              android:layout_height="130dp"
+              android:layout_height="125dp"
               android:orientation="horizontal">
 
     <ImageView
         android:id="@+id/imvCover"
-        android:layout_width="130dp"
+        android:layout_width="125dp"
         android:layout_height="match_parent"
         android:scaleType="fitXY"/>
 
