@@ -17,8 +17,6 @@
         android:layout_height="match_parent"
         android:layout_weight="7"
         android:orientation="vertical"
-        android:paddingEnd="5dp"
-        android:paddingStart="5dp"
         android:paddingTop="5dp">
 
         <TextView
@@ -28,7 +26,8 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:lines="1"
-            android:paddingStart="10dp"
+            android:paddingEnd="5dp"
+            android:paddingStart="15dp"
             android:textColor="@color/colorPrimary"
             android:textSize="16sp"/>
 
@@ -41,7 +40,8 @@
             android:layout_marginBottom="20dp"
             android:ellipsize="end"
             android:lines="1"
-            android:paddingStart="10dp"
+            android:paddingEnd="5dp"
+            android:paddingStart="15dp"
             android:textColor="@color/colorPrimary"
             android:textSize="12sp"/>
 
@@ -50,9 +50,7 @@
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:layout_below="@id/tvArtist"
-            android:paddingEnd="-10dp"
-            android:paddingStart="-10dp"
-            android:src="#80ffffff"/>
+            android:src="#000"/>
 
         <LinearLayout
             android:id="@+id/layoutControl"

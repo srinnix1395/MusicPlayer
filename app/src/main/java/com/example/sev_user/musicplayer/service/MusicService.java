@@ -188,8 +188,8 @@ public class MusicService extends Service {
         if (mediaManager.getAlbumCover() == null) {
             smallRemoteView.setImageViewResource(R.id.imvCover, mediaManager.getCurrentPlaceholder());
             setImageNotification(smallRemoteView, bigViews, R.drawable.ic_play_48_gray, R.drawable.ic_pause_48_gray,
-                    R.drawable.ic_prev_gray, R.drawable.ic_next_gray, R.drawable.ic_close_gray, Color.parseColor("#8a000000"), Color.WHITE);
-
+                    R.drawable.ic_prev_gray, R.drawable.ic_next_gray, R.drawable.ic_close_gray, Color.parseColor("#8a000000")
+                    , Color.WHITE, R.drawable.background_view_line_gray);
         } else {
             smallRemoteView.setImageViewUri(R.id.imvCover, Uri.parse(mediaManager.getCurrentImageUri()));
             Bitmap bitmap = BitmapFactory.decodeFile(mediaManager.getCurrentImageUri());
@@ -206,14 +206,16 @@ public class MusicService extends Service {
 
                 if (swatch != null) {
                     setImageNotification(smallRemoteView, bigViews, R.drawable.ic_play_48_white, R.drawable.ic_pause_48_white,
-                            R.drawable.ic_prev_white, R.drawable.ic_next_white, R.drawable.ic_close_white, Color.WHITE, swatch.getRgb());
+                            R.drawable.ic_prev_white, R.drawable.ic_next_white, R.drawable.ic_close_white, Color.WHITE
+                            , swatch.getRgb(), R.drawable.background_view_line_white);
                 } else {
                     setImageNotification(smallRemoteView, bigViews, R.drawable.ic_play_48_gray, R.drawable.ic_pause_48_gray,
-                            R.drawable.ic_prev_gray, R.drawable.ic_next_gray, R.drawable.ic_close_gray, Color.parseColor("#8a000000"), swatch.getRgb());
+                            R.drawable.ic_prev_gray, R.drawable.ic_next_gray, R.drawable.ic_close_gray
+                            , Color.parseColor("#8a000000"), swatch.getRgb(), R.drawable.background_view_line_gray);
                 }
             } else {
                 setImageNotification(smallRemoteView, bigViews, R.drawable.ic_play_48_gray, R.drawable.ic_pause_48_gray,
-                        R.drawable.ic_prev_gray, R.drawable.ic_next_gray, R.drawable.ic_close_gray, Color.parseColor("#8a000000"), Color.WHITE);
+                        R.drawable.ic_prev_gray, R.drawable.ic_next_gray, R.drawable.ic_close_gray, Color.parseColor("#8a000000"), Color.WHITE, R.drawable.background_view_line_gray);
             }
         }
 
@@ -230,7 +232,7 @@ public class MusicService extends Service {
     }
 
     private void setImageNotification(RemoteViews smallRemoteView, RemoteViews bigRemoteView, int icPlay
-            , int icPause, int icPrev, int icNext, int icClose, int textColor, int backgroundColor) {
+            , int icPause, int icPrev, int icNext, int icClose, int textColor, int backgroundColor, int viewLine) {
         smallRemoteView.setInt(R.id.layout, "setBackgroundColor", backgroundColor);
         bigRemoteView.setInt(R.id.layout, "setBackgroundColor", backgroundColor);
 
@@ -247,7 +249,7 @@ public class MusicService extends Service {
         bigRemoteView.setImageViewResource(R.id.imvClose, icClose);
         bigRemoteView.setTextColor(R.id.tvName, textColor);
         bigRemoteView.setTextColor(R.id.tvArtist, textColor);
-
+        bigRemoteView.setImageViewResource(R.id.viewLine, viewLine);
     }
 
     @Override
