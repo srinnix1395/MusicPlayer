@@ -187,8 +187,10 @@ public class MusicService extends Service {
 
         if (mediaManager.getAlbumCover() == null) {
             smallRemoteView.setImageViewResource(R.id.imvCover, mediaManager.getCurrentPlaceholder());
-        } else {
+            setImageNotification(smallRemoteView, bigViews, R.drawable.ic_play_48_gray, R.drawable.ic_pause_48_gray,
+                    R.drawable.ic_prev_gray, R.drawable.ic_next_gray, R.drawable.ic_close_gray, Color.parseColor("#8a000000"), Color.WHITE);
 
+        } else {
             smallRemoteView.setImageViewUri(R.id.imvCover, Uri.parse(mediaManager.getCurrentImageUri()));
             Bitmap bitmap = BitmapFactory.decodeFile(mediaManager.getCurrentImageUri());
             if (bitmap != null) {
