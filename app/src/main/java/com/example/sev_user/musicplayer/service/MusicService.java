@@ -8,6 +8,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.Handler;
@@ -15,6 +18,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
+import android.support.v7.graphics.Palette;
 import android.widget.RemoteViews;
 
 import com.example.sev_user.musicplayer.R;
@@ -147,8 +151,6 @@ public class MusicService extends Service {
     }
 
     private void startNotification() {
-        notification = new NotificationCompat.Builder(this).setSmallIcon(R.drawable.ic_note).build();
-
         RemoteViews bigViews = new RemoteViews(getPackageName(), R.layout.notification_big_view_music);
         bigViews.setTextViewText(R.id.tvName, mediaManager.getNameSong());
         bigViews.setTextViewText(R.id.tvArtist, mediaManager.getArtist());
@@ -157,8 +159,6 @@ public class MusicService extends Service {
         PendingIntent piClose = PendingIntent.getBroadcast(this, 0, intentClose, PendingIntent.FLAG_UPDATE_CURRENT);
         bigViews.setOnClickPendingIntent(R.id.imvClose, piClose);
 
-
-        bigViews.setImageViewResource(R.id.imvPlay, mediaManager.isPlaying() ? R.drawable.ic_pause_48_gray : R.drawable.ic_play_gray_48);
         Intent intentPlay = new Intent(Constant.ACTION_PLAY_MUSIC);
         PendingIntent piPlay = PendingIntent.getBroadcast(this, 0, intentPlay, PendingIntent.FLAG_UPDATE_CURRENT);
         bigViews.setOnClickPendingIntent(R.id.imvPlay, piPlay);
@@ -177,27 +177,75 @@ public class MusicService extends Service {
             bigViews.setImageViewUri(R.id.imvCover, Uri.parse(mediaManager.getCurrentImageUri()));
         }
 
-        notification.bigContentView = bigViews;
-
-        RemoteViews views = new RemoteViews(getPackageName(), R.layout.notification_view_music);
-        views.setTextViewText(R.id.tvName, mediaManager.getNameSong());
-        views.setTextViewText(R.id.tvArtist, mediaManager.getArtist());
-        views.setOnClickPendingIntent(R.id.imvPlay, piPlay);
-        views.setOnClickPendingIntent(R.id.imvPre, piPrev);
-        views.setOnClickPendingIntent(R.id.imvNext, piNext);
-        views.setImageViewResource(R.id.imvPlay, mediaManager.isPlaying() ? R.drawable.ic_pause_48_gray : R.drawable.ic_play_gray_48);
-        views.setOnClickPendingIntent(R.id.imvClose, piClose);
+        RemoteViews smallRemoteView = new RemoteViews(getPackageName(), R.layout.notification_view_music);
+        smallRemoteView.setTextViewText(R.id.tvName, mediaManager.getNameSong());
+        smallRemoteView.setTextViewText(R.id.tvArtist, mediaManager.getArtist());
+        smallRemoteView.setOnClickPendingIntent(R.id.imvPlay, piPlay);
+        smallRemoteView.setOnClickPendingIntent(R.id.imvPre, piPrev);
+        smallRemoteView.setOnClickPendingIntent(R.id.imvNext, piNext);
+        smallRemoteView.setOnClickPendingIntent(R.id.imvClose, piClose);
 
         if (mediaManager.getAlbumCover() == null) {
-            views.setImageViewResource(R.id.imvCover, mediaManager.getCurrentPlaceholder());
+            smallRemoteView.setImageViewResource(R.id.imvCover, mediaManager.getCurrentPlaceholder());
         } else {
-            views.setImageViewUri(R.id.imvCover, Uri.parse(mediaManager.getCurrentImageUri()));
+
+            smallRemoteView.setImageViewUri(R.id.imvCover, Uri.parse(mediaManager.getCurrentImageUri()));
+            Bitmap bitmap = BitmapFactory.decodeFile(mediaManager.getCurrentImageUri());
+            if (bitmap != null) {
+                Palette p = Palette.from(bitmap).generate();
+                bitmap.recycle();
+                Palette.Swatch swatch = p.getDarkVibrantSwatch();
+                if (swatch == null) {
+                    swatch = p.getDarkMutedSwatch();
+                }
+                if (swatch == null) {
+                    swatch = p.getDominantSwatch();
+                }
+
+                if (swatch != null) {
+                    setImageNotification(smallRemoteView, bigViews, R.drawable.ic_play_48_white, R.drawable.ic_pause_48_white,
+                            R.drawable.ic_prev_white, R.drawable.ic_next_white, R.drawable.ic_close_white, Color.WHITE, swatch.getRgb());
+                } else {
+                    setImageNotification(smallRemoteView, bigViews, R.drawable.ic_play_48_gray, R.drawable.ic_pause_48_gray,
+                            R.drawable.ic_prev_gray, R.drawable.ic_next_gray, R.drawable.ic_close_gray, Color.parseColor("#8a000000"), swatch.getRgb());
+                }
+            } else {
+                setImageNotification(smallRemoteView, bigViews, R.drawable.ic_play_48_gray, R.drawable.ic_pause_48_gray,
+                        R.drawable.ic_prev_gray, R.drawable.ic_next_gray, R.drawable.ic_close_gray, Color.parseColor("#8a000000"), Color.WHITE);
+            }
         }
 
-        notification.contentView = views;
-
         Intent intentNewTask = new Intent(Constant.ACTION_NEW_TASK);
-        notification.contentIntent = PendingIntent.getBroadcast(this, 0, intentNewTask, 0);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.ic_note)
+                .setContent(smallRemoteView)
+                .setCustomBigContentView(bigViews)
+                .setContentIntent(PendingIntent.getBroadcast(this, 0, intentNewTask, 0));
+
+
+        notification = builder.build();
+    }
+
+    private void setImageNotification(RemoteViews smallRemoteView, RemoteViews bigRemoteView, int icPlay
+            , int icPause, int icPrev, int icNext, int icClose, int textColor, int backgroundColor) {
+        smallRemoteView.setInt(R.id.layout, "setBackgroundColor", backgroundColor);
+        bigRemoteView.setInt(R.id.layout, "setBackgroundColor", backgroundColor);
+
+        smallRemoteView.setImageViewResource(R.id.imvPlay, mediaManager.isPlaying() ? icPause : icPlay);
+        smallRemoteView.setImageViewResource(R.id.imvPre, icPrev);
+        smallRemoteView.setImageViewResource(R.id.imvNext, icNext);
+        smallRemoteView.setImageViewResource(R.id.imvClose, icClose);
+        smallRemoteView.setTextColor(R.id.tvName, textColor);
+        smallRemoteView.setTextColor(R.id.tvArtist, textColor);
+
+        bigRemoteView.setImageViewResource(R.id.imvPlay, mediaManager.isPlaying() ? icPause : icPlay);
+        bigRemoteView.setImageViewResource(R.id.imvPre, icPrev);
+        bigRemoteView.setImageViewResource(R.id.imvNext, icNext);
+        bigRemoteView.setImageViewResource(R.id.imvClose, icClose);
+        bigRemoteView.setTextColor(R.id.tvName, textColor);
+        bigRemoteView.setTextColor(R.id.tvArtist, textColor);
+
     }
 
     @Override
