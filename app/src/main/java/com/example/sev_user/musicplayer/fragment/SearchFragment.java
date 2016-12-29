@@ -52,10 +52,8 @@ public class SearchFragment extends Fragment implements SearchAdapterCallback {
     LinearLayout layoutNotFound;
 
     private SearchAdapter adapter;
-    private SearchView searchView;
-    private MenuItem searchItem;
-
-    private ArrayList<BaseModel> songArrayList;
+	
+	private ArrayList<BaseModel> songArrayList;
     private ArrayList<Artist> artistArrayList;
     private ArrayList<Album> albumArrayList;
 
