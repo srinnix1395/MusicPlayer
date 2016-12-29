@@ -113,7 +113,11 @@ public class MusicContentProvider {
 		for (int i = 0, size = songs.size(); i < size; i++) {
 			if (!Character.isLetter(songs.get(i).getName().charAt(0))) {
 				arrObjects.add(songs.get(i));
-				positionLetter = i;
+				if (i == size - 1) {
+					positionLetter = size;
+				} else {
+					positionLetter = i;
+				}
 			} else {
 				arrObjects.get(arrObjects.size() - 1).setHasLine(false);
 				if (i != 0) {
