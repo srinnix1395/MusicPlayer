@@ -48,17 +48,17 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         View view;
         switch (viewType) {
             case VIEW_SONG: {
-                view = inflater.inflate(R.layout.view_holder_song, parent, false);
+                view = inflater.inflate(R.layout.item_song, parent, false);
                 viewHolder = new SongViewHolder(view, onClickViewHolderCallback);
                 break;
             }
             case VIEW_STRING: {
-                view = inflater.inflate(R.layout.view_holder_header, parent, false);
+                view = inflater.inflate(R.layout.item_header, parent, false);
                 viewHolder = new HeaderViewHolder(view);
                 break;
             }
             case VIEW_PLAY_SHUFFLE: {
-                view = inflater.inflate(R.layout.view_holder_play_shuffle, parent, false);
+                view = inflater.inflate(R.layout.item_play_shuffle, parent, false);
                 viewHolder = new PlayShuffleViewHolder(view, onClickShuffleCallback);
                 break;
             }

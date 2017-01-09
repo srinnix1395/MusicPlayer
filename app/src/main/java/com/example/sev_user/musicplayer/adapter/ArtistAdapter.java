@@ -39,12 +39,12 @@ public class ArtistAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         View view;
         switch (viewType) {
             case VIEW_ARTIST: {
-                view = inflater.inflate(R.layout.view_holder_artist, parent, false);
+                view = inflater.inflate(R.layout.item_artist, parent, false);
                 viewHolder = new ArtistViewHolder(view, onClickViewHolderCallback);
                 break;
             }
             case VIEW_STRING: {
-                view = inflater.inflate(R.layout.view_holder_header, parent, false);
+                view = inflater.inflate(R.layout.item_header, parent, false);
                 viewHolder = new HeaderViewHolder(view);
                 break;
             }

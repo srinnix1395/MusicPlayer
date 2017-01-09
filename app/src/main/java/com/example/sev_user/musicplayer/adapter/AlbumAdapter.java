@@ -30,14 +30,14 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumGridViewHolder> {
 
     public AlbumAdapter(Context context, ArrayList<Album> arrayList) {
         this.arrayList = arrayList;
-        margin = (int) ImageUtils.convertDpToPixel(10, context);
+        margin = (int) ImageUtils.convertDpToPixel(15, context);
         noMargin = (int) ImageUtils.convertDpToPixel(1, context);
     }
 
     @Override
     public AlbumGridViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View view = inflater.inflate(R.layout.view_holder_album, parent, false);
+        View view = inflater.inflate(R.layout.item_album, parent, false);
         return new AlbumGridViewHolder(view);
     }
 

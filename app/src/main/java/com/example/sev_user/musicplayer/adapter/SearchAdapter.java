@@ -79,27 +79,27 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         View view;
         switch (viewType) {
             case ITEM_VIEW_TYPE_ITEM_ALBUM: {
-                view = inflater.inflate(R.layout.view_holder_song, parent, false);
+                view = inflater.inflate(R.layout.item_song, parent, false);
                 viewHolder = new AlbumListViewHolder(view, onClickViewHolderCallback);
                 break;
             }
             case ITEM_VIEW_TYPE_ITEM_SONG: {
-                view = inflater.inflate(R.layout.view_holder_song, parent, false);
+                view = inflater.inflate(R.layout.item_song, parent, false);
                 viewHolder = new SongViewHolder(view, onClickViewHolderCallback);
                 break;
             }
             case ITEM_VIEW_TYPE_ITEM_ARTIST: {
-                view = inflater.inflate(R.layout.view_holder_artist, parent, false);
+                view = inflater.inflate(R.layout.item_artist, parent, false);
                 viewHolder = new ArtistViewHolder(view, onClickViewHolderCallback);
                 break;
             }
             case ITEM_VIEW_TYPE_HEADER: {
-                view = inflater.inflate(R.layout.view_holder_header, parent, false);
+                view = inflater.inflate(R.layout.item_header, parent, false);
                 viewHolder = new HeaderViewHolder(view);
                 break;
             }
             case ITEM_VIEW_TYPE_SHOW_ALL: {
-                view = inflater.inflate(R.layout.view_holder_show_all, parent, false);
+                view = inflater.inflate(R.layout.item_show_all, parent, false);
                 viewHolder = new ShowAllViewHolder(view);
                 break;
             }

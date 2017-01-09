@@ -13,25 +13,29 @@ public class Album extends BaseModel implements Parcelable{
     private String artistName;
     private int numberOfSong;
     private int firstYear;
-
-    public Album(int id, String image, String albumName, String artistName, int numberOfSong, int firstYear) {
+	private int placeHolder;
+	
+	public Album(int id, String image, String albumName, String artistName, int numberOfSong, int firstYear, int placeHolder) {
+		this.id = id;
+		this.image = image;
+		this.albumName = albumName;
+		this.artistName = artistName;
+		this.numberOfSong = numberOfSong;
+		this.firstYear = firstYear;
+		this.placeHolder = placeHolder;
+	}
+	
+	public Album(int id, String image, String albumName, String artistName, int numberOfSong
+			, int firstYear, boolean hasLine, int placeHolder) {
         this.id = id;
         this.image = image;
         this.albumName = albumName;
         this.artistName = artistName;
         this.numberOfSong = numberOfSong;
         this.firstYear = firstYear;
-    }
-
-    public Album(int id, String image, String albumName, String artistName, int numberOfSong, int firstYear, boolean hasLine) {
-        this.id = id;
-        this.image = image;
-        this.albumName = albumName;
-        this.artistName = artistName;
-        this.numberOfSong = numberOfSong;
-        this.firstYear = firstYear;
-        this.hasLine = hasLine;
-    }
+		this.placeHolder = placeHolder;
+		this.hasLine = hasLine;
+	}
 
     protected Album(Parcel in) {
         id = in.readInt();
@@ -40,6 +44,7 @@ public class Album extends BaseModel implements Parcelable{
         artistName = in.readString();
         numberOfSong = in.readInt();
         firstYear = in.readInt();
+		placeHolder = in.readInt();
         hasLine = in.readByte() != 0;
     }
 
@@ -78,8 +83,12 @@ public class Album extends BaseModel implements Parcelable{
     public int getFirstYear() {
         return firstYear;
     }
-
-    @Override
+	
+	public int getPlaceHolder() {
+		return placeHolder;
+	}
+	
+	@Override
     public int getTypeModel() {
         return BaseModel.TYPE_ALBUM;
     }
@@ -97,6 +106,7 @@ public class Album extends BaseModel implements Parcelable{
         parcel.writeString(artistName);
         parcel.writeInt(numberOfSong);
         parcel.writeInt(firstYear);
+		parcel.writeInt(placeHolder);
         parcel.writeByte((byte) (hasLine ? 1 : 0));
     }
 }

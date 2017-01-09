@@ -8,7 +8,6 @@ import com.bumptech.glide.Glide;
 import com.example.sev_user.musicplayer.R;
 import com.example.sev_user.musicplayer.callback.OnClickViewHolderCallback;
 import com.example.sev_user.musicplayer.model.Album;
-import com.example.sev_user.musicplayer.utils.ImageUtils;
 
 /**
  * Created by DELL on 11/19/2016.
@@ -25,12 +24,12 @@ public class AlbumListViewHolder extends SongViewHolder {
     public void setupViewHolder(Album album, int position) {
         this.album = album;
         this.position = position;
-
+		
         Glide.with(itemView.getContext())
                 .load(album.getImage())
                 .thumbnail(0.1f)
-                .placeholder(ImageUtils.randomImage())
-                .error(ImageUtils.randomImage())
+                .placeholder(album.getPlaceHolder())
+                .error(album.getPlaceHolder())
                 .into(imvCover);
 
         tvName.setText(album.getAlbumName());

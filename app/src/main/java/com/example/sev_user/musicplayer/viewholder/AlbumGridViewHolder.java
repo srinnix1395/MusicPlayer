@@ -12,7 +12,6 @@ import com.bumptech.glide.Glide;
 import com.example.sev_user.musicplayer.R;
 import com.example.sev_user.musicplayer.callback.OnClickViewHolderCallback;
 import com.example.sev_user.musicplayer.model.Album;
-import com.example.sev_user.musicplayer.utils.ImageUtils;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -58,12 +57,12 @@ public class AlbumGridViewHolder extends RecyclerView.ViewHolder implements View
             layoutParams.rightMargin = margin;
         }
         itemView.requestLayout();
-
-        Glide.with(itemView.getContext())
+	
+		Glide.with(itemView.getContext())
                 .load(album.getImage())
                 .crossFade()
-                .placeholder(ImageUtils.randomImage())
-                .error(ImageUtils.randomImage())
+                .placeholder(album.getPlaceHolder())
+                .error(album.getPlaceHolder())
                 .into(imvAlbumArt);
 
         tvAlbumName.setText(album.getAlbumName());

@@ -17,4 +17,5 @@
     <string name="show_all_album">Hiển thị tất cả album</string>
     <string name="noSearchFound">Không tìm thấy kết quả</string>
     <string name="pleaseCheck">Hãy kiểm tra lại lỗi chính tả hoặc\nthử một từ khóa khác</string>
+    <string name="music">NHẠC</string>
 </resources>

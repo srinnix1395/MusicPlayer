@@ -30,12 +30,13 @@ public class MusicContentProvider {
 	public ArrayList<Artist> getArtist() {
 		Cursor cursor = contentResolver.query(MediaStore.Audio.Artists.EXTERNAL_CONTENT_URI, Constant.COLUMN_ARTIST, null, null, null);
 		ArrayList<Artist> arrayList = new ArrayList<>();
+		int i = 0;
 		while (cursor.moveToNext()) {
 			int id = cursor.getInt(0);
 			String name = cursor.getString(1);
 			int numberOfTrack = cursor.getInt(2);
 			int numberOfAlbum = cursor.getInt(3);
-			int color = ImageUtils.randomColor();
+			int color = ImageUtils.randomColor(i++);
 			
 			arrayList.add(new Artist(id, name, numberOfAlbum + " album | " + numberOfTrack + " bài hát", color, true));
 		}
@@ -47,6 +48,7 @@ public class MusicContentProvider {
 		ArrayList<Album> albums = new ArrayList<>();
 		Cursor cursor = contentResolver.query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI, Constant.COLUMN_ALBUM, null, null, null);
 		if (cursor != null) {
+			int i = 0;
 			while (cursor.moveToNext()) {
 				int id = cursor.getInt(0);
 				String image = cursor.getString(1);
@@ -55,7 +57,8 @@ public class MusicContentProvider {
 				int numberOfSong = cursor.getInt(4);
 				int firstYear = cursor.getInt(5);
 				
-				albums.add(new Album(id, image, albumName, artistName, numberOfSong, firstYear));
+				albums.add(new Album(id, image, albumName, artistName, numberOfSong, firstYear,
+						ImageUtils.randomImage(i++)));
 			}
 			cursor.close();
 		}
@@ -74,6 +77,7 @@ public class MusicContentProvider {
 	private ArrayList<Song> getSongs() {
 		ArrayList<Song> arrSong = new ArrayList<>();
 		Cursor cursor = contentResolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, Constant.COLUMN_SONG, MediaStore.Audio.Media.IS_MUSIC + "= 1", null, null);
+		int i = 0;
 		while (cursor.moveToNext()) {
 			int id = cursor.getInt(1);
 			String name = cursor.getString(2);
@@ -83,7 +87,8 @@ public class MusicContentProvider {
 			int albumId = cursor.getInt(6);
 			String album = cursor.getString(7);
 			
-			arrSong.add(new Song(id, "", name, data, artist, artistId, album, albumId, true, ImageUtils.randomImage()));
+			arrSong.add(new Song(id, "", name, data, artist, artistId, album, albumId, true
+					, ImageUtils.randomImage(i++)));
 		}
 		cursor.close();
 		return arrSong;

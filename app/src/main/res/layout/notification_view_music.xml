@@ -7,82 +7,82 @@
               android:orientation="horizontal">
 
     <ImageView
-        android:id="@+id/imvCover"
-        android:layout_width="65dp"
-        android:layout_height="65dp"
-        android:scaleType="fitXY"/>
+            android:id="@+id/imvCover"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:scaleType="fitXY"/>
 
     <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="2.5"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:paddingEnd="5dp"
-        android:paddingStart="5dp">
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2.5"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingEnd="5dp"
+            android:paddingStart="5dp">
 
         <TextView
-            android:id="@+id/tvName"
-            style="?android:attr/textAppearanceSmall"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:fontFamily="sans-serif-light"
-            android:lines="1"
-            android:textColor="@color/colorPrimary"
-            android:textStyle="bold"/>
+                android:id="@+id/tvName"
+                style="?android:attr/textAppearanceSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif-light"
+                android:lines="1"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold"/>
 
         <TextView
-            android:id="@+id/tvArtist"
-            style="?android:attr/textAppearanceSmall"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:lines="1"
-            android:textColor="@color/colorPrimary"/>
+                android:id="@+id/tvArtist"
+                style="?android:attr/textAppearanceSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:lines="1"
+                android:textColor="@color/colorPrimary"/>
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="3.5"
-        android:gravity="center">
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3.5"
+            android:gravity="center">
 
         <ImageView
-            android:id="@+id/imvPre"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/ripple_effect_dark"
-            android:clickable="true"
-            android:scaleType="center"
-            app:srcCompat="@drawable/ic_prev_gray"/>
+                android:id="@+id/imvPre"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:background="@drawable/ripple_effect_dark"
+                android:clickable="true"
+                android:scaleType="center"
+                app:srcCompat="@drawable/ic_prev_gray"/>
 
         <ImageView
-            android:id="@+id/imvPlay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="15dp"
-            android:layout_marginStart="15dp"
-            android:background="@drawable/ripple_effect_dark"
-            android:clickable="true"
-            android:scaleType="center"/>
+                android:id="@+id/imvPlay"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginStart="15dp"
+                android:background="@drawable/ripple_effect_dark"
+                android:clickable="true"
+                android:scaleType="center"/>
 
         <ImageView
-            android:id="@+id/imvNext"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/ripple_effect_dark"
-            android:clickable="true"
-            android:scaleType="center"
-            app:srcCompat="@drawable/ic_next_gray"/>
+                android:id="@+id/imvNext"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:background="@drawable/ripple_effect_dark"
+                android:clickable="true"
+                android:scaleType="center"
+                app:srcCompat="@drawable/ic_next_gray"/>
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/imvClose"
-        android:layout_width="50dp"
-        android:layout_height="match_parent"
-        android:background="?android:attr/selectableItemBackground"
-        android:clickable="true"
-        android:scaleType="center"
-        app:srcCompat="@drawable/ic_close_gray"/>
+            android:id="@+id/imvClose"
+            android:layout_width="44dp"
+            android:layout_height="match_parent"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:scaleType="center"
+            app:srcCompat="@drawable/ic_close_gray"/>
 </LinearLayout>

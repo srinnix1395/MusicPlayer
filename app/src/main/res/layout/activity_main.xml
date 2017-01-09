@@ -1,129 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
-                                                 android:id="@+id/coordinatorLayout"
-                                                 android:layout_width="match_parent"
-                                                 android:layout_height="match_parent">
+<android.support.design.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <RelativeLayout
-        android:id="@+id/viewList"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"/>
-
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tabLayout"
-            style="@style/MyCustomTabLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/toolbar"
-            android:background="@color/colorPrimary"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark"
-            app:tabMode="fixed"/>
-
-        <android.support.v4.view.ViewPager
-            android:id="@+id/viewPager"
+            android:id="@+id/viewList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/tabLayout"
-            android:layout_marginBottom="56dp"/>
+            android:orientation="horizontal">
+
+        <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"/>
+
+        <android.support.design.widget.TabLayout
+                android:id="@+id/tabLayout"
+                style="@style/MyCustomTabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/toolbar"
+                android:background="@color/colorPrimary"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark"
+                app:tabMode="fixed"/>
+
+        <android.support.v4.view.ViewPager
+                android:id="@+id/viewPager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/tabLayout"
+                android:layout_marginBottom="56dp"/>
 
     </RelativeLayout>
 
 
     <LinearLayout
-        android:id="@+id/bottom_sheet"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorGrayDisable"
-        android:orientation="vertical"
+            android:id="@+id/bottom_sheet"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#5d5d5d"
+            android:orientation="vertical"
         app:layout_behavior="@string/bottom_sheet_behavior">
 
         <LinearLayout
-            android:id="@+id/linearLayoutPlay"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:background="@color/colorPrimary"
-            android:clickable="true">
+                android:id="@+id/linearLayoutPlay"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="@color/colorPrimary"
+                android:clickable="true">
 
             <ImageView
-                android:id="@+id/imvSong"
-                android:layout_width="56dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="-1dp"
-                android:scaleType="fitXY"/>
+                    android:id="@+id/imvSong"
+                    android:layout_width="56dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="-1dp"
+                    android:scaleType="fitXY"/>
 
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="5"
-                android:gravity="center_vertical"
-                android:orientation="vertical"
-                android:paddingEnd="5dp"
-                android:paddingStart="5dp">
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="5"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical"
+                    android:paddingEnd="5dp"
+                    android:paddingStart="5dp">
 
                 <TextView
-                    android:id="@+id/tvSongName"
-                    style="?android:attr/textAppearanceSmall"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:lines="1"
-                    android:textColor="@android:color/white"
-                    android:textStyle="bold"/>
+                        android:id="@+id/tvSongName"
+                        style="?android:attr/textAppearanceSmall"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:lines="1"
+                        android:textColor="@android:color/white"
+                        android:textStyle="bold"/>
 
                 <TextView
-                    android:id="@+id/tvArtistName"
-                    style="?android:attr/textAppearanceSmall"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:lines="1"
-                    android:textColor="@android:color/white"/>
+                        android:id="@+id/tvArtistName"
+                        style="?android:attr/textAppearanceSmall"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:lines="1"
+                        android:textColor="@android:color/white"/>
 
             </LinearLayout>
 
             <ImageView
-                android:id="@+id/imvPlayToolbar"
-                android:layout_width="56dp"
-                android:layout_height="match_parent"
-                android:background="@drawable/ripple_effect"
-                android:scaleType="center"
-                android:src="@drawable/drawable_play_pause"/>
+                    android:id="@+id/imvPlayToolbar"
+                    android:layout_width="56dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/ripple_effect"
+                    android:scaleType="center"
+                    android:src="@drawable/drawable_play_pause"/>
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/imvCover"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="3"
-                android:clickable="false"
-                android:scaleType="fitXY"/>
-
-            <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:layout_margin="5dp"
-                android:background="#2d2f2d">
-
-                <RelativeLayout
+                    android:id="@+id/imvCover"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="3"
+                    android:clickable="false"
+                    android:scaleType="fitXY"/>
+
+            <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
                     android:background="@color/colorPrimary">
 
-                    <TextView
+                <TextView
                         android:id="@+id/tvCurrentPosition"
                         style="?android:attr/textAppearanceSmall"
                         android:layout_width="wrap_content"
@@ -132,7 +126,7 @@
                         android:layout_marginTop="7dp"
                         android:textColor="@android:color/white"/>
 
-                    <TextView
+                <TextView
                         android:id="@+id/tvDuration"
                         style="?android:attr/textAppearanceSmall"
                         android:layout_width="wrap_content"
@@ -143,7 +137,7 @@
                         android:layout_marginTop="7dp"
                         android:textColor="@android:color/white"/>
 
-                    <SeekBar
+                <SeekBar
                         android:id="@+id/seekBar"
                         style="?android:attr/seekBarStyle"
                         android:layout_width="match_parent"
@@ -153,12 +147,12 @@
                         android:layout_marginStart="-5dp"
                         android:progressBackgroundTint="@android:color/white"/>
 
-                    <RelativeLayout
+                <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_alignParentBottom="true">
 
-                        <ImageView
+                    <ImageView
                             android:id="@+id/imvPlay"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -170,7 +164,7 @@
                             android:scaleType="center"
                             android:src="@drawable/drawable_play_pause_69"/>
 
-                        <ImageView
+                    <ImageView
                             android:id="@+id/imvNext"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -182,7 +176,7 @@
                             android:scaleType="center"
                             android:src="@drawable/ic_next"/>
 
-                        <ImageView
+                    <ImageView
                             android:id="@+id/imvPre"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -194,7 +188,7 @@
                             android:scaleType="center"
                             android:src="@drawable/ic_prev"/>
 
-                        <ImageView
+                    <ImageView
                             android:id="@+id/imvRepeat"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -205,7 +199,7 @@
                             android:scaleType="center"
                             android:src="@drawable/drawable_repeat"/>
 
-                        <ImageView
+                    <ImageView
                             android:id="@+id/imvRandom"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -216,10 +210,9 @@
                             android:scaleType="center"
                             android:src="@drawable/drawable_shuffle"/>
 
-                    </RelativeLayout>
-
                 </RelativeLayout>
-            </android.support.v7.widget.CardView>
+
+            </RelativeLayout>
 
         </LinearLayout>
     </LinearLayout>
