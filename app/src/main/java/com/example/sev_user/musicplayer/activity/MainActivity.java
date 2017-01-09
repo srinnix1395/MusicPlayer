@@ -693,7 +693,7 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
 	@Override
 	public void onClickArtist(Artist artist) {
 		ArrayList<SongPlus> arrayList = getSongOfArtist(songFragment.getArrayListAll(), artist);
-		
+		 
 		Bundle bundle = new Bundle();
 		bundle.putParcelableArrayList(Constant.ARRAY_SONG_PLUS, arrayList);
 		bundle.putParcelable(Constant.ARTIST, artist);
