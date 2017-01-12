@@ -3,7 +3,6 @@ package com.example.sev_user.musicplayer.fragment;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -112,12 +111,6 @@ public class ArtistFragment extends android.support.v4.app.Fragment {
             ArrayList<BaseModel> newList = reverseList();
             adapter.swapItems(newList);
             sortType = type;
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    adapter.notifyDataSetChanged();
-                }
-            }, 500);
         }
     }
 

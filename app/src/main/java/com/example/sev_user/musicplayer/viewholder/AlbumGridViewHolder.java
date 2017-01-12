@@ -60,6 +60,7 @@ public class AlbumGridViewHolder extends RecyclerView.ViewHolder implements View
 	
 		Glide.with(itemView.getContext())
                 .load(album.getImage())
+				.thumbnail(0.3f)
                 .crossFade()
                 .placeholder(album.getPlaceHolder())
                 .error(album.getPlaceHolder())
