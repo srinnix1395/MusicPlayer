@@ -130,10 +130,10 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
 	
 	private MusicService musicService;
 	private SongPlus currentSong;
-	private boolean isRunning = true;
 	private String currentAction = "";
 	private boolean isBind;
 	private boolean isPaused = false;
+	private boolean isRunning = true;
 	
 	private Handler mHandlerOnCompletion = new Handler() {
 		@Override
@@ -234,6 +234,7 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
 		public void onServiceDisconnected(ComponentName name) {
 		}
 	};
+	
 	private Animation animTranslateInImage;
 	private Animation animTranslateInButton;
 	private Animation animTranslateOutButton;
@@ -245,7 +246,6 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
 		setContentView(R.layout.activity_main);
 		ButterKnife.bind(this);
 		initViews();
-		initAnimation();
 		if (SharedPreUtil.getInstance(this).getBoolean(Constant.IS_PLAYING_SERVICE, false)) {
 			initService();
 		}
@@ -483,6 +483,7 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
 		
 		initViewPager();
 		initBottomSheet();
+		initAnimation();
 		
 		seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 			@Override
@@ -584,11 +585,6 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
 		behavior = BottomSheetBehavior.from(layoutPlay);
 		behavior.setPeekHeight((int) ImageUtils.convertDpToPixel(56f, this));
 		
-		Intent intent = getIntent();
-		if (intent != null && intent.hasExtra(Constant.ACTION_NEW_TASK)) {
-			behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-		}
-		
 		behavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
 			@Override
 			public void onStateChanged(@NonNull View bottomSheet, int newState) {
@@ -623,6 +619,13 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
 				return true;
 			}
 		});
+		
+		Intent intent = getIntent();
+		if (intent != null && intent.hasExtra(Constant.ACTION_NEW_TASK)) {
+			behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+			imvSongThumbnail.setVisibility(View.INVISIBLE);
+			imvPlayToolbar.setVisibility(View.INVISIBLE);
+		}
 	}
 	
 	private void initViewPager() {
