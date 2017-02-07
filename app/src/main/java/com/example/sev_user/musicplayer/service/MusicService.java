@@ -8,8 +8,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Binder;
@@ -18,11 +16,8 @@ import android.os.IBinder;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
-import android.support.v7.graphics.Palette;
 import android.widget.RemoteViews;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.NotificationTarget;
 import com.example.sev_user.musicplayer.R;
 import com.example.sev_user.musicplayer.activity.MainActivity;
 import com.example.sev_user.musicplayer.constant.Constant;
@@ -190,53 +185,43 @@ public class MusicService extends Service {
 		smallRemoteView.setOnClickPendingIntent(R.id.imvNext, piNext);
 		smallRemoteView.setOnClickPendingIntent(R.id.imvClose, piClose);
 		
-		NotificationTarget notificationTarget = new NotificationTarget(
-				this,
-				smallRemoteView,
-				R.id.imvCover,
-				notification, Constant._ID_FOREGROUND_SERVICE
-		);
 		if (mediaManager.getAlbumCover() == null) {
-			Glide.with(getApplicationContext())
-					.load(mediaManager.getCurrentPlaceholder())
-					.asBitmap()
-					.into(notificationTarget);
-			setImageNotification(smallRemoteView, bigViews, R.drawable.ic_play_48_gray, R.drawable.ic_pause_48_gray,
-					R.drawable.ic_prev_gray, R.drawable.ic_next_gray, R.drawable.ic_close_gray, Color.parseColor("#8a000000")
-					, Color.WHITE, R.drawable.background_view_line_gray);
+			smallRemoteView.setImageViewResource(R.id.imvCover, mediaManager.getCurrentPlaceholder());
+//			setImageNotification(smallRemoteView, bigViews, R.drawable.ic_play_48_gray, R.drawable.ic_pause_48_gray,
+//					R.drawable.ic_prev_gray, R.drawable.ic_next_gray, R.drawable.ic_close_gray, Color.parseColor("#8a000000")
+//					, Color.WHITE, R.drawable.background_view_line_gray);
 		} else {
-			Glide.with(getApplicationContext())
-					.load(Uri.parse(mediaManager.getCurrentImageUri()))
-					.asBitmap()
-					.into(notificationTarget);
-			
-			Bitmap bitmap = BitmapFactory.decodeFile(mediaManager.getCurrentImageUri());
-			if (bitmap != null) {
-				Palette p = Palette.from(bitmap).generate();
-				bitmap.recycle();
-				Palette.Swatch swatch = p.getDarkVibrantSwatch();
-				if (swatch == null) {
-					swatch = p.getDarkMutedSwatch();
-				}
-				if (swatch == null) {
-					swatch = p.getDominantSwatch();
-				}
-				
-				if (swatch != null) {
-					setImageNotification(smallRemoteView, bigViews, R.drawable.ic_play_48_white, R.drawable.ic_pause_48_white,
-							R.drawable.ic_prev_white, R.drawable.ic_next_white, R.drawable.ic_close_white, Color.WHITE
-							, swatch.getRgb(), R.drawable.background_view_line_white);
-				} else {
-					setImageNotification(smallRemoteView, bigViews, R.drawable.ic_play_48_gray, R.drawable.ic_pause_48_gray,
-							R.drawable.ic_prev_gray, R.drawable.ic_next_gray, R.drawable.ic_close_gray
-							, Color.parseColor("#8a000000"), swatch.getRgb(), R.drawable.background_view_line_gray);
-				}
-			} else {
-				setImageNotification(smallRemoteView, bigViews, R.drawable.ic_play_48_gray, R.drawable.ic_pause_48_gray,
-						R.drawable.ic_prev_gray, R.drawable.ic_next_gray, R.drawable.ic_close_gray, Color.parseColor("#8a000000")
-						, Color.WHITE, R.drawable.background_view_line_gray);
-			}
+			smallRemoteView.setImageViewUri(R.id.imvCover, Uri.parse(mediaManager.getCurrentImageUri()));
+//			Bitmap bitmap = BitmapFactory.decodeFile(mediaManager.getCurrentImageUri());
+//			if (bitmap != null) {
+//				Palette p = Palette.from(bitmap).generate();
+//				bitmap.recycle();
+//				Palette.Swatch swatch = p.getDarkVibrantSwatch();
+//				if (swatch == null) {
+//					swatch = p.getDarkMutedSwatch();
+//				}
+//				if (swatch == null) {
+//					swatch = p.getDominantSwatch();
+//				}
+//
+//				if (swatch != null) {
+//					setImageNotification(smallRemoteView, bigViews, R.drawable.ic_play_48_white, R.drawable.ic_pause_48_white,
+//							R.drawable.ic_prev_white, R.drawable.ic_next_white, R.drawable.ic_close_white, Color.WHITE
+//							, swatch.getRgb(), R.drawable.background_view_line_white);
+//				} else {
+//					setImageNotification(smallRemoteView, bigViews, R.drawable.ic_play_48_gray, R.drawable.ic_pause_48_gray,
+//							R.drawable.ic_prev_gray, R.drawable.ic_next_gray, R.drawable.ic_close_gray
+//							, Color.parseColor("#8a000000"), swatch.getRgb(), R.drawable.background_view_line_gray);
+//				}
+//			} else {
+//				setImageNotification(smallRemoteView, bigViews, R.drawable.ic_play_48_gray, R.drawable.ic_pause_48_gray,
+//						R.drawable.ic_prev_gray, R.drawable.ic_next_gray, R.drawable.ic_close_gray, Color.parseColor("#8a000000")
+//						, Color.WHITE, R.drawable.background_view_line_gray);
+//			}
 		}
+		setImageNotification(smallRemoteView, bigViews, R.drawable.ic_play_48_white, R.drawable.ic_pause_48_white,
+				R.drawable.ic_prev_white, R.drawable.ic_next_white, R.drawable.ic_close_white, Color.WHITE
+				, Color.parseColor("#424242"), R.drawable.background_view_line_white);
 		
 		Intent intentNewTask = new Intent(Constant.ACTION_NEW_TASK);
 		

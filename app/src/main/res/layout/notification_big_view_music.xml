@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
               android:id="@+id/layout"
               android:layout_width="match_parent"
               android:layout_height="125dp"
@@ -69,7 +70,7 @@
                     android:layout_height="44dp"
                     android:background="?android:attr/selectableItemBackground"
                     android:clickable="true"
-                    app:srcCompat="@drawable/ic_prev_gray"/>
+                    tools:src="@drawable/ic_prev_gray"/>
 
             <ImageView
                     android:id="@+id/imvPlay"
@@ -88,7 +89,7 @@
                     android:layout_height="44dp"
                     android:background="?android:attr/selectableItemBackground"
                     android:clickable="true"
-                    app:srcCompat="@drawable/ic_next_gray"/>
+                    tools:src="@drawable/ic_next_gray"/>
         </LinearLayout>
 
         <ImageView
@@ -103,6 +104,6 @@
                 android:background="?android:attr/selectableItemBackground"
                 android:clickable="true"
                 android:scaleType="center"
-                app:srcCompat="@drawable/ic_close_gray"/>
+                tools:src="@drawable/ic_close_gray"/>
     </RelativeLayout>
 </LinearLayout>
