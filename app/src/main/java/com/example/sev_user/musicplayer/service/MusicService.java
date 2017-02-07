@@ -21,6 +21,8 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v7.graphics.Palette;
 import android.widget.RemoteViews;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.NotificationTarget;
 import com.example.sev_user.musicplayer.R;
 import com.example.sev_user.musicplayer.activity.MainActivity;
 import com.example.sev_user.musicplayer.constant.Constant;
@@ -188,13 +190,26 @@ public class MusicService extends Service {
 		smallRemoteView.setOnClickPendingIntent(R.id.imvNext, piNext);
 		smallRemoteView.setOnClickPendingIntent(R.id.imvClose, piClose);
 		
+		NotificationTarget notificationTarget = new NotificationTarget(
+				this,
+				smallRemoteView,
+				R.id.imvCover,
+				notification, Constant._ID_FOREGROUND_SERVICE
+		);
 		if (mediaManager.getAlbumCover() == null) {
-			smallRemoteView.setImageViewResource(R.id.imvCover, mediaManager.getCurrentPlaceholder());
+			Glide.with(getApplicationContext())
+					.load(mediaManager.getCurrentPlaceholder())
+					.asBitmap()
+					.into(notificationTarget);
 			setImageNotification(smallRemoteView, bigViews, R.drawable.ic_play_48_gray, R.drawable.ic_pause_48_gray,
 					R.drawable.ic_prev_gray, R.drawable.ic_next_gray, R.drawable.ic_close_gray, Color.parseColor("#8a000000")
 					, Color.WHITE, R.drawable.background_view_line_gray);
 		} else {
-			smallRemoteView.setImageViewUri(R.id.imvCover, Uri.parse(mediaManager.getCurrentImageUri()));
+			Glide.with(getApplicationContext())
+					.load(Uri.parse(mediaManager.getCurrentImageUri()))
+					.asBitmap()
+					.into(notificationTarget);
+			
 			Bitmap bitmap = BitmapFactory.decodeFile(mediaManager.getCurrentImageUri());
 			if (bitmap != null) {
 				Palette p = Palette.from(bitmap).generate();
