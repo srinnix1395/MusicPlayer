@@ -9,6 +9,10 @@
         <item name="actionOverflowButtonStyle">@style/MyOverflowButton</item>
     </style>
 
+    <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@drawable/background_splash_activity</item>
+    </style>
+
     <!--style tab layout-->
     <style name="MyCustomTabLayout" parent="Widget.Design.TabLayout">
         <item name="tabIndicatorColor">#fff</item>
