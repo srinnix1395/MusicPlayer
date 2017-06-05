@@ -148,7 +148,6 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
 				}
 				case Constant.WHAT_CLOSE_SERVICE: {
 					isRunning = false;
-					musicService.stopForeground(true);
 					MainActivity.this.stopService(new Intent(MainActivity.this, MusicService.class));
 					if (isBind) {
 						unbindService(connection);
@@ -247,7 +246,7 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
 		ButterKnife.bind(this);
 		initViews();
 		if (SharedPreUtil.getInstance(this).getBoolean(Constant.IS_PLAYING_SERVICE, false)) {
-			initService();
+			initService(false);
 		}
 	}
 	
@@ -453,9 +452,11 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
 		}
 	}
 	
-	private void initService() {
+	private void initService(boolean isStartService) {
 		Intent intent = new Intent(this, MusicService.class);
-		startService(intent);
+    if (isStartService) {
+      startService(intent);
+    }
 		bindService(intent, connection, BIND_AUTO_CREATE);
 	}
 	
@@ -671,7 +672,7 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
 		}
 		currentSong = new SongPlus(song, 0, position);
 		if (musicService == null) {
-			initService();
+			initService(true);
 			currentAction = Constant.ACTION_CLICK_SONG;
 			return;
 		}
@@ -726,7 +727,7 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
 	public void onClickSongAlbum(SongPlus songPlus) {
 		this.currentSong = songPlus;
 		if (musicService == null) {
-			initService();
+			initService(true);
 			currentAction = Constant.ACTION_CLICK_SONG;
 			return;
 		}
@@ -782,7 +783,7 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
 	//START - function play, pause...---------------------------
 	private void onClickPlay() {
 		if (musicService == null) {
-			initService();
+			initService(true);
 			currentAction = Constant.ACTION_PLAY_MUSIC;
 			return;
 		}
@@ -808,7 +809,7 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
 	
 	private void onClickPrev() {
 		if (musicService == null) {
-			initService();
+			initService(true);
 			currentAction = Constant.ACTION_PREV_MUSIC;
 			return;
 		}
@@ -853,7 +854,7 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
 	
 	private void onClickNext() {
 		if (musicService == null) {
-			initService();
+			initService(true);
 			currentAction = Constant.ACTION_NEXT_MUSIC;
 			return;
 		}
@@ -869,7 +870,7 @@ public class MainActivity extends AppCompatActivity implements OnClickViewHolder
 	
 	private void playShuffleAll() {
 		if (musicService == null) {
-			initService();
+			initService(true);
 			currentAction = Constant.ACTION_PLAY_SHUFFLE;
 			return;
 		}

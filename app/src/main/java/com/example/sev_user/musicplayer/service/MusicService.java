@@ -16,6 +16,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.example.sev_user.musicplayer.R;
@@ -257,7 +258,8 @@ public class MusicService extends Service {
 	
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		runForeground();
+    Log.e("abc", "onStartCommand: " + startId );
+    runForeground();
 		return START_NOT_STICKY;
 	}
 	
