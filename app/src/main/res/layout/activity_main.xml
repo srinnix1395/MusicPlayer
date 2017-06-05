@@ -1,219 +1,218 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+  <RelativeLayout
+      android:id="@+id/viewList"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="horizontal">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark"/>
 
-    <RelativeLayout
-            android:id="@+id/viewList"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tabLayout"
+        style="@style/MyCustomTabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        android:background="@color/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark"
+        app:tabMode="fixed"/>
 
-        <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:theme="@style/ThemeOverlay.AppCompat.Dark"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/colorPrimary"/>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/tabLayout"
+        android:layout_marginBottom="56dp"/>
 
-        <android.support.design.widget.TabLayout
-                android:id="@+id/tabLayout"
-                style="@style/MyCustomTabLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/toolbar"
-                android:background="@color/colorPrimary"
-                android:theme="@style/ThemeOverlay.AppCompat.Dark"
-                app:tabMode="fixed"/>
+  </RelativeLayout>
 
-        <android.support.v4.view.ViewPager
-                android:id="@+id/viewPager"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@id/tabLayout"
-                android:layout_marginBottom="56dp"/>
 
-    </RelativeLayout>
-
+  <LinearLayout
+      android:id="@+id/bottom_sheet"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:background="#5d5d5d"
+      android:clickable="true"
+      android:orientation="vertical"
+      app:layout_behavior="@string/bottom_sheet_behavior">
 
     <LinearLayout
-            android:id="@+id/bottom_sheet"
+        android:id="@+id/linearLayoutPlay"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/colorPrimary">
+
+      <ImageView
+          android:id="@+id/imvSong"
+          android:layout_width="56dp"
+          android:layout_height="match_parent"
+          android:layout_marginStart="-1dp"
+          android:scaleType="fitXY"/>
+
+      <LinearLayout
+          android:layout_width="0dp"
+          android:layout_height="match_parent"
+          android:layout_weight="5"
+          android:gravity="center_vertical"
+          android:orientation="vertical"
+          android:paddingEnd="5dp"
+          android:paddingStart="5dp">
+
+        <TextView
+            android:id="@+id/tvSongName"
+            style="?android:attr/textAppearanceSmall"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#5d5d5d"
-            android:orientation="vertical"
-        app:layout_behavior="@string/bottom_sheet_behavior">
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:lines="1"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"/>
 
-        <LinearLayout
-                android:id="@+id/linearLayoutPlay"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:background="@color/colorPrimary"
-                android:clickable="true">
+        <TextView
+            android:id="@+id/tvArtistName"
+            style="?android:attr/textAppearanceSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:lines="1"
+            android:textColor="@android:color/white"/>
 
-            <ImageView
-                    android:id="@+id/imvSong"
-                    android:layout_width="56dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="-1dp"
-                    android:scaleType="fitXY"/>
+      </LinearLayout>
 
-            <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="5"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical"
-                    android:paddingEnd="5dp"
-                    android:paddingStart="5dp">
-
-                <TextView
-                        android:id="@+id/tvSongName"
-                        style="?android:attr/textAppearanceSmall"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:lines="1"
-                        android:textColor="@android:color/white"
-                        android:textStyle="bold"/>
-
-                <TextView
-                        android:id="@+id/tvArtistName"
-                        style="?android:attr/textAppearanceSmall"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:lines="1"
-                        android:textColor="@android:color/white"/>
-
-            </LinearLayout>
-
-            <ImageView
-                    android:id="@+id/imvPlayToolbar"
-                    android:layout_width="56dp"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/ripple_effect"
-                    android:scaleType="center"
-                    android:src="@drawable/drawable_play_pause"/>
-        </LinearLayout>
-
-        <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-            <ImageView
-                    android:id="@+id/imvCover"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="3"
-                    android:clickable="false"
-                    android:scaleType="fitXY"/>
-
-            <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="150dp"
-                    android:background="@color/colorPrimary">
-
-                <TextView
-                        android:id="@+id/tvCurrentPosition"
-                        style="?android:attr/textAppearanceSmall"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="25dp"
-                        android:layout_marginTop="7dp"
-                        android:textColor="@android:color/white"/>
-
-                <TextView
-                        android:id="@+id/tvDuration"
-                        style="?android:attr/textAppearanceSmall"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginBottom="5dp"
-                        android:layout_marginRight="25dp"
-                        android:layout_marginTop="7dp"
-                        android:textColor="@android:color/white"/>
-
-                <SeekBar
-                        android:id="@+id/seekBar"
-                        style="?android:attr/seekBarStyle"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/tvDuration"
-                        android:layout_marginEnd="-5dp"
-                        android:layout_marginStart="-5dp"
-                        android:progressBackgroundTint="@android:color/white"/>
-
-                <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true">
-
-                    <ImageView
-                            android:id="@+id/imvPlay"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:layout_margin="3dp"
-                            android:background="@drawable/ripple_effect"
-                            android:clickable="true"
-                            android:padding="10dp"
-                            android:scaleType="center"
-                            android:src="@drawable/drawable_play_pause_69"/>
-
-                    <ImageView
-                            android:id="@+id/imvNext"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:layout_marginRight="5dp"
-                            android:layout_toRightOf="@+id/imvPlay"
-                            android:background="@drawable/ripple_effect"
-                            android:padding="5dp"
-                            android:scaleType="center"
-                            android:src="@drawable/ic_next"/>
-
-                    <ImageView
-                            android:id="@+id/imvPre"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:layout_marginLeft="5dp"
-                            android:layout_toLeftOf="@+id/imvPlay"
-                            android:background="@drawable/ripple_effect"
-                            android:padding="5dp"
-                            android:scaleType="center"
-                            android:src="@drawable/ic_prev"/>
-
-                    <ImageView
-                            android:id="@+id/imvRepeat"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:layout_toLeftOf="@+id/imvPre"
-                            android:background="@drawable/ripple_effect"
-                            android:padding="7dp"
-                            android:scaleType="center"
-                            android:src="@drawable/drawable_repeat"/>
-
-                    <ImageView
-                            android:id="@+id/imvRandom"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:layout_toRightOf="@+id/imvNext"
-                            android:background="@drawable/ripple_effect"
-                            android:padding="7dp"
-                            android:scaleType="center"
-                            android:src="@drawable/drawable_shuffle"/>
-
-                </RelativeLayout>
-
-            </RelativeLayout>
-
-        </LinearLayout>
+      <ImageView
+          android:id="@+id/imvPlayToolbar"
+          android:layout_width="56dp"
+          android:layout_height="match_parent"
+          android:background="@drawable/ripple_effect"
+          android:scaleType="center"
+          android:src="@drawable/drawable_play_pause"/>
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+      <ImageView
+          android:id="@+id/imvCover"
+          android:layout_width="match_parent"
+          android:layout_height="0dp"
+          android:layout_weight="3"
+          android:clickable="false"
+          android:scaleType="fitXY"/>
+
+      <RelativeLayout
+          android:layout_width="match_parent"
+          android:layout_height="150dp"
+          android:background="@color/colorPrimary">
+
+        <TextView
+            android:id="@+id/tvCurrentPosition"
+            style="?android:attr/textAppearanceSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="7dp"
+            android:textColor="@android:color/white"/>
+
+        <TextView
+            android:id="@+id/tvDuration"
+            style="?android:attr/textAppearanceSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="5dp"
+            android:layout_marginEnd="25dp"
+            android:layout_marginTop="7dp"
+            android:textColor="@android:color/white"/>
+
+        <SeekBar
+            android:id="@+id/seekBar"
+            style="?android:attr/seekBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvDuration"
+            android:layout_marginEnd="-5dp"
+            android:layout_marginStart="-5dp"
+            android:progressBackgroundTint="@android:color/white"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true">
+
+          <ImageView
+              android:id="@+id/imvPlay"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_centerInParent="true"
+              android:layout_margin="3dp"
+              android:background="@drawable/ripple_effect"
+              android:padding="10dp"
+              android:scaleType="center"
+              android:src="@drawable/drawable_play_pause_69"/>
+
+          <ImageView
+              android:id="@+id/imvNext"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_centerInParent="true"
+              android:layout_marginEnd="5dp"
+              android:layout_toEndOf="@+id/imvPlay"
+              android:background="@drawable/ripple_effect"
+              android:padding="5dp"
+              android:scaleType="center"
+              app:srcCompat="@drawable/ic_next"/>
+
+          <ImageView
+              android:id="@+id/imvPre"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_centerInParent="true"
+              android:layout_marginStart="5dp"
+              android:layout_toStartOf="@+id/imvPlay"
+              android:background="@drawable/ripple_effect"
+              android:padding="5dp"
+              android:scaleType="center"
+              app:srcCompat="@drawable/ic_prev"/>
+
+          <ImageView
+              android:id="@+id/imvRepeat"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_centerInParent="true"
+              android:layout_toStartOf="@+id/imvPre"
+              android:background="@drawable/ripple_effect"
+              android:padding="7dp"
+              android:scaleType="center"
+              android:src="@drawable/drawable_repeat"/>
+
+          <ImageView
+              android:id="@+id/imvRandom"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_centerInParent="true"
+              android:layout_toEndOf="@+id/imvNext"
+              android:background="@drawable/ripple_effect"
+              android:padding="7dp"
+              android:scaleType="center"
+              android:src="@drawable/drawable_shuffle"/>
+
+        </RelativeLayout>
+
+      </RelativeLayout>
+
+    </LinearLayout>
+  </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>
